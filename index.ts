@@ -1,7 +1,10 @@
 import express from "express";
+import bodyParser from "body-parser";
+
 import { AppDataSource } from "./src/config/data-source";
-import { logEvents } from "./src/helpers/logEvents";
 import { Post } from "./src/router/postRouter";
+import { User } from "./src/router/userRouter";
+
 const PORT = process.env.PORT || 3000;
 
 // thiết lập kết nối cơ sở dữ liệu
@@ -15,10 +18,14 @@ AppDataSource.initialize()
 
 const app = express();
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
 app.use("/api/v1", Post);
+app.use("/api/v1", User);
 
 app.use((err, req, res, next) => {
-  logEvents(err.message);
   res.status(err.status || 500);
   res.json({
     status: err.status || 500,
