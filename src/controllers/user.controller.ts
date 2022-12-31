@@ -6,7 +6,7 @@ import Token from "../middlewares/jwt.middleware";
 const User = AppDataSource.getRepository(Users);
 class UserController {
   // đăng ký tài khoản
-  async signUpUser(req: any, res: any, next) {
+  async signUpUser(req, res, next) {
     try {
       const { name, email, username, password } = req.body;
       const user = await User.findOne({
