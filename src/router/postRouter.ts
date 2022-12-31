@@ -6,4 +6,4 @@ export const Post = express.Router();
 
 Post.post("/post/new", uploadPost.single("post"), Posts.newPost);
 
-Post.delete("/post/:id", Posts.deletePost);
+Post.delete("/post/:id", Posts.deletePost).put("/post/:id",Posts.updateCaption);

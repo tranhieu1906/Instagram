@@ -4,6 +4,7 @@ import { AppDataSource } from "../config/data-source";
 const Post = AppDataSource.getRepository(Posts);
 
 class PostController {
+  // add posts
   async newPost(req, res, next) {
     try {
       const postData = {
@@ -20,6 +21,7 @@ class PostController {
       next(error);
     }
   }
+  // delete post
   async deletePost(req, res, next) {
     try {
       const post = await Post.findOne({
@@ -42,6 +44,31 @@ class PostController {
     } catch (error) {
       next(error);
     }
+  }
+  // update caption
+  async updateCaption(req,res,next){
+     try {
+       const post = await Post.findOne({
+         where: { id: req.params.id },
+         relations: {
+           user: true,
+         },
+       });
+       if (!post) {
+         return next(createError(401, "Post Not Found"));
+       }
+       if (post.user.id !== req.user.id) {
+         return next(createError(401, "User Not Authenticated"));
+       }
+       post.content = req.body.content;
+       await Post.save(post);
+       res.status(200).json({
+         success: true,
+         message: "Post Updated",
+       });
+     } catch (error) {
+       next(error);
+     }
   }
 }
 
