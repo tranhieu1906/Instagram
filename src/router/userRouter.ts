@@ -10,3 +10,5 @@ User.post("/login",UserController.loginUser);
 User.get("/logout",UserController.logOut);
 
 app.use(Token.veryfyAccessToken);
+
+User.put("/update/password",Token.veryfyAccessToken, UserController.UpdatePassword);

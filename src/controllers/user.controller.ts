@@ -59,20 +59,42 @@ class UserController {
     }
   }
   //logOut
-  async logOut(req, res) {
-    res.cookie("token", null, {
-      expires: new Date(Date.now()),
-      httpOnly: true,
-    });
+  async logOut(req, res, next) {
+    try {
+      res.cookie("token", null, {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+      });
 
-    res.status(200).json({
-      success: true,
-      message: "Logged Out",
-    });
+      res.status(200).json({
+        success: true,
+        message: "Logged Out",
+      });
+    } catch (error) {
+      next(error);
+    }
   }
   // Update Password
-  async UpdatePassword(req, res) {
-    const { oldPassword, newPassword } = req.body;
+  async UpdatePassword(req, res, next) {
+    try {
+      const { oldPassword, newPassword } = req.body;
+      const user = await User.findOneBy(req.user.id);
+      const isPasswordMatched = await bcrypt.compare(
+        oldPassword,
+        user.password
+      );
+      if (!isPasswordMatched) {
+        return next(createError(401, "Invalid Old Password"));
+      }
+      user.password = await bcrypt.hash(newPassword, 10);
+      await User.save(user);
+      res.status(200).json({
+        success: true,
+        message: "Change password successfully",
+      });
+    } catch (error) {
+      next(error);
+    }
   }
 }
 

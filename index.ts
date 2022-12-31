@@ -2,7 +2,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 import express from "express";
 import bodyParser from "body-parser";
-
+const cookieParser = require("cookie-parser");
 import { AppDataSource } from "./src/config/data-source";
 import { Post } from "./src/router/postRouter";
 import { User } from "./src/router/userRouter";
@@ -22,6 +22,7 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.use("/api/v1", Post);
 app.use("/api/v1", User);
