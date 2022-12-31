@@ -2,6 +2,7 @@ import { Users } from "./../model/Users";
 import createError from "http-errors";
 import bcrypt from "bcrypt";
 import { AppDataSource } from "../config/data-source";
+import Token from "../middlewares/jwt.middleware";
 const User = AppDataSource.getRepository(Users);
 class UserController {
   // đăng ký tài khoản
@@ -45,6 +46,11 @@ class UserController {
       if (!isPasswordMatched) {
         return next(createError(401, "Password mismatch"));
       }
+      const accessToken = await Token.signAccessToken({ id: user.id });
+      res.cookie("token", accessToken, {
+        maxAge: 1000 * 60 * 60 * 24,
+        httpOnly: true,
+      });
       res.status(200).json({
         message: "login successfully",
       });
@@ -52,10 +58,21 @@ class UserController {
       next(error);
     }
   }
+  //logOut
+  async logOut(req, res) {
+    res.cookie("token", null, {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Logged Out",
+    });
+  }
   // Update Password
-  async UpdatePassword(req,res){
+  async UpdatePassword(req, res) {
     const { oldPassword, newPassword } = req.body;
-    
   }
 }
 

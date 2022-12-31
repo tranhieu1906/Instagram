@@ -1,5 +1,9 @@
 import JWT from "jsonwebtoken";
 import createError from "http-errors";
+import { Users } from "./../model/Users";
+import { AppDataSource } from "../config/data-source";
+const User = AppDataSource.getRepository(Users);
+
 class Token {
   async signAccessToken(data) {
     return new Promise((resolve, reject) => {
@@ -37,18 +41,16 @@ class Token {
       });
     });
   }
-  async veryfyAccessToken(req, res, next) {
-    if (!req.cookies.login) {
-      return res.redirect("/auth/login");
-    }
-    const token = req.cookies.login;
-    JWT.verify(token, process.env.SECRET_KEY, (err, payload) => {
-      if (err) {
-        return next(createError.Unauthorized());
-      }
-      req.payload = payload;
-      next();
-    });
+  veryfyAccessToken(req, res, next) {
+    const {token} = req.cookies;
+     JWT.verify(token, process.env.SECRET_KEY, async (err, payload) => {
+       if (err) {
+         return next(createError.Unauthorized());
+       }
+       console.log(payload);
+       req.user = await User.findOneBy(payload.id);
+       next();
+     });
   }
 }
 
