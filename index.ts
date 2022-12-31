@@ -1,21 +1,38 @@
 import express from "express";
-import {AppDataSource} from "./src/config/data-source";
-const PORT = 3000;
+import bodyParser from "body-parser";
+
+import { AppDataSource } from "./src/config/data-source";
+import { Post } from "./src/router/postRouter";
+import { User } from "./src/router/userRouter";
+
+const PORT = process.env.PORT || 3000;
 
 // thiết lập kết nối cơ sở dữ liệu
-AppDataSource
-    .initialize()
-    .then(() => {
-        console.log("Data Source has been initialized!")
-    })
-    .catch((err) => {
-        console.error("Error during Data Source initialization:", err)
-    })
+AppDataSource.initialize()
+  .then(() => {
+    console.log("Data Source has been initialized!");
+  })
+  .catch((err) => {
+    console.error("Error during Data Source initialization:", err);
+  });
 
 const app = express();
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
+
+app.use("/api/v1", Post);
+app.use("/api/v1", User);
+
+app.use((err, req, res, next) => {
+  res.status(err.status || 500);
+  res.json({
+    status: err.status || 500,
+    message: err.message,
+  });
+});
 
 app.listen(PORT, () => {
-    console.log("App running with port: " + PORT)
-})
+  console.log("App running with port: " + PORT);
+});

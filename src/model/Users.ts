@@ -13,7 +13,7 @@ export class Users {
   username: string;
 
   @Column({ type: "varchar" })
-  fullname: string;
+  name: string;
 
   @Column({ type: "varchar" })
   password: string;
@@ -21,8 +21,8 @@ export class Users {
   @Column({ type: "varchar" })
   email: string;
 
-  @Column({ type: "varchar" })
-  profile_picture: string;
+  // @Column({ type: "varchar" })
+  // profile_picture: string;
 
   @Column({ type: "timestamp", default: () => "now()" })
   created_at: Date;
@@ -35,7 +35,7 @@ export class Users {
 
   @OneToMany((type) => Like, (likes) => likes.post)
   likes: Like[];
-  
+
   @OneToMany((type) => Follow, (follow) => follow.following)
   following: Follow[];
 
