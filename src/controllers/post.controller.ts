@@ -7,6 +7,7 @@ class PostController {
   // add posts
   async newPost(req, res, next) {
     try {
+      console.log(req);
       const postData = {
         content: req.body.content,
         image_url: req.file.location,
@@ -92,3 +93,5 @@ class PostController {
 }
 
 export default new PostController();
+
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxNn0sImlhdCI6MTY3MjU1NzEwMSwiZXhwIjoxNjcyNjQzNTAxfQ.EbwWObU-nWPPiawOfYRig0nZwiPFgyAlfFtucXZumK4

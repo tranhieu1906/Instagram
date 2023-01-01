@@ -47,7 +47,9 @@ class Token {
       if (err) {
         return next(createError.Unauthorized());
       }
-      req.user = await User.findOneBy(payload.id);
+      req.user = await User.findOne({
+          where: { id: payload.data.id },
+        })
       next();
     });
   }

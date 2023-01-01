@@ -78,7 +78,9 @@ class UserController {
   async UpdatePassword(req, res, next) {
     try {
       const { oldPassword, newPassword } = req.body;
-      const user = await User.findOneBy(req.user.id);
+      const user = await User.findOne({
+          where: { id: req.user.id },
+        })
       const isPasswordMatched = await bcrypt.compare(
         oldPassword,
         user.password
