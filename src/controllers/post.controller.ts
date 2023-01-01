@@ -46,29 +46,48 @@ class PostController {
     }
   }
   // update caption
-  async updateCaption(req,res,next){
-     try {
-       const post = await Post.findOne({
-         where: { id: req.params.id },
-         relations: {
-           user: true,
-         },
-       });
-       if (!post) {
-         return next(createError(401, "Post Not Found"));
-       }
-       if (post.user.id !== req.user.id) {
-         return next(createError(401, "User Not Authenticated"));
-       }
-       post.content = req.body.content;
-       await Post.save(post);
-       res.status(200).json({
-         success: true,
-         message: "Post Updated",
-       });
-     } catch (error) {
-       next(error);
-     }
+  async updateCaption(req, res, next) {
+    try {
+      const post = await Post.findOne({
+        where: { id: req.params.id },
+        relations: {
+          user: true,
+        },
+      });
+      if (!post) {
+        return next(createError(401, "Post Not Found"));
+      }
+      if (post.user.id !== req.user.id) {
+        return next(createError(401, "User Not Authenticated"));
+      }
+      post.content = req.body.content;
+      await Post.save(post);
+      res.status(200).json({
+        success: true,
+        message: "Post Updated",
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  // Like or Unlike Post
+  async likeUnlikePost(req, res, next) {
+    try {
+      const post = await Post.findOne({
+        where: { id: req.params.id },
+        relations: {
+          user: true,
+          likes: true,
+        },
+      });
+      post.likes.push(req.user.id);
+      console.log(post);
+      if (!post) {
+        return next(createError(401, "Post Not Found"));
+      }
+    } catch (error) {
+      next(error);
+    }
   }
 }
 
