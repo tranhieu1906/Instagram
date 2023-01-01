@@ -2,10 +2,11 @@ import { Users } from "./../model/Users";
 import createError from "http-errors";
 import bcrypt from "bcrypt";
 import { AppDataSource } from "../config/data-source";
+import Token from "../middlewares/jwt.middleware";
 const User = AppDataSource.getRepository(Users);
 class UserController {
   // đăng ký tài khoản
-  async signUpUser(req: any, res: any, next) {
+  async signUpUser(req, res, next) {
     try {
       const { name, email, username, password } = req.body;
       const user = await User.findOne({
@@ -45,6 +46,11 @@ class UserController {
       if (!isPasswordMatched) {
         return next(createError(401, "Password mismatch"));
       }
+      const accessToken = await Token.signAccessToken({ id: user.id });
+      res.cookie("token", accessToken, {
+        maxAge: 1000 * 60 * 60 * 24,
+        httpOnly: true,
+      });
       res.status(200).json({
         message: "login successfully",
       });
@@ -52,10 +58,43 @@ class UserController {
       next(error);
     }
   }
+  //logOut
+  async logOut(req, res, next) {
+    try {
+      res.cookie("token", null, {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+      });
+
+      res.status(200).json({
+        success: true,
+        message: "Logged Out",
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
   // Update Password
-  async UpdatePassword(req,res){
-    const { oldPassword, newPassword } = req.body;
-    
+  async UpdatePassword(req, res, next) {
+    try {
+      const { oldPassword, newPassword } = req.body;
+      const user = await User.findOneBy(req.user.id);
+      const isPasswordMatched = await bcrypt.compare(
+        oldPassword,
+        user.password
+      );
+      if (!isPasswordMatched) {
+        return next(createError(401, "Invalid Old Password"));
+      }
+      user.password = await bcrypt.hash(newPassword, 10);
+      await User.save(user);
+      res.status(200).json({
+        success: true,
+        message: "Change password successfully",
+      });
+    } catch (error) {
+      next(error);
+    }
   }
 }
 

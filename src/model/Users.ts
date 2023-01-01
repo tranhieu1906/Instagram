@@ -27,18 +27,18 @@ export class Users {
   @Column({ type: "timestamp", default: () => "now()" })
   created_at: Date;
 
-  @OneToMany((type) => Posts, (post) => post.user)
+  @OneToMany(() => Posts, (post) => post.user)
   posts: Posts[];
 
-  @OneToMany((type) => Comment, (comment) => comment.user)
+  @OneToMany(() => Comment, (comment) => comment.user)
   comments: Comment[];
 
-  @OneToMany((type) => Like, (likes) => likes.post)
+  @OneToMany(() => Like, (likes) => likes.post)
   likes: Like[];
 
-  @OneToMany((type) => Follow, (follow) => follow.following)
+  @OneToMany(() => Follow, (follow) => follow.following)
   following: Follow[];
 
-  @OneToMany((type) => Follow, (follow) => follow.follower)
+  @OneToMany(() => Follow, (follow) => follow.follower)
   followers: Follow[];
 }

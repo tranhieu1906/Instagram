@@ -23,12 +23,12 @@ export class Posts {
   @Column({ type: "varchar" })
   image_url: string;
 
-  @ManyToOne((type) => Users, (user) => user.posts)
+  @ManyToOne(() => Users, (user) => user.posts)
   user: Users;
 
-  @OneToMany((type) => Comment, (comment) => comment.post)
+  @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
 
-  @OneToMany((type) => Comment, (likes) => likes.post)
+  @OneToMany(() => Comment, (likes) => likes.post)
   likes: Like[];
 }
