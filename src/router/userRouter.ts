@@ -9,6 +9,9 @@ User.post("/signup", UserController.signUpUser);
 User.post("/login",UserController.loginUser);
 User.get("/logout",UserController.logOut);
 
-app.use(Token.veryfyAccessToken);
-
 User.put("/update/password",Token.veryfyAccessToken, UserController.UpdatePassword);
+
+User.get("/follow/:id",Token.veryfyAccessToken, UserController.followUser);
+
+// User.get("/me", Token.veryfyAccessToken, UserController.getAccountDetails);
+
