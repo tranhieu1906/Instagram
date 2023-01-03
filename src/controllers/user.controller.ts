@@ -1,15 +1,15 @@
-import { Users } from "./../model/Users";
+import { User } from "../model/User";
 import createError from "http-errors";
 import bcrypt from "bcrypt";
 import { AppDataSource } from "../config/data-source";
 import Token from "../middlewares/jwt.middleware";
-const User = AppDataSource.getRepository(Users);
+const userRepo = AppDataSource.getRepository(User);
 class UserController {
   // đăng ký tài khoản
   async signUpUser(req, res, next) {
     try {
       const { name, email, username, password } = req.body;
-      const user = await User.findOne({
+      const user = await userRepo.findOne({
         where: [{ email }, { username }],
       });
       if (user) {
@@ -19,7 +19,7 @@ class UserController {
         return next(createError(401, "Email already exists"));
       }
       let hashPassword = await bcrypt.hash(password, 10);
-      const newUser = await User.save({
+      const newUser = await userRepo.save({
         name: name,
         email: email,
         username: username,
@@ -36,7 +36,7 @@ class UserController {
   async loginUser(req, res, next) {
     try {
       const { account, password } = req.body;
-      const user = await User.findOne({
+      const user = await userRepo.findOne({
         where: [{ email: account }, { username: account }],
       });
       if (!user) {
@@ -78,7 +78,9 @@ class UserController {
   async UpdatePassword(req, res, next) {
     try {
       const { oldPassword, newPassword } = req.body;
-      const user = await User.findOneBy(req.user.id);
+      const user = await userRepo.findOne({
+        where: { id: req.user.id },
+      });
       const isPasswordMatched = await bcrypt.compare(
         oldPassword,
         user.password
@@ -87,7 +89,7 @@ class UserController {
         return next(createError(401, "Invalid Old Password"));
       }
       user.password = await bcrypt.hash(newPassword, 10);
-      await User.save(user);
+      await userRepo.save(user);
       res.status(200).json({
         success: true,
         message: "Change password successfully",

@@ -1,8 +1,8 @@
 import JWT from "jsonwebtoken";
 import createError from "http-errors";
-import { Users } from "./../model/Users";
+import { User } from "../model/User";
 import { AppDataSource } from "../config/data-source";
-const User = AppDataSource.getRepository(Users);
+const userRepo = AppDataSource.getRepository(User);
 
 class Token {
   async signAccessToken(data) {
@@ -47,7 +47,9 @@ class Token {
       if (err) {
         return next(createError.Unauthorized());
       }
-      req.user = await User.findOneBy(payload.id);
+      req.user = await userRepo.findOne({
+        where: { id: payload.data.id },
+      });
       next();
     });
   }
