@@ -102,43 +102,60 @@ class UserController {
   }
   // Follow | Unfollow User
   async followUser(req, res, next) {
-    const userToFollow = await UserRepo.findOne({
-      where: { id: req.params.id },
-    });
-    if (!userToFollow) {
-      return next(createError(401, "User Not Found"));
-    }
-    const follow = await FollowRepo.findOne({
-      relations: {
-        user: true,
-        follower: true,
-      },
-      where: {
-        user: { id: req.user.id },
-        follower: { id: req.params.id },
-      },
-    });
-    if (follow) {
-      FollowRepo.delete({
-        user: { id: req.user.id },
-        follower: { id: req.params.id },
+    try {
+      const userToFollow = await UserRepo.findOne({
+        where: { id: req.params.id },
       });
-      res.status(200).json({
-        success: true,
-        message: "Delete Follow",
+      if (!userToFollow) {
+        return next(createError(401, "User Not Found"));
+      }
+      const follow = await FollowRepo.findOne({
+        relations: {
+          user: true,
+          follower: true,
+        },
+        where: {
+          user: { id: req.user.id },
+          follower: { id: req.params.id },
+        },
       });
-    } else {
-      FollowRepo.save({
-        user: { id: req.user.id },
-        follower: { id: req.params.id },
-      });
-      res.status(200).json({
-        success: true,
-        message: "create Follow ",
-      });
+      if (follow) {
+        FollowRepo.delete({
+          user: { id: req.user.id },
+          follower: { id: req.params.id },
+        });
+        res.status(200).json({
+          success: true,
+          message: "Delete Follow",
+        });
+      } else {
+        FollowRepo.save({
+          user: { id: req.user.id },
+          follower: { id: req.params.id },
+        });
+        res.status(200).json({
+          success: true,
+          message: "create Follow ",
+        });
+      }
+    } catch (error) {
+      next(error);
     }
   }
-  // getAccountDetails(req, res, next) {}
+  async getAccountDetails(req, res, next) {
+    try {
+      const user = await UserRepo.findOne({
+        relations: {
+          posts: true,
+          followers: true,
+        },
+        where: { posts: { id: req.params.id }, id: req.user.id },
+      });
+      res.json({ user: user });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default new UserController();

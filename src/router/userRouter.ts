@@ -13,5 +13,5 @@ User.put("/update/password",Token.veryfyAccessToken, UserController.UpdatePasswo
 
 User.get("/follow/:id",Token.veryfyAccessToken, UserController.followUser);
 
-// User.get("/me", Token.veryfyAccessToken, UserController.getAccountDetails);
+User.get("/me", Token.veryfyAccessToken, UserController.getAccountDetails);
 
