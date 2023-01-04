@@ -12,3 +12,4 @@ User.get("/logout",UserController.logOut);
 app.use(Token.veryfyAccessToken);
 
 User.put("/update/password",Token.veryfyAccessToken, UserController.UpdatePassword);
+User.put("/update/profile",Token.veryfyAccessToken, UserController.updateProfile)

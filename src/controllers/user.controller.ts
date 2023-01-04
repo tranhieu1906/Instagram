@@ -96,6 +96,24 @@ class UserController {
       next(error);
     }
   }
+
+  async updateProfile (req,res,next) {
+    try {
+      const {newUsername, newName, newEmail} = req.body;
+      const user = await User.findOneBy(req.user.id);
+      user.username = newUsername;
+      user.name = newName;
+      user.email = newEmail;
+      await User.save(user)
+      res.status(200).json({
+        success: true,
+        message: "Update profile successfully",
+      });
+    }catch (error) {
+      next(error);
+    }
+  }
+
 }
 
 export default new UserController();
