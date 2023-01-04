@@ -7,7 +7,7 @@ import Token from "../middlewares/jwt.middleware";
 const UserRepo = AppDataSource.getRepository(User);
 const FollowRepo = AppDataSource.getRepository(Follow);
 class UserController {
-  // đăng ký tài khoản
+  // signUp
   async signUpUser(req, res, next) {
     try {
       const { name, email, username, password } = req.body;
@@ -34,7 +34,7 @@ class UserController {
       next(error);
     }
   }
-  // đăng nhập
+  // login
   async loginUser(req, res, next) {
     try {
       const { account, password } = req.body;
@@ -142,6 +142,7 @@ class UserController {
       next(error);
     }
   }
+  // AccountDetails
   async getAccountDetails(req, res, next) {
     try {
       const user = await UserRepo.findOne({
@@ -156,38 +157,38 @@ class UserController {
       next(error);
     }
   }
-
-  async updateProfile (req,res,next) {
+  // updateProfile
+  async updateProfile(req, res, next) {
     try {
-      const {newUsername, newName, newEmail} = req.body;
+      const { newUsername, newName, newEmail } = req.body;
       const user = await UserRepo.findOneBy(req.user.id);
       user.username = newUsername;
       user.name = newName;
       user.email = newEmail;
-      await UserRepo.save(user)
+      await UserRepo.save(user);
       res.status(200).json({
         success: true,
         message: "Update profile successfully",
       });
-    }catch (error) {
+    } catch (error) {
       next(error);
     }
   }
-  async updateAvatar (req, res, next) {
+  // updateAvatar
+  async updateAvatar(req, res, next) {
     try {
       const newAvatar = req.file.location;
-      const user = await UserRepo.findOneBy(req.user.id)
+      const user = await UserRepo.findOneBy(req.user.id);
       user.profile_picture = newAvatar;
       await UserRepo.save(user);
       res.status(200).json({
         success: true,
         message: "Update Avatar successfully",
       });
-    }catch (error) {
+    } catch (error) {
       next(error);
     }
   }
-
 }
 
 export default new UserController();
