@@ -1,7 +1,7 @@
-dist
-node_modules
+/dist
+/node_modules
 .git
 .idea
-package-lock.json
+/package-lock.json
 .env
-.data-source
+/config/data-source.ts
