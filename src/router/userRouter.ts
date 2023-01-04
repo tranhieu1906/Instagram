@@ -10,6 +10,7 @@ User.post("/login",UserController.loginUser);
 User.get("/logout",UserController.logOut);
 
 User.put("/update/password",Token.veryfyAccessToken, UserController.UpdatePassword);
+User.put("/update/profile",Token.veryfyAccessToken, UserController.updateProfile)
 
 User.get("/follow/:id",Token.veryfyAccessToken, UserController.followUser);
 
