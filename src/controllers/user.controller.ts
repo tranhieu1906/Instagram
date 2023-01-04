@@ -1,15 +1,17 @@
-import { Users } from "./../model/Users";
+import { Follow } from "./../model/Follow";
+import { User } from "../model/User";
 import createError from "http-errors";
 import bcrypt from "bcrypt";
 import { AppDataSource } from "../config/data-source";
 import Token from "../middlewares/jwt.middleware";
-const User = AppDataSource.getRepository(Users);
+const UserRepo = AppDataSource.getRepository(User);
+const FollowRepo = AppDataSource.getRepository(Follow);
 class UserController {
   // đăng ký tài khoản
   async signUpUser(req, res, next) {
     try {
       const { name, email, username, password } = req.body;
-      const user = await User.findOne({
+      const user = await UserRepo.findOne({
         where: [{ email }, { username }],
       });
       if (user) {
@@ -19,7 +21,7 @@ class UserController {
         return next(createError(401, "Email already exists"));
       }
       let hashPassword = await bcrypt.hash(password, 10);
-      const newUser = await User.save({
+      const newUser = await UserRepo.save({
         name: name,
         email: email,
         username: username,
@@ -36,7 +38,7 @@ class UserController {
   async loginUser(req, res, next) {
     try {
       const { account, password } = req.body;
-      const user = await User.findOne({
+      const user = await UserRepo.findOne({
         where: [{ email: account }, { username: account }],
       });
       if (!user) {
@@ -78,7 +80,9 @@ class UserController {
   async UpdatePassword(req, res, next) {
     try {
       const { oldPassword, newPassword } = req.body;
-      const user = await User.findOneBy(req.user.id);
+      const user = await UserRepo.findOne({
+        where: { id: req.user.id },
+      });
       const isPasswordMatched = await bcrypt.compare(
         oldPassword,
         user.password
@@ -87,7 +91,7 @@ class UserController {
         return next(createError(401, "Invalid Old Password"));
       }
       user.password = await bcrypt.hash(newPassword, 10);
-      await User.save(user);
+      await UserRepo.save(user);
       res.status(200).json({
         success: true,
         message: "Change password successfully",
@@ -96,15 +100,71 @@ class UserController {
       next(error);
     }
   }
+  // Follow | Unfollow User
+  async followUser(req, res, next) {
+    try {
+      const userToFollow = await UserRepo.findOne({
+        where: { id: req.params.id },
+      });
+      if (!userToFollow) {
+        return next(createError(401, "User Not Found"));
+      }
+      const follow = await FollowRepo.findOne({
+        relations: {
+          user: true,
+          follower: true,
+        },
+        where: {
+          user: { id: req.user.id },
+          follower: { id: req.params.id },
+        },
+      });
+      if (follow) {
+        FollowRepo.delete({
+          user: { id: req.user.id },
+          follower: { id: req.params.id },
+        });
+        res.status(200).json({
+          success: true,
+          message: "Delete Follow",
+        });
+      } else {
+        FollowRepo.save({
+          user: { id: req.user.id },
+          follower: { id: req.params.id },
+        });
+        res.status(200).json({
+          success: true,
+          message: "create Follow ",
+        });
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getAccountDetails(req, res, next) {
+    try {
+      const user = await UserRepo.findOne({
+        relations: {
+          posts: true,
+          followers: true,
+        },
+        where: { posts: { id: req.params.id }, id: req.user.id },
+      });
+      res.json({ user: user });
+    } catch (error) {
+      next(error);
+    }
+  }
 
   async updateProfile (req,res,next) {
     try {
       const {newUsername, newName, newEmail} = req.body;
-      const user = await User.findOneBy(req.user.id);
+      const user = await UserRepo.findOneBy(req.user.id);
       user.username = newUsername;
       user.name = newName;
       user.email = newEmail;
-      await User.save(user)
+      await UserRepo.save(user)
       res.status(200).json({
         success: true,
         message: "Update profile successfully",

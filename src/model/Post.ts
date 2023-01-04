@@ -5,12 +5,12 @@ import {
   ManyToOne,
   OneToMany,
 } from "typeorm";
-import { Users } from "./Users";
+import { User } from "./User";
 import { Comment } from "./Comment";
 import { Like } from "./Like";
 
 @Entity()
-export class Posts {
+export class Post {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -23,8 +23,8 @@ export class Posts {
   @Column({ type: "varchar" })
   image_url: string;
 
-  @ManyToOne(() => Users, (user) => user.posts)
-  user: Users;
+  @ManyToOne(() => User, (user) => user.posts)
+  user: User;
 
   @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];

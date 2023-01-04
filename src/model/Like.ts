@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
-import { Users } from "./Users";
-import { Posts } from "./Posts";
+import { User } from "./User";
+import { Post } from "./Post";
 
 @Entity()
 export class Like {
@@ -10,9 +10,9 @@ export class Like {
   @Column({ type: "timestamp", default: () => "now()" })
   created_at: Date;
 
-  @ManyToOne((type) => Users, (user) => user.likes)
-  user: Users;
+  @ManyToOne((type) => User, (user) => user.likes)
+  user: User;
 
-  @ManyToOne((type) => Posts, (post) => post.likes)
-  post: Posts;
+  @ManyToOne((type) => Post, (post) => post.likes)
+  post: Post;
 }

@@ -1,11 +1,11 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
-import { Posts } from "./Posts";
+import { Post } from "./Post";
 import { Comment } from "./Comment";
 import { Like } from "./Like";
-import { Follow } from "./follows";
+import { Follow } from "./Follow";
 
 @Entity()
-export class Users {
+export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -27,16 +27,16 @@ export class Users {
   @Column({ type: "timestamp", default: () => "now()" })
   created_at: Date;
 
-  @OneToMany(() => Posts, (post) => post.user)
-  posts: Posts[];
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
 
   @OneToMany(() => Comment, (comment) => comment.user)
   comments: Comment[];
 
-  @OneToMany(() => Like, (likes) => likes.post)
+  @OneToMany(() => Like, (like) => like.post)
   likes: Like[];
 
-  @OneToMany(() => Follow, (follow) => follow.following)
+  @OneToMany(() => Follow, (follow) => follow.user)
   following: Follow[];
 
   @OneToMany(() => Follow, (follow) => follow.follower)
