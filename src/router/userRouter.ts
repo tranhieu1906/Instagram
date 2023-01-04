@@ -1,6 +1,7 @@
 import express from "express";
 import UserController from "./../controllers/user.controller"
 import Token from "../middlewares/jwt.middleware"
+const { uploadAvatar } = require("../utils/awsFunctions")
 export const User = express.Router();
 const app = express();
 
@@ -11,6 +12,7 @@ User.get("/logout",UserController.logOut);
 
 User.put("/update/password",Token.veryfyAccessToken, UserController.UpdatePassword);
 User.put("/update/profile",Token.veryfyAccessToken, UserController.updateProfile)
+User.put("/update/avatar",uploadAvatar.single("avatar"), Token.veryfyAccessToken, UserController.updateAvatar)
 
 User.get("/follow/:id",Token.veryfyAccessToken, UserController.followUser);
 

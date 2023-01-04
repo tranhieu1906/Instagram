@@ -174,6 +174,21 @@ class UserController {
     }
   }
 
+  async updateAvatar (req, res, next) {
+    try {
+      const newAvatar = req.file.location;
+      const user = await UserRepo.findOneBy(req.user.id)
+      user.profile_picture = newAvatar;
+      await UserRepo.save(user);
+      res.status(200).json({
+        success: true,
+        message: "Update Avatar successfully",
+      });
+    }catch (error) {
+      next(error);
+    }
+  }
+
 }
 
 export default new UserController();
