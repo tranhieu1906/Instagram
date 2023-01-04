@@ -21,8 +21,8 @@ export class User {
   @Column({ type: "varchar" })
   email: string;
 
-  // @Column({ type: "varchar" })
-  // profile_picture: string;
+  @Column({ type: "varchar" })
+  profile_picture: string;
 
   @Column({ type: "timestamp", default: () => "now()" })
   created_at: Date;

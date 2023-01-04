@@ -1,4 +1,4 @@
-import { Follow } from "./../model/Follow";
+import { Follow } from "../model/Follow";
 import { User } from "../model/User";
 import createError from "http-errors";
 import bcrypt from "bcrypt";
@@ -168,6 +168,20 @@ class UserController {
       res.status(200).json({
         success: true,
         message: "Update profile successfully",
+      });
+    }catch (error) {
+      next(error);
+    }
+  }
+  async updateAvatar (req, res, next) {
+    try {
+      const newAvatar = req.file.location;
+      const user = await UserRepo.findOneBy(req.user.id)
+      user.profile_picture = newAvatar;
+      await UserRepo.save(user);
+      res.status(200).json({
+        success: true,
+        message: "Update Avatar successfully",
       });
     }catch (error) {
       next(error);
