@@ -3,22 +3,24 @@ import { Post } from "./Post";
 import { Comment } from "./Comment";
 import { Like } from "./Like";
 import { Follow } from "./Follow";
+import { Message } from "./message";
+
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: "varchar" })
+  @Column({ type: "varchar", unique: true, nullable: false })
   username: string;
 
   @Column({ type: "varchar" })
   name: string;
 
-  @Column({ type: "varchar" })
+  @Column({ type: "varchar", nullable: false })
   password: string;
 
-  @Column({ type: "varchar" })
+  @Column({ type: "varchar", unique: true, nullable: false })
   email: string;
 
   @Column({
@@ -45,4 +47,7 @@ export class User {
 
   @OneToMany(() => Follow, (follow) => follow.follower)
   followers: Follow[];
+
+  @OneToMany((type) => Message, (message) => message.sender)
+  messages: Message[];
 }

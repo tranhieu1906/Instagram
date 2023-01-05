@@ -194,6 +194,33 @@ class PostController {
       next(error);
     }
   }
+  // show followers posts
+  async followePosts(req, res, next) {
+    try {
+      const users = await UserRepo.findOne({
+        relations: {
+          // người theo dõi
+          followers: true,
+          // đang theo dõi
+          following: true,
+        },
+        where: {
+          id: req.user.id,
+        },
+      });
+      const post = await PostRepo.find({
+        relations: {
+          user: true,
+          likes: true,
+          comments: true,
+        },
+        where: { user: users.followers },
+      });
+      res.json(users.followers);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default new PostController();
