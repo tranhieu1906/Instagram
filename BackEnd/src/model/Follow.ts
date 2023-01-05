@@ -10,6 +10,7 @@ export class Follow {
     onDelete: "CASCADE",
   })
   user: User;
+  
   // người theo dõi
   @ManyToOne((type) => User, (user) => user.followers, {
     onDelete: "CASCADE",

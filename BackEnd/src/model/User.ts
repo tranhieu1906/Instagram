@@ -3,8 +3,7 @@ import { Post } from "./Post";
 import { Comment } from "./Comment";
 import { Like } from "./Like";
 import { Follow } from "./Follow";
-import { Message } from "./message";
-
+import { Messages } from "./Messages";
 
 @Entity()
 export class User {
@@ -48,6 +47,9 @@ export class User {
   @OneToMany(() => Follow, (follow) => follow.follower)
   followers: Follow[];
 
-  @OneToMany((type) => Message, (message) => message.sender)
-  messages: Message[];
+  @OneToMany(() => Messages, (message) => message.user)
+  target: Messages[];
+
+  @OneToMany(() => Messages, (message) => message.source)
+  sources: Messages[];
 }
