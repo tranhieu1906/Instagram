@@ -13,14 +13,14 @@ export class Messages {
 
   @Column()
   content: string;
-  
+
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;
 
   @ManyToOne(() => User, (user) => user.target, {
     onDelete: "CASCADE",
   })
-  user: User;
+  target: User;
 
   @ManyToOne(() => User, (user) => user.sources, {
     onDelete: "CASCADE",
