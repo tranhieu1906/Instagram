@@ -10,6 +10,7 @@ const PostRepo = AppDataSource.getRepository(Post);
 const UserRepo = AppDataSource.getRepository(User);
 const LikeRepo = AppDataSource.getRepository(Like);
 const CommentRepo = AppDataSource.getRepository(Comment);
+const FollowRepo = AppDataSource.getRepository(Follow);
 
 class PostController {
   // add posts
@@ -197,26 +198,27 @@ class PostController {
   // show followers posts
   async followePosts(req, res, next) {
     try {
-      const users = await UserRepo.findOne({
-        relations: {
-          // người theo dõi
-          followers: true,
-          // đang theo dõi
-          following: true,
-        },
+      const users = await FollowRepo.createQueryBuilder("follow")
+        .leftJoinAndSelect("follow.following", "user AS u")
+        .leftJoinAndSelect("follow.follower", "u")
+        .where("follow.following = :id", { id: req.user.id })
+        .getMany();
+      let arr = [];
+      users.map((user) => arr.push(user.follower));
+      const posts = await PostRepo.find({
         where: {
-          id: req.user.id,
+          user: arr,
         },
-      });
-      const post = await PostRepo.find({
         relations: {
           user: true,
           likes: true,
           comments: true,
         },
-        where: { user: users.followers },
+        order: {
+          created_at: "ASC",
+        },
       });
-      res.json(users.followers);
+      res.status(200).json(posts);
     } catch (error) {
       next(error);
     }

@@ -5,13 +5,13 @@ import { User } from "./User";
 export class Follow {
   @PrimaryGeneratedColumn()
   id: number;
-  // đang theo dõi
+  // người dùng đang theo dõi ai
   @ManyToOne((type) => User, (user) => user.following, {
     onDelete: "CASCADE",
   })
-  user: User;
-  
-  // người theo dõi
+  following: User;
+
+  // người đang theo dõi người dùng
   @ManyToOne((type) => User, (user) => user.followers, {
     onDelete: "CASCADE",
   })

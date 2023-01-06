@@ -111,17 +111,17 @@ class UserController {
       }
       const follow = await FollowRepo.findOne({
         relations: {
-          user: true,
+          following: true,
           follower: true,
         },
         where: {
-          user: { id: req.user.id },
+          following: { id: req.user.id },
           follower: { id: req.params.id },
         },
       });
       if (follow) {
         FollowRepo.delete({
-          user: { id: req.user.id },
+          following: { id: req.user.id },
           follower: { id: req.params.id },
         });
         res.status(200).json({
