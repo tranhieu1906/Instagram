@@ -44,9 +44,6 @@ function SignUp() {
             src={logo}
             alt="logo"
           />
-          <p className="mx-auto text-slate-400 font-bold text-lg max-w-xs text-center	">
-            Đăng ký để xem ảnh và video từ bạn bè.
-          </p>
           <form
             // onSubmit={handleRegister}
             className="flex flex-col justify-center items-center gap-3 m-3 md:m-8"
@@ -62,25 +59,6 @@ function SignUp() {
               onChange={handleDataChange}
               required
               size="small"
-            />
-            <TextField
-              fullWidth
-              label="Tên đầy đủ"
-              name="name"
-              value={name}
-              onChange={handleDataChange}
-              required
-              size="small"
-            />
-            <TextField
-              label="Tên người dùng"
-              type="text"
-              name="username"
-              value={username}
-              onChange={handleDataChange}
-              size="small"
-              required
-              fullWidth
             />
             <FormControl
               fullWidth
@@ -111,38 +89,29 @@ function SignUp() {
                 label="Password"
               />
             </FormControl>
-
-            <p className="mx-auto max-w-xs text-center text-xs text-slate-400">
-              Những người dùng dịch vụ của chúng tôi có thể đã tải thông tin
-              liên hệ của bạn lên Instagram.{" "}
-              <a
-                href="https://www.facebook.com/help/instagram/261704639352628"
-                className="text-blue-400"
-              >
-                Tìm hiểu thêm
-              </a>
-            </p>
             <button
               type="submit"
               className="bg-primary-blue font-medium py-2 rounded text-white w-full"
             >
-              Đăng Ký
+              Đăng Nhập
             </button>
-            <span className="my-3 text-gray-500">OR</span>
+            <div className="flex">
+              <span className="my-3 text-gray-500">Hoặc</span>
+            </div>
             <Link
               to="/password/forgot"
               className="text-sm font-medium  text-blue-800"
             >
-              Forgot password?
+              Quên mật khẩu?
             </Link>
           </form>
         </div>
 
         <div className="bg-white border p-5 text-center drop-shadow-md">
           <span>
-            Already have an account?{" "}
+            Bạn chưa có tài khoản ư?{" "}
             <Link to="/login" className="text-primary-blue">
-              Log in
+              Đăng Ký
             </Link>
           </span>
         </div>
