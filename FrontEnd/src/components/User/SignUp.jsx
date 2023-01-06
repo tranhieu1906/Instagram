@@ -1,13 +1,27 @@
-// import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Auth from "./Auth";
 import TextField from "@mui/material/TextField";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+
 // import { Link } from "react-router-dom";
 function SignUp() {
+ const [user, setUser] = useState({
+   email: "",
+   name: "",
+   username: "",
+   password: "",
+ });
+
+ const { email, name, username, password } = user;
+
+  const handleDataChange = (e) => {
+      setUser({ ...user, [e.target.name]: e.target.value });
+  };
   return (
     <>
       <Auth>
         <div className="bg-white border flex flex-col gap-2 p-4 pt-10">
-          <img
+          <LazyLoadImage
             draggable="false"
             className="mx-auto h-30 w-36 object-contain"
             src="https://assets.stickpng.com/images/5a4e432a2da5ad73df7efe7a.png"
@@ -25,36 +39,36 @@ function SignUp() {
               label="Email"
               type="email"
               name="email"
-              // value={email}
-              // onChange={handleDataChange}
+              value={email}
+              onChange={handleDataChange}
               required
               size="small"
             />
             <TextField
               fullWidth
-              label="Full Name"
+              label="Tên đầy đủ"
               name="name"
-              // value={name}
-              // onChange={handleDataChange}
+              value={name}
+              onChange={handleDataChange}
               required
               size="small"
             />
             <TextField
-              label="Username"
+              label="Tên người dùng"
               type="text"
               name="username"
-              // value={username}
-              // onChange={handleDataChange}
+              value={username}
+              onChange={handleDataChange}
               size="small"
               required
               fullWidth
             />
             <TextField
-              label="Password"
+              label="Mật Khẩu"
               type="password"
               name="password"
-              // value={password}
-              // onChange={handleDataChange}
+              value={password}
+              onChange={handleDataChange}
               required
               size="small"
               fullWidth
