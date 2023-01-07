@@ -2,13 +2,14 @@ import * as dotenv from "dotenv";
 dotenv.config();
 import express from "express";
 import bodyParser from "body-parser";
-const cookieParser = require("cookie-parser");
-import Token from "./src/middlewares/jwt.middleware"
+import cookieParser from "cookie-parser";
+import cors from "cors"
+import Token from "./src/middlewares/jwt.middleware";
 import { AppDataSource } from "./src/config/data-source";
 import { Post } from "./src/router/postRouter";
 import { User } from "./src/router/userRouter";
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 // thiết lập kết nối cơ sở dữ liệu
 AppDataSource.initialize()
@@ -24,6 +25,8 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(cors())
+
 app.use("/api/v1", User);
 app.use(Token.veryfyAccessToken);
 app.use("/api/v1", Post);

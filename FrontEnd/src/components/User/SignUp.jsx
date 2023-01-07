@@ -54,21 +54,32 @@ function SignUp() {
       username: Yup.string().required("Không được để trống"),
     }),
     onSubmit: (values) => {
-      // axios
-      //   .post("http://localhost:8080/api/v1/signup", values)
-      //   .then((response) => console.log(response.data))
-      //   .catch((error) =>
-      //     toast.error(error.message, {
-      //       position: "top-right",
-      //       autoClose: 5000,
-      //       hideProgressBar: false,
-      //       closeOnClick: true,
-      //       pauseOnHover: true,
-      //       draggable: true,
-      //       progress: undefined,
-      //       theme: "light",
-      //     })
-      //   );
+      axios
+        .post("http://localhost:8080/api/v1/signup", values)
+        .then((response) =>
+          toast.success(response.data.message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+        )
+        .catch((error) =>
+          toast.error(error.response.data.message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+        );
     },
   });
   const [showPassword, setShowPassword] = useState(false);

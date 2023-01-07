@@ -35,10 +35,7 @@ function ForgotPassword() {
               Gửi liên kết đăng nhập
             </button>
             <span className="my-3 text-gray-500">Hoặc</span>
-            <Link
-              to="/login"
-              className="text-sm font-medium text-blue-800"
-            >
+            <Link to="/login" className="text-sm font-medium text-blue-800">
               Quay lại đăng nhập ?
             </Link>
           </form>

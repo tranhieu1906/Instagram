@@ -18,22 +18,19 @@ function SignUp() {
     account: "",
     password: "",
   });
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
   const { account, password } = user;
-
   const handleDataChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
   const handleLogin = (e) => {
     e.preventDefault();
     console.log(user);
+  };
+
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
   };
   return (
     <>
