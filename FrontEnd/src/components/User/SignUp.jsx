@@ -11,21 +11,24 @@ import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
+import axios from "axios";
 import * as Yup from "yup";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Auth from "./Auth";
 import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
 
 function SignUp() {
-  const [user, setUser] = useState({
-    email: "",
-    name: "",
-    username: "",
-    password: "",
-  });
-  const { email, name, username, password } = user;
-  const handleDataChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
+  // const [user, setUser] = useState({
+  //   email: "",
+  //   name: "",
+  //   username: "",
+  //   password: "",
+  // });
+  // const { email, name, username, password } = user;
+  // const handleDataChange = (e) => {
+  //   setUser({ ...user, [e.target.name]: e.target.value });
+  // };
 
   const formik = useFormik({
     initialValues: {
@@ -51,7 +54,21 @@ function SignUp() {
       username: Yup.string().required("Không được để trống"),
     }),
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      // axios
+      //   .post("http://localhost:8080/api/v1/signup", values)
+      //   .then((response) => console.log(response.data))
+      //   .catch((error) =>
+      //     toast.error(error.message, {
+      //       position: "top-right",
+      //       autoClose: 5000,
+      //       hideProgressBar: false,
+      //       closeOnClick: true,
+      //       pauseOnHover: true,
+      //       draggable: true,
+      //       progress: undefined,
+      //       theme: "light",
+      //     })
+      //   );
     },
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -192,6 +209,20 @@ function SignUp() {
           </span>
         </div>
       </Auth>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      {/* Same as */}
+      <ToastContainer />
     </>
   );
 }

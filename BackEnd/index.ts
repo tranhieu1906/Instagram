@@ -24,7 +24,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-
 app.use("/api/v1", User);
 app.use(Token.veryfyAccessToken);
 app.use("/api/v1", Post);
