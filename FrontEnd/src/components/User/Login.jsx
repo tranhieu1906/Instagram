@@ -15,9 +15,7 @@ import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
 
 function SignUp() {
   const [user, setUser] = useState({
-    email: "",
-    name: "",
-    username: "",
+    account: "",
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -28,10 +26,14 @@ function SignUp() {
     event.preventDefault();
   };
 
-  const { email, name, username, password } = user;
+  const { account, password } = user;
 
   const handleDataChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
+  };
+  const handleLogin = (e) => {
+    e.preventDefault();
+    console.log(user);
   };
   return (
     <>
@@ -44,17 +46,14 @@ function SignUp() {
             alt="logo"
           />
           <form
-            // onSubmit={handleRegister}
+            onSubmit={handleLogin}
             className="flex flex-col justify-center items-center gap-3 m-3 md:m-8"
           >
             <TextField
-              //   error
-              //   helperText="Incorrect entry."
               fullWidth
-              label="Email"
-              type="email"
-              name="email"
-              value={email}
+              label="Tên người dùng hoặc email"
+              name="account"
+              value={account}
               onChange={handleDataChange}
               required
               size="small"
@@ -71,6 +70,7 @@ function SignUp() {
                 Mật Khẩu
               </InputLabel>
               <OutlinedInput
+                name="password"
                 id="outlined-adornment-password"
                 type={showPassword ? "text" : "password"}
                 endAdornment={
@@ -109,7 +109,7 @@ function SignUp() {
         <div className="bg-white border p-5 text-center drop-shadow-md">
           <span>
             Bạn chưa có tài khoản ư?{" "}
-            <Link to="/login" className="text-primary-blue">
+            <Link to="/register" className="text-primary-blue">
               Đăng Ký
             </Link>
           </span>

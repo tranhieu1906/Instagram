@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import Auth from "./Auth";
 import TextField from "@mui/material/TextField";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import InputLabel from "@mui/material/InputLabel";
-// import FilledInput from "@mui/material/FilledInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import FormControl from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
 import { Link } from "react-router-dom";
-
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import Auth from "./Auth";
 import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
 
 function SignUp() {
@@ -21,18 +22,42 @@ function SignUp() {
     username: "",
     password: "",
   });
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
   const { email, name, username, password } = user;
-
   const handleDataChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      name: "",
+      username: "",
+      password: "",
+    },
+    validationSchema: Yup.object({
+      name: Yup.string().required("Không được để trống").min(4, "Tên quá ngắn"),
+      email: Yup.string()
+        .required("Không được để trống")
+        .matches(
+          /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+          "Vui lòng nhập đúng định dạng Email"
+        ),
+      password: Yup.string()
+        .required("Không được để trống")
+        .matches(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,17}$/,
+          "Tối thiểu 8 và tối đa 17 ký tự, ít nhất một chữ hoa, một chữ thường, một số và một ký tự đặc biệt"
+        ),
+      username: Yup.string().required("Không được để trống"),
+    }),
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+    },
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
   };
   return (
     <>
@@ -48,52 +73,66 @@ function SignUp() {
             Đăng ký để xem ảnh và video từ bạn bè.
           </p>
           <form
-            // onSubmit={handleRegister}
+            onSubmit={formik.handleSubmit}
             className="flex flex-col justify-center items-center gap-3 m-3 md:m-8"
           >
             <TextField
-              //   error
-              //   helperText="Incorrect entry."
               fullWidth
               label="Email"
               type="email"
               name="email"
-              value={email}
-              onChange={handleDataChange}
-              required
               size="small"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              error={!!formik.errors.email && formik.touched.email}
+              helperText={
+                formik.errors.email && formik.touched.email
+                  ? formik.errors.email
+                  : null
+              }
             />
             <TextField
               fullWidth
               label="Tên đầy đủ"
               name="name"
-              value={name}
-              onChange={handleDataChange}
-              required
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              error={!!formik.errors.name && formik.touched.name}
+              helperText={
+                formik.errors.name && formik.touched.name
+                  ? formik.errors.name
+                  : null
+              }
               size="small"
             />
             <TextField
               label="Tên người dùng"
               type="text"
               name="username"
-              value={username}
-              onChange={handleDataChange}
+              value={formik.values.username}
+              onChange={formik.handleChange}
+              error={!!formik.errors.username && formik.touched.username}
+              helperText={
+                formik.errors.username && formik.touched.username
+                  ? formik.errors.username
+                  : null
+              }
               size="small"
-              required
               fullWidth
             />
             <FormControl
+              error={!!formik.errors.password && formik.touched.password}
               fullWidth
-              required
               size="small"
-              value={password}
-              onChange={handleDataChange}
+              value={formik.values.password}
+              onChange={formik.handleChange}
               variant="outlined"
             >
               <InputLabel htmlFor="outlined-adornment-password">
                 Mật Khẩu
               </InputLabel>
               <OutlinedInput
+                name="password"
                 id="outlined-adornment-password"
                 type={showPassword ? "text" : "password"}
                 endAdornment={
@@ -110,6 +149,12 @@ function SignUp() {
                 }
                 label="Password"
               />
+
+              {formik.errors.password && formik.touched.password ? (
+                <FormHelperText style={{ color: "#d32f2f" }}>
+                  {formik.errors.password}
+                </FormHelperText>
+              ) : null}
             </FormControl>
 
             <p className="mx-auto max-w-xs text-center text-xs text-slate-400">
