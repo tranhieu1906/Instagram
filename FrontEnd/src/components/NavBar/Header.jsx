@@ -11,6 +11,8 @@ import {
   postUploadOutline,
 } from "./SvgIcons";
 import NewPost from "./NewPost";
+import ProfileDetails from "./ProfileDetails";
+
 
 
 function Header() {
@@ -74,9 +76,9 @@ function Header() {
           </div>
         </div>
 
-        {/* {profileToggle && (
+        {profileToggle && (
           <ProfileDetails setProfileToggle={setProfileToggle} />
-        )} */}
+        )}
 
         <NewPost newPost={newPost} setNewPost={setNewPost} />
       </div>
