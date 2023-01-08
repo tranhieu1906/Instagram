@@ -4143,6 +4143,11 @@
   "resolved" "https://registry.npmjs.org/emittery/-/emittery-0.8.1.tgz"
   "version" "0.8.1"
 
+"emoji-mart@^5.4.0":
+  "integrity" "sha512-xrRrUmMqZG64oRxmUZcf8zSMUGQtIUYUL3aZD5iMkqAve+I9wMNh3OVOXL7NW9fEm48L2LI3BUPpj/DUIAJrVg=="
+  "resolved" "https://registry.npmjs.org/emoji-mart/-/emoji-mart-5.4.0.tgz"
+  "version" "5.4.0"
+
 "emoji-regex@^8.0.0":
   "integrity" "sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A=="
   "resolved" "https://registry.npmjs.org/emoji-regex/-/emoji-regex-8.0.0.tgz"

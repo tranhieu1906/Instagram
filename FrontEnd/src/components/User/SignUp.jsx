@@ -206,16 +206,16 @@ function SignUp() {
               to="/password/forgot"
               className="text-sm font-medium  text-blue-800"
             >
-              Forgot password?
+              Quên mật khẩu?
             </Link>
           </form>
         </div>
 
         <div className="bg-white border p-5 text-center drop-shadow-md">
           <span>
-            Already have an account?{" "}
+           Bạn đã có tài khoản ?{" "}
             <Link to="/login" className="text-primary-blue">
-              Log in
+              Đăng nhập
             </Link>
           </span>
         </div>
