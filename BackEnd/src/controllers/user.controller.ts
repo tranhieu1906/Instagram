@@ -4,6 +4,8 @@ import createError from "http-errors";
 import bcrypt from "bcrypt";
 import { AppDataSource } from "../config/data-source";
 import Token from "../middlewares/jwt.middleware";
+import { sendEmail } from "../utils/sendEmail";
+
 const UserRepo = AppDataSource.getRepository(User);
 const FollowRepo = AppDataSource.getRepository(Follow);
 class UserController {
@@ -185,6 +187,17 @@ class UserController {
         success: true,
         message: "Update Avatar successfully",
       });
+    } catch (error) {
+      next(error);
+    }
+  }
+  // Forgot Password
+  async forgotPassword(req, res, next) {
+    try {
+      const user = await UserRepo.findOneBy({ email: req.body.email });
+      if (!user) {
+        return next(createError(404, "User Not Found"));
+      }
     } catch (error) {
       next(error);
     }

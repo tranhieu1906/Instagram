@@ -29,6 +29,12 @@ export class User {
   })
   profile_picture: string;
 
+  @Column({ type: "varchar", nullable: true })
+  resetPasswordToken: string;
+
+  @Column({ type: "timestamp", nullable: true })
+  resetPasswordExpiry: Date;
+
   @Column({ type: "timestamp", default: () => "now()" })
   created_at: Date;
 
