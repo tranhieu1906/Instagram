@@ -1,10 +1,10 @@
 import { Dialog, LinearProgress } from "@mui/material";
-import { Picker } from "emoji-mart";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { emojiIcon } from "../Home/SvgIcons";
-
 
 function NewPost({ newPost, setNewPost }) {
   const [postImage, setPostImage] = useState("");
@@ -52,9 +52,15 @@ function NewPost({ newPost, setNewPost }) {
   return (
     <Dialog open={newPost} onClose={() => setNewPost(false)} maxWidth="xl">
       <div className="flex flex-col sm:w-screen max-w-4xl">
-        <p className="font-semibold text-center bg-white py-3 border-b px-4">
-          Tạo bài viết mới
-        </p>
+        <div className="bg-white py-3 border-b px-4 flex justify-between w-full">
+          <p className="font-semibold text-center">Tạo bài viết mới</p>
+          <button
+            onClick={newPostSubmitHandler}
+            className="text-blue-500 font-medium"
+          >
+            Chia sẻ
+          </button>
+        </div>
         {/* {loading && <LinearProgress />} */}
 
         <div className="flex sm:flex-row sm:items-start items-center flex-col w-full">
@@ -121,20 +127,6 @@ function NewPost({ newPost, setNewPost }) {
             </div>
 
             <div className="p-3 w-full border-b relative">
-              <label className="block mb-4">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="block w-full text-sm text-slate-500
-                                    file:mr-3 file:py-2 file:px-6
-                                    file:rounded-full file:border-0
-                                    file:text-sm file:cursor-pointer file:font-semibold
-                                    file:bg-purple-100 file:text-purple-700
-                                    hover:file:bg-purple-200
-                                    "
-                />
-              </label>
               <textarea
                 className="outline-none resize-none h-32 sm:h-auto"
                 placeholder="Write a caption..."
@@ -155,22 +147,18 @@ function NewPost({ newPost, setNewPost }) {
                 </span>
 
                 {showEmojis && (
-                  <div className="absolute bottom-10 -left-20">
+                  <div className="absolute" style={{ bottom: "-23rem" }}>
                     <Picker
-                      set="google"
-                      onSelect={(e) => setCaption(caption + e.native)}
-                      title="Emojis"
+                      theme="light"
+                      skin="3"
+                      data={data}
+                      onEmojiSelect={(e) => {
+                        setCaption(caption + e.native);
+                        setShowEmojis(false)
+                      }}
                     />
                   </div>
                 )}
-
-                <button
-                  onClick={newPostSubmitHandler}
-                  //   disabled={loading}
-                  className="bg-primary-blue text-white px-6 py-1.5 rounded font-medium hover:drop-shadow-lg uppercase text-sm tracking-wider"
-                >
-                  Post
-                </button>
               </div>
             </div>
           </div>
