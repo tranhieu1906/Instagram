@@ -2,9 +2,11 @@ import { Follow } from "../model/Follow";
 import { User } from "../model/User";
 import createError from "http-errors";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
 import { AppDataSource } from "../config/data-source";
 import Token from "../middlewares/jwt.middleware";
 import { sendEmail } from "../utils/sendEmail";
+import { MoreThan } from "typeorm";
 
 const UserRepo = AppDataSource.getRepository(User);
 const FollowRepo = AppDataSource.getRepository(Follow);
@@ -198,9 +200,59 @@ class UserController {
       if (!user) {
         return next(createError(404, "User Not Found"));
       }
+      const resetToken = crypto.randomBytes(20).toString("hex");
+      let resetPasswordToken = crypto
+        .createHash("sha256")
+        .update(resetToken)
+        .digest("hex");
+      user.resetPasswordToken = resetPasswordToken;
+      user.resetPasswordExpiry = new Date(Date.now() + 15 * 60 * 1000);
+      UserRepo.save(user);
+      const resetPasswordUrl = `https://${req.get(
+        "host"
+      )}/password/reset/${resetPasswordToken}`;
+      try {
+        await sendEmail({
+          email: user.email,
+          templateId: process.env.SENDGRID_RESET_TEMPLATEID,
+          data: {
+            reset_url: resetPasswordUrl,
+          },
+        });
+        res.status(200).json({
+          success: true,
+          message: `Email sent to ${user.email}`,
+        });
+      } catch (error) {
+        next(error);
+      }
     } catch (error) {
       next(error);
     }
+  }
+
+  async resetPassword(req, res, next) {
+    const resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(req.params.token)
+      .digest("hex");
+    const user = await UserRepo.findOneBy({
+      resetPasswordToken: resetPasswordToken,
+      resetPasswordExpiry: MoreThan(new Date(Date.now())),
+    });
+    if (!user) {
+      createError(404, "User Not Found");
+    }
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpiry = undefined;
+
+    await UserRepo.save(user);
+    const accessToken = await Token.signAccessToken({ id: user.id });
+    res.cookie("token", accessToken, {
+      maxAge: 1000 * 60 * 60 * 24,
+      httpOnly: true,
+    });
   }
 }
 

@@ -19,17 +19,6 @@ import Auth from "./Auth";
 import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
 
 function SignUp() {
-  // const [user, setUser] = useState({
-  //   email: "",
-  //   name: "",
-  //   username: "",
-  //   password: "",
-  // });
-  // const { email, name, username, password } = user;
-  // const handleDataChange = (e) => {
-  //   setUser({ ...user, [e.target.name]: e.target.value });
-  // };
-
   const formik = useFormik({
     initialValues: {
       email: "",
