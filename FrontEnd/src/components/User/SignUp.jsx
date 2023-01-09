@@ -1,34 +1,29 @@
-import React, { useEffect, useState } from "react";
-import TextField from "@mui/material/TextField";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
-import { Link } from "react-router-dom";
-import { useFormik } from "formik";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import TextField from "@mui/material/TextField";
 import axios from "axios";
-import * as Yup from "yup";
+import { useFormik } from "formik";
+import React, { useState } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import PasswordStrengthBar from "react-password-strength-bar";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import CircularProgress from "@mui/material/CircularProgress";
+import Backdrop from "@mui/material/Backdrop";
 import "react-toastify/dist/ReactToastify.css";
-import Auth from "./Auth";
+import * as Yup from "yup";
 import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
+import Auth from "./Auth";
 
 function SignUp() {
-  // const [user, setUser] = useState({
-  //   email: "",
-  //   name: "",
-  //   username: "",
-  //   password: "",
-  // });
-  // const { email, name, username, password } = user;
-  // const handleDataChange = (e) => {
-  //   setUser({ ...user, [e.target.name]: e.target.value });
-  // };
+  let navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -41,10 +36,7 @@ function SignUp() {
       name: Yup.string().required("Không được để trống").min(4, "Tên quá ngắn"),
       email: Yup.string()
         .required("Không được để trống")
-        .matches(
-          /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
-          "Vui lòng nhập đúng định dạng Email"
-        ),
+        .email("Vui lòng nhập đúng định dạng Email"),
       password: Yup.string()
         .required("Không được để trống")
         .matches(
@@ -54,21 +46,15 @@ function SignUp() {
       username: Yup.string().required("Không được để trống"),
     }),
     onSubmit: (values) => {
+      setIsLoading(true);
       axios
         .post("http://localhost:8080/api/v1/signup", values)
-        .then((response) =>
-          toast.success(response.data.message, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          })
-        )
-        .catch((error) =>
+        .then((response) => {
+          setIsLoading(false);
+          navigate("/login");
+        })
+        .catch((error) =>{
+          setIsLoading(true);
           toast.error(error.response.data.message, {
             position: "top-right",
             autoClose: 5000,
@@ -79,7 +65,7 @@ function SignUp() {
             progress: undefined,
             theme: "light",
           })
-        );
+        })
     },
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -89,6 +75,15 @@ function SignUp() {
   };
   return (
     <>
+      {isLoading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={isLoading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
+
       <Auth>
         <div className="bg-white border flex flex-col gap-2 p-4 pt-10 drop-shadow-md">
           <LazyLoadImage
@@ -177,6 +172,11 @@ function SignUp() {
                 }
                 label="Password"
               />
+              <PasswordStrengthBar
+                password={formik.values.password}
+                scoreWords={["Yếu", "Yếu", "Trung bình", "Tốt", "Mạnh"]}
+                shortScoreWord={"Quá ngắn"}
+              />
 
               {formik.errors.password && formik.touched.password ? (
                 <FormHelperText style={{ color: "#d32f2f" }}>
@@ -213,7 +213,7 @@ function SignUp() {
 
         <div className="bg-white border p-5 text-center drop-shadow-md">
           <span>
-           Bạn đã có tài khoản ?{" "}
+            Bạn đã có tài khoản ?{" "}
             <Link to="/login" className="text-primary-blue">
               Đăng nhập
             </Link>

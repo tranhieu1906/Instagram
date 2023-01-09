@@ -17,3 +17,7 @@ Post.post("/post/comment/:id", Posts.newComment)
   .put("/post/comment/:id", Posts.updateComment);
 
 Post.get("/posts", Posts.followePosts);
+
+Post.get("/posts/all",Posts.allPosts);
+
+Post.get("/post/detail/:id", Posts.getPostDetails);

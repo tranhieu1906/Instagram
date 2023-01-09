@@ -223,6 +223,41 @@ class PostController {
       next(error);
     }
   }
+  // Get All Posts
+  async allPosts(req, res, next) {
+    try {
+      const posts = await PostRepo.find();
+      return res.status(200).json({
+        posts,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  // Get Post Details
+  async getPostDetails(req, res, next) {
+    try {
+      const post = await PostRepo.findOne({
+        where: {
+          id: req.params.id,
+        },
+        relations: {
+          likes: true,
+          user: true,
+          comments: true,
+        },
+      });
+      if (!post) {
+        return next(createError(404, "Post Not Found"));
+      }
+      res.status(200).json({
+        success: true,
+        post,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default new PostController();

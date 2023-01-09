@@ -14,7 +14,6 @@ import NewPost from "./NewPost";
 import ProfileDetails from "./ProfileDetails";
 
 
-
 function Header() {
   const [profileToggle, setProfileToggle] = useState(false);
   const [newPost, setNewPost] = useState(false);

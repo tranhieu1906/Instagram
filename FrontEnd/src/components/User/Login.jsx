@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import Auth from "./Auth";
-import TextField from "@mui/material/TextField";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import FormControl from "@mui/material/FormControl";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import TextField from "@mui/material/TextField";
+import React, { useState } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Link } from "react-router-dom";
+import Auth from "./Auth";
 
 import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
 
