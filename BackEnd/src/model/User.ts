@@ -47,9 +47,9 @@ export class User {
   @OneToMany(() => Follow, (follow) => follow.follower)
   followers: Follow[];
 
-  @OneToMany(() => Messages, (message) => message.target)
-  target: Messages[];
-
-  @OneToMany(() => Messages, (message) => message.source)
-  sources: Messages[];
+  // @OneToMany(() => Messages, (message) => message.target)
+  // target: Messages[];
+  //
+  // @OneToMany(() => Messages, (message) => message.source)
+  // sources: Messages[];
 }
