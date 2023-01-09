@@ -1,29 +1,28 @@
 import {
-  Entity,
-  Column,
-  ManyToOne,
-  PrimaryGeneratedColumn,
+    Entity,
+    Column,
+    ManyToOne,
+    PrimaryGeneratedColumn,
 } from "typeorm";
-import { User } from "./User";
+import {User} from "./User";
+import {Rooms} from "./Room";
 
 @Entity()
 export class Messages {
-  @PrimaryGeneratedColumn()
-  id: number;
 
-  @Column()
-  content: string;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-  createdAt: Date;
+    @ManyToOne(() => Rooms, (Rooms) => Rooms.messages)
+    room: Rooms;
 
-  @ManyToOne(() => User, (user) => user.target, {
-    onDelete: "CASCADE",
-  })
-  target: User;
+    @ManyToOne(() => User, (Users) => Users.name)
+    author: User[]
+    @Column({type: "varchar"})
+    content: string;
 
-  @ManyToOne(() => User, (user) => user.sources, {
-    onDelete: "CASCADE",
-  })
-  source: User;
+    @Column({
+        type: "timestamp"
+    })
+    time: string
 }
