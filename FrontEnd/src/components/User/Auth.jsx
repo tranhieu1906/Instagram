@@ -1,6 +1,6 @@
 import React from 'react';
-import homepage from '../../assests/images/homepage.webp';
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import homepage from '../../assests/images/homepage.webp';
 
 const Auth = ({ children }) => {
     return (

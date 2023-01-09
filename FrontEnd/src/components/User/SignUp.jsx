@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from "react";
-import TextField from "@mui/material/TextField";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
-import { Link } from "react-router-dom";
-import { useFormik } from "formik";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import TextField from "@mui/material/TextField";
 import axios from "axios";
-import * as Yup from "yup";
+import { useFormik } from "formik";
+import React, { useState } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import PasswordStrengthBar from "react-password-strength-bar";
+import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Auth from "./Auth";
+import * as Yup from "yup";
 import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
+import Auth from "./Auth";
+
 
 function SignUp() {
   const formik = useFormik({
@@ -166,6 +168,7 @@ function SignUp() {
                 }
                 label="Password"
               />
+              <PasswordStrengthBar password={formik.values.password} />
 
               {formik.errors.password && formik.touched.password ? (
                 <FormHelperText style={{ color: "#d32f2f" }}>
@@ -202,7 +205,7 @@ function SignUp() {
 
         <div className="bg-white border p-5 text-center drop-shadow-md">
           <span>
-           Bạn đã có tài khoản ?{" "}
+            Bạn đã có tài khoản ?{" "}
             <Link to="/login" className="text-primary-blue">
               Đăng nhập
             </Link>
