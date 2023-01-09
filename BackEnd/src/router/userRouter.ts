@@ -26,9 +26,17 @@ User.put(
   UserController.updateAvatar
 );
 
-User.post("/password/forgot",UserController.forgotPassword);
-User.put("/password/reset/:token", UserController.resetPassword);
-
 User.get("/follow/:id", Token.veryfyAccessToken, UserController.followUser);
 
 User.get("/me", Token.veryfyAccessToken, UserController.getAccountDetails);
+
+User.post("/password/forgot", UserController.forgotPassword);
+User.put("/password/reset/:token", UserController.resetPassword);
+
+User.get("/users", Token.veryfyAccessToken, UserController.searchUsers);
+User.get(
+  "/users/suggested",
+  Token.veryfyAccessToken,
+  UserController.suggestedUsers
+);
+User.get("/userdetails/:id", Token.veryfyAccessToken,UserController.getUserDetails);

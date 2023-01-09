@@ -12,15 +12,19 @@ import { useFormik } from "formik";
 import React, { useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import PasswordStrengthBar from "react-password-strength-bar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import CircularProgress from "@mui/material/CircularProgress";
+import Backdrop from "@mui/material/Backdrop";
 import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
 import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
 import Auth from "./Auth";
 
-
 function SignUp() {
+  let navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -32,10 +36,7 @@ function SignUp() {
       name: Yup.string().required("Không được để trống").min(4, "Tên quá ngắn"),
       email: Yup.string()
         .required("Không được để trống")
-        .matches(
-          /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
-          "Vui lòng nhập đúng định dạng Email"
-        ),
+        .email("Vui lòng nhập đúng định dạng Email"),
       password: Yup.string()
         .required("Không được để trống")
         .matches(
@@ -45,21 +46,15 @@ function SignUp() {
       username: Yup.string().required("Không được để trống"),
     }),
     onSubmit: (values) => {
+      setIsLoading(true);
       axios
         .post("http://localhost:8080/api/v1/signup", values)
-        .then((response) =>
-          toast.success(response.data.message, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          })
-        )
-        .catch((error) =>
+        .then((response) => {
+          setIsLoading(false);
+          navigate("/login");
+        })
+        .catch((error) =>{
+          setIsLoading(true);
           toast.error(error.response.data.message, {
             position: "top-right",
             autoClose: 5000,
@@ -70,7 +65,7 @@ function SignUp() {
             progress: undefined,
             theme: "light",
           })
-        );
+        })
     },
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -80,6 +75,15 @@ function SignUp() {
   };
   return (
     <>
+      {isLoading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={isLoading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
+
       <Auth>
         <div className="bg-white border flex flex-col gap-2 p-4 pt-10 drop-shadow-md">
           <LazyLoadImage
@@ -168,7 +172,11 @@ function SignUp() {
                 }
                 label="Password"
               />
-              <PasswordStrengthBar password={formik.values.password} />
+              <PasswordStrengthBar
+                password={formik.values.password}
+                scoreWords={["Yếu", "Yếu", "Trung bình", "Tốt", "Mạnh"]}
+                shortScoreWord={"Quá ngắn"}
+              />
 
               {formik.errors.password && formik.touched.password ? (
                 <FormHelperText style={{ color: "#d32f2f" }}>

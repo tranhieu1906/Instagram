@@ -6,7 +6,7 @@ import crypto from "crypto";
 import { AppDataSource } from "../config/data-source";
 import Token from "../middlewares/jwt.middleware";
 import { sendEmail } from "../utils/sendEmail";
-import { MoreThan } from "typeorm";
+import { Like, MoreThan } from "typeorm";
 
 const UserRepo = AppDataSource.getRepository(User);
 const FollowRepo = AppDataSource.getRepository(Follow);
@@ -230,7 +230,7 @@ class UserController {
       next(error);
     }
   }
-
+  // Reset Password
   async resetPassword(req, res, next) {
     const resetPasswordToken = crypto
       .createHash("sha256")
@@ -253,6 +253,63 @@ class UserController {
       maxAge: 1000 * 60 * 60 * 24,
       httpOnly: true,
     });
+  }
+  // User Search
+  async searchUsers(req, res, next) {
+    try {
+      if (req.query.keyword) {
+        const users = await UserRepo.find({
+          where: [
+            { name: Like(`%${req.query.keyword}%`) },
+            { username: Like(`%${req.query.keyword}%`) },
+          ],
+        });
+        res.status(200).json({
+          success: true,
+          users,
+        });
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+  // suggested Users
+  async suggestedUsers(req, res, next) {
+    try {
+      const users = await UserRepo.find({
+        relations: {
+          followers: true,
+        },
+      });
+      const suggestedUsers = users
+        .filter(
+          (u) =>
+            !u.followers.includes(req.user.id) &&
+            u.id.toString() !== req.user.id.toString()
+        )
+        .slice(-5);
+
+      res.status(200).json({
+        success: true,
+        users: suggestedUsers,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  // Get User Details
+  async getUserDetails(req, res, next) {
+    try {
+      const user = await UserRepo.findOne({
+        where: { id: req.params.id },
+      });
+      res.status(200).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      next(error);
+    }
   }
 }
 
