@@ -59,6 +59,7 @@ class UserController {
       });
       res.status(200).json({
         message: "login successfully",
+        accessToken,
       });
     } catch (error) {
       next(error);

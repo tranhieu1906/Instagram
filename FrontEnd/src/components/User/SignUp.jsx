@@ -40,8 +40,8 @@ function SignUp() {
       password: Yup.string()
         .required("Không được để trống")
         .matches(
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,17}$/,
-          "Tối thiểu 8 và tối đa 17 ký tự, ít nhất một chữ hoa, một chữ thường, một số và một ký tự đặc biệt"
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,13}$/,
+          "Tối thiểu 8 và tối đa 13 ký tự, ít nhất một chữ hoa, một chữ thường, một số và một ký tự đặc biệt"
         ),
       username: Yup.string().required("Không được để trống"),
     }),
@@ -53,7 +53,7 @@ function SignUp() {
           setIsLoading(false);
           navigate("/login");
         })
-        .catch((error) =>{
+        .catch((error) => {
           setIsLoading(true);
           toast.error(error.response.data.message, {
             position: "top-right",
@@ -64,8 +64,8 @@ function SignUp() {
             draggable: true,
             progress: undefined,
             theme: "light",
-          })
-        })
+          });
+        });
     },
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -156,6 +156,7 @@ function SignUp() {
               </InputLabel>
               <OutlinedInput
                 name="password"
+                autoComplete="on"
                 id="outlined-adornment-password"
                 type={showPassword ? "text" : "password"}
                 endAdornment={
@@ -232,7 +233,6 @@ function SignUp() {
         pauseOnHover
         theme="light"
       />
-      {/* Same as */}
       <ToastContainer />
     </>
   );
