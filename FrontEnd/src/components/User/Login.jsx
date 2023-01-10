@@ -1,31 +1,59 @@
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import FormControl from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import TextField from "@mui/material/TextField";
+import axios from "axios";
+import { useFormik } from "formik";
 import React, { useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import * as Yup from "yup";
+import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
 import Auth from "./Auth";
 
-import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
-
 function SignUp() {
-  const [user, setUser] = useState({
-    account: "",
-    password: "",
+  let navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const formik = useFormik({
+    initialValues: {
+      account: "",
+      password: "",
+    },
+    validationSchema: Yup.object({
+      account: Yup.string().required("Không được để trống"),
+      password: Yup.string().required("Không được để trống"),
+    }),
+    onSubmit: (values) => {
+      setIsLoading(true);
+      axios
+        .post("http://localhost:8080/api/v1/login", values)
+        .then((res) => {
+          setIsLoading(false);
+          navigate("/");
+        })
+        .catch((error) => {
+          setIsLoading(true);
+          toast.error(error.response.data.message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        });
+    },
   });
-  const { account, password } = user;
-  const handleDataChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
-  const handleLogin = (e) => {
-    e.preventDefault();
-    console.log(user);
-  };
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -34,6 +62,14 @@ function SignUp() {
   };
   return (
     <>
+      {isLoading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={isLoading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <Auth>
         <div className="bg-white border flex flex-col gap-2 p-4 pt-10 drop-shadow-md">
           <LazyLoadImage
@@ -43,24 +79,31 @@ function SignUp() {
             alt="logo"
           />
           <form
-            onSubmit={handleLogin}
+            onSubmit={formik.handleSubmit}
             className="flex flex-col justify-center items-center gap-3 m-3 md:m-8"
           >
             <TextField
               fullWidth
               label="Tên người dùng hoặc email"
               name="account"
-              value={account}
-              onChange={handleDataChange}
+              value={formik.values.account}
+              onChange={formik.handleChange}
+              error={!!formik.errors.account && formik.touched.account}
+              helperText={
+                formik.errors.account && formik.touched.account
+                  ? formik.errors.account
+                  : null
+              }
               required
               size="small"
             />
             <FormControl
+              error={!!formik.errors.password && formik.touched.password}
               fullWidth
               required
               size="small"
-              value={password}
-              onChange={handleDataChange}
+              value={formik.values.password}
+              onChange={formik.handleChange}
               variant="outlined"
             >
               <InputLabel htmlFor="outlined-adornment-password">
@@ -68,6 +111,7 @@ function SignUp() {
               </InputLabel>
               <OutlinedInput
                 name="password"
+                autoComplete="on"
                 id="outlined-adornment-password"
                 type={showPassword ? "text" : "password"}
                 endAdornment={
@@ -84,6 +128,11 @@ function SignUp() {
                 }
                 label="Password"
               />
+              {formik.errors.password && formik.touched.password ? (
+                <FormHelperText style={{ color: "#d32f2f" }}>
+                  {formik.errors.password}
+                </FormHelperText>
+              ) : null}
             </FormControl>
             <button
               type="submit"
@@ -112,6 +161,19 @@ function SignUp() {
           </span>
         </div>
       </Auth>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      <ToastContainer />
     </>
   );
 }
