@@ -1,8 +1,7 @@
-import { Dialog, LinearProgress } from "@mui/material";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Dialog } from "@mui/material";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { emojiIcon } from "../Home/SvgIcons";
 

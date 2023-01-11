@@ -1,26 +1,27 @@
+
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Backdrop,
   CircularProgress,
   FormControl,
-  FormHelperText,
   IconButton,
   InputAdornment,
   InputLabel,
   OutlinedInput,
-  TextField,
+  TextField
 } from "@mui/material";
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import "react-toastify/dist/ReactToastify.css";
-import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import FormHelperText from "@mui/material/FormHelperText";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
+import { clearErrors, loginUser } from "../../actions/userAction";
 import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
 import Auth from "./Auth";
-import { clearErrors, loginUser } from "../../actions/userAction";
 
 function Login() {
   let navigate = useNavigate();
@@ -48,7 +49,7 @@ function Login() {
       dispatch(clearErrors());
     }
     if (isAuthenticated) {
-      navigate(`/`);
+      navigate("/");
     }
   }, [dispatch, error, isAuthenticated, navigate]);
 

@@ -151,6 +151,7 @@ class UserController {
   }
   // AccountDetails
   async getAccountDetails(req, res, next) {
+    console.log(req.user)
     try {
       const user = await UserRepo.findOne({
         relations: {

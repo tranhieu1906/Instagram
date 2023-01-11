@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import NewPost from "./NewPost";
+import ProfileDetails from "./ProfileDetails";
 import {
   exploreOutline,
   homeFill,
   homeOutline,
-  likeFill,
   likeOutline,
   messageFill,
   messageOutline,
-  postUploadOutline,
+  postUploadOutline
 } from "./SvgIcons";
-import NewPost from "./NewPost";
-import ProfileDetails from "./ProfileDetails";
 
 
 function Header() {

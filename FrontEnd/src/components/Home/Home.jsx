@@ -6,8 +6,7 @@ import axios from "../../api/axios";
 
 const Home = () => {
   useEffect(() => {
-    
-    axios.get({url :"/api/v1/users"});
+    axios.get("/api/v1/users");
   }, []);
   return (
     <>

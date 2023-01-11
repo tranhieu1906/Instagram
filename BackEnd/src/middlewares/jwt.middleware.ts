@@ -52,7 +52,7 @@ class Token {
       if (err) {
         return next(createError.Unauthorized());
       }
-      req.payload = payload;
+      req.user = payload;
       next();
     });
   }

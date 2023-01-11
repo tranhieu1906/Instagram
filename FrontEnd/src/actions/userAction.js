@@ -24,7 +24,7 @@ export const loginUser = (values) => async (dispatch) => {
         "Content-Type": "application/json",
       },
     };
-    const { data } = await axios.post(`/api/v1/login`, values, config);
+    const { data } = await axios.post("/api/v1/login", values, config);
     const token = data.accessToken;
     localStorage.setItem("token", token);
     setAuthToken(token);
@@ -44,7 +44,7 @@ export const loginUser = (values) => async (dispatch) => {
 export const registerUser = (userData) => async (dispatch) => {
   try {
     dispatch({ type: REGISTER_USER_REQUEST });
-    const { data } = await axios.post(`/api/v1/signup`, userData);
+    const { data } = await axios.post("/api/v1/signup", userData);
 
     dispatch({
       type: REGISTER_USER_SUCCESS,
@@ -62,7 +62,7 @@ export const loadUser = () => async (dispatch) => {
   try {
     dispatch({ type: LOAD_USER_REQUEST });
 
-    const { data } = await axios.get(`/api/v1/me`);
+    const { data } = await axios.get("/api/v1/me");
 
     dispatch({
       type: LOAD_USER_SUCCESS,
@@ -78,7 +78,7 @@ export const loadUser = () => async (dispatch) => {
 
 export const logoutUser = () => async (dispatch) => {
   try {
-    await axios.get(`/api/v1/logout`);
+    await axios.get("/api/v1/logout");
     localStorage.removeItem("token")
     dispatch({ type: LOGOUT_USER_SUCCESS });
   } catch (error) {
