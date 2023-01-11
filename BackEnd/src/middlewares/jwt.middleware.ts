@@ -42,16 +42,31 @@ class Token {
     });
   }
   veryfyAccessToken(req, res, next) {
-    const { token } = req.cookies;
-    JWT.verify(token, process.env.SECRET_KEY, async (err, payload) => {
-      if (err) {
-        return next(createError.Unauthorized());
+    try {
+      const authHeader = req.headers["authorization"];
+      const token = authHeader && authHeader.split(" ")[1];
+      console.log(token);
+      if (token == null) {
+        res.status(401).json("token not found");
       }
-      req.user = await userRepo.findOne({
-        where: { id: payload.data.id },
-      });
-      next();
-    });
+      JWT.verify(
+        token,
+        process.env.SECRET_KEY as string,
+        async (err: any, payload: any) => {
+          if (err) return res.sendStatus(403);
+          let userLogin = await userRepo.findOne({
+            where: { id: payload.data.id },
+          });
+          if (!userLogin) {
+            return res.status(401).json("Unauthozitaion");
+          }
+          req.user = userLogin;
+          next();
+        }
+      );
+    } catch (error) {
+      next(error)
+    }
   }
 }
 

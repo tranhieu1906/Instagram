@@ -52,11 +52,7 @@ class UserController {
       if (!isPasswordMatched) {
         return next(createError(401, "Password mismatch"));
       }
-      const accessToken = await Token.signAccessToken({ id: user.id });
-      res.cookie("token", accessToken, {
-        maxAge: 1000 * 60 * 60 * 24,
-        httpOnly: true,
-      });
+      const accessToken = await Token.signAccessToken(user);
       res.status(200).json({
         message: "login successfully",
         accessToken,

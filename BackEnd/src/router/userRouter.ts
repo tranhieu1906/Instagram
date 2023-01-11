@@ -2,41 +2,40 @@ import express from "express";
 import UserController from "./../controllers/user.controller";
 import Token from "../middlewares/jwt.middleware";
 const { uploadAvatar } = require("../utils/awsFunctions");
-export const User = express.Router();
+export const router = express.Router();
 const app = express();
 
-User.post("/signup", UserController.signUpUser);
-User.post("/login", UserController.loginUser);
-User.get("/logout", UserController.logOut);
+router.post("/signup", UserController.signUpUser);
+router.post("/login", UserController.loginUser);
+router.get("/logout", UserController.logOut);
 
-User.put(
-  "/update/password",
-  Token.veryfyAccessToken,
-  UserController.UpdatePassword
-);
-User.put(
+router.use(Token.veryfyAccessToken);
+
+router.put("/update/password", UserController.UpdatePassword);
+router.put(
   "/update/profile",
-  Token.veryfyAccessToken,
   UserController.updateProfile
 );
-User.put(
+router.put(
   "/update/avatar",
   uploadAvatar.single("avatar"),
-  Token.veryfyAccessToken,
   UserController.updateAvatar
 );
 
-User.get("/follow/:id", Token.veryfyAccessToken, UserController.followUser);
+router.get("/follow/:id", UserController.followUser);
 
-User.get("/me", Token.veryfyAccessToken, UserController.getAccountDetails);
+router.get("/me", UserController.getAccountDetails);
 
-User.post("/password/forgot", UserController.forgotPassword);
-User.put("/password/reset/:token", UserController.resetPassword);
+router.post("/password/forgot", UserController.forgotPassword);
+router.put("/password/reset/:token", UserController.resetPassword);
 
-User.get("/users", Token.veryfyAccessToken, UserController.searchUsers);
-User.get(
+router.get("/users", UserController.searchUsers);
+router.get(
   "/users/suggested",
-  Token.veryfyAccessToken,
+
   UserController.suggestedUsers
 );
-User.get("/userdetails/:id", Token.veryfyAccessToken,UserController.getUserDetails);
+router.get(
+  "/userdetails/:id",
+  UserController.getUserDetails
+);
