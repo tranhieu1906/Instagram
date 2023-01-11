@@ -3,8 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { loadUser } from "./actions/userAction";
 import { useDispatch, useSelector } from "react-redux";
 import { lazy, Suspense, useEffect } from "react";
-
-import { setAuthToken } from "./actions/setAuthToken";
+import axios from "./api/axios";
 
 import Header from "./components/NavBar/Header";
 import ForgotPassword from "./components/User/ForgotPassword";
@@ -21,9 +20,13 @@ function App() {
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.user);
 
+   useEffect(() => {
+     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("token");
+  
+   }, []);
+
   useEffect(() => {
     dispatch(loadUser());
-    
   }, [dispatch]);
   return (
     <>

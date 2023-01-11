@@ -48,7 +48,6 @@ class Token {
     const authHeader = req.headers.authorization;
     const bearerToken = authHeader.split(" ");
     const token = bearerToken[1];
-    console.log(token);
     JWT.verify(token, process.env.SECRET_KEY, (err, payload) => {
       if (err) {
         return next(createError.Unauthorized());
