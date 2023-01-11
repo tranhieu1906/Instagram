@@ -53,8 +53,13 @@ class UserController {
         return next(createError(401, "Password mismatch"));
       }
       const accessToken = await Token.signAccessToken(user);
+      res.cookie("token", accessToken, {
+        maxAge: 1000 * 60 * 60 * 24,
+        httpOnly: true,
+      });
       res.status(200).json({
         message: "login successfully",
+        user,
         accessToken,
       });
     } catch (error) {
@@ -63,6 +68,7 @@ class UserController {
   }
   //logOut
   async logOut(req, res, next) {
+    console.log(req.header("authorization"));
     try {
       res.cookie("token", null, {
         expires: new Date(Date.now()),

@@ -24,7 +24,7 @@ const Sidebar = () => {
                     <span className="text-blue-500 text-xs font-semibold cursor-pointer">Switch</span>
                 </div>
 
-¥                <div className="flex justify-between items-center mt-5">
+               <div className="flex justify-between items-center mt-5">
                     <p className="font-semibold text-gray-500 text-sm">Suggestions For You</p>
                     <span className="text-black text-xs font-semibold cursor-pointer">See All</span>
                 </div>

@@ -33,10 +33,8 @@ import {
     USER_DETAILS_REQUEST,
     USER_DETAILS_SUCCESS
 } from "../constants/userConstants";
-import axios from 'axios';
+import axios from '../api/axios';
 import {setAuthToken} from "./setAuthToken";
-
-const URL_API = "http://localhost:8080"
 
 export const loginUser = (values) => async (dispatch) => {
     try {
@@ -47,7 +45,7 @@ export const loginUser = (values) => async (dispatch) => {
             },
         }
         const {data} = await axios.post(
-            `${URL_API}/api/v1/login`,
+            `/api/v1/login`,
             values,
             config
         )
@@ -71,7 +69,7 @@ export const registerUser = (userData) => async (dispatch) => {
     try {
         dispatch({type: REGISTER_USER_REQUEST});
         const {data} = await axios.post(
-            `${URL_API}/api/v1/signup`,
+            `/api/v1/signup`,
             userData
         );
 
@@ -86,6 +84,36 @@ export const registerUser = (userData) => async (dispatch) => {
             payload: error.response.data.message,
         });
     }
+};
+
+export const loadUser = () => async (dispatch) => {
+  try {
+    dispatch({ type: LOAD_USER_REQUEST });
+
+    const { data } = await axios.get(`/api/v1/me`);
+
+    dispatch({
+      type: LOAD_USER_SUCCESS,
+      payload: data.user,
+    });
+  } catch (error) {
+    dispatch({
+      type: LOAD_USER_FAIL,
+      payload: error.response,
+    });
+  }
+};
+
+export const logoutUser = () => async (dispatch) => {
+  try {
+    await axios.get(`/api/v1/logout`);
+    dispatch({ type: LOGOUT_USER_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: LOGOUT_USER_FAIL,
+      payload: error.response.data.message,
+    });
+  }
 };
 
 export const clearErrors = () => async (dispatch) => {

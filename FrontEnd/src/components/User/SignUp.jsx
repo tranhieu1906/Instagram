@@ -1,5 +1,7 @@
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import IconButton from "@mui/material/IconButton";
@@ -7,19 +9,16 @@ import InputAdornment from "@mui/material/InputAdornment";
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import TextField from "@mui/material/TextField";
-import axios from "axios";
-import {useFormik} from "formik";
-import React, {useEffect, useState} from "react";
-import {LazyLoadImage} from "react-lazy-load-image-component";
+import { useFormik } from "formik";
+import React, { useEffect, useState } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import PasswordStrengthBar from "react-password-strength-bar";
-import {Link, useNavigate} from "react-router-dom";
-import {ToastContainer, toast} from "react-toastify";
-import CircularProgress from "@mui/material/CircularProgress";
-import Backdrop from "@mui/material/Backdrop";
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
 import { clearErrors, registerUser } from '../../actions/userAction';
-import { useDispatch, useSelector } from 'react-redux';
 import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
 import Auth from "./Auth";
 
@@ -28,7 +27,6 @@ function SignUp() {
     const dispatch = useDispatch();
     
     const { loading, isAuthenticated, error } = useSelector((state) => state.user);
-    console.log(isAuthenticated)
     const formik = useFormik({
         initialValues: {
             email: "",
