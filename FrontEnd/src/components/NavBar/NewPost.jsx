@@ -1,16 +1,27 @@
-import data from "@emoji-mart/data";
+import { Dialog, LinearProgress } from "@mui/material";
 import Picker from "@emoji-mart/react";
-import { Dialog } from "@mui/material";
-import React, { useState } from "react";
+import data from "@emoji-mart/data";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { addNewPost, clearErrors } from "../../actions/postAction";
+import { NEW_POST_RESET } from "../../constants/postConstants";
 import { emojiIcon } from "../Home/SvgIcons";
 
-function NewPost({ newPost, setNewPost }) {
+const NewPost = ({ newPost, setNewPost }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { loading, success, error } = useSelector((state) => state.newPost);
+  const { user } = useSelector((state) => state.user);
+
   const [postImage, setPostImage] = useState("");
   const [postPreview, setPostPreview] = useState("");
   const [caption, setCaption] = useState("");
   const [showEmojis, setShowEmojis] = useState(false);
   const [dragged, setDragged] = useState(false);
+
   const handleDragChange = () => {
     setDragged(!dragged);
   };
@@ -45,22 +56,40 @@ function NewPost({ newPost, setNewPost }) {
     formData.set("caption", caption);
     formData.set("post", postImage);
 
-    // dispatch(addNewPost(formData));
+    dispatch(addNewPost(formData));
   };
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+    if (success) {
+      toast.success("Post Shared");
+      dispatch({ type: NEW_POST_RESET });
+      setNewPost(false);
+      navigate("/");
+
+      setPostImage("");
+      setPostPreview("");
+      setCaption("");
+    }
+  }, [dispatch, error, success, navigate, setNewPost]);
 
   return (
     <Dialog open={newPost} onClose={() => setNewPost(false)} maxWidth="xl">
       <div className="flex flex-col sm:w-screen max-w-4xl">
         <div className="bg-white py-3 border-b px-4 flex justify-between w-full">
-          <p className="font-semibold text-center">Tạo bài viết mới</p>
+          <span className="font-medium">Create new post</span>
           <button
             onClick={newPostSubmitHandler}
+            disabled={loading}
             className="text-blue-500 font-medium"
           >
-            Chia sẻ
+            Share
           </button>
         </div>
-        {/* {loading && <LinearProgress />} */}
+        {loading && <LinearProgress />}
 
         <div className="flex sm:flex-row sm:items-start items-center flex-col w-full">
           {postImage ? (
@@ -117,11 +146,11 @@ function NewPost({ newPost, setNewPost }) {
               <img
                 draggable="false"
                 className="w-11 h-11 rounded-full object-cover"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTv2Y0DwEcPc_pqiHtcbyZ6owZUwbxR4kxZ7dKeuwZbXg&s"
+                src={user.profile_picture}
                 alt="avatar"
               />
               <span className="text-black text-sm font-semibold">
-                {/* {user.username} */}
+                {user.username}
               </span>
             </div>
 
@@ -153,11 +182,19 @@ function NewPost({ newPost, setNewPost }) {
                       data={data}
                       onEmojiSelect={(e) => {
                         setCaption(caption + e.native);
-                        setShowEmojis(false)
+                        setShowEmojis(false);
                       }}
                     />
                   </div>
                 )}
+
+                <button
+                  onClick={newPostSubmitHandler}
+                  disabled={loading}
+                  className="bg-primary-blue text-white px-6 py-1.5 rounded font-medium hover:drop-shadow-lg uppercase text-sm tracking-wider"
+                >
+                  Post
+                </button>
               </div>
             </div>
           </div>
@@ -165,5 +202,6 @@ function NewPost({ newPost, setNewPost }) {
       </div>
     </Dialog>
   );
-}
+};
+
 export default NewPost;

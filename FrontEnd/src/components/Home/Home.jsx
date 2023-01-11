@@ -1,13 +1,8 @@
 // import PostsContainer from './PostsContainer'
 import SideBar from "./SideBar/SideBar";
 import MetaData from "../Layouts/MetaData";
-import { useEffect } from "react";
-import axios from "../../api/axios";
 
 const Home = () => {
-  useEffect(() => {
-    axios.get("/api/v1/users");
-  }, []);
   return (
     <>
       <MetaData title="Instagram" />

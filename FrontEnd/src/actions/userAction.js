@@ -1,5 +1,4 @@
 import axios from "../api/axios";
-import { setAuthToken } from "./setAuthToken";
 
 import {
   CLEAR_ERRORS,
@@ -27,7 +26,6 @@ export const loginUser = (values) => async (dispatch) => {
     const { data } = await axios.post("/api/v1/login", values, config);
     const token = data.accessToken;
     localStorage.setItem("token", token);
-    setAuthToken(token);
     dispatch({
       type: LOGIN_USER_SUCCESS,
       payload: data.user,
@@ -44,12 +42,18 @@ export const loginUser = (values) => async (dispatch) => {
 export const registerUser = (userData) => async (dispatch) => {
   try {
     dispatch({ type: REGISTER_USER_REQUEST });
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
     const { data } = await axios.post("/api/v1/signup", userData);
-
     dispatch({
       type: REGISTER_USER_SUCCESS,
-      payload: data.user,
+      payload: data.newUser,
+      config,
     });
+
   } catch (error) {
     dispatch({
       type: REGISTER_USER_FAIL,
