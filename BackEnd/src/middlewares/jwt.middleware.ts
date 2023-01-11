@@ -42,14 +42,17 @@ class Token {
     });
   }
   veryfyAccessToken(req, res, next) {
-    const { token } = req.cookies;
-    JWT.verify(token, process.env.SECRET_KEY, async (err, payload) => {
+    if (!req.headers.authorization) {
+      return next(createError.Unauthorized());
+    }
+    const authHeader = req.headers.authorization;
+    const bearerToken = authHeader.split(" ");
+    const token = bearerToken[1];
+    JWT.verify(token, process.env.SECRET_KEY, (err, payload) => {
       if (err) {
         return next(createError.Unauthorized());
       }
-      req.user = await userRepo.findOne({
-        where: { id: payload.data.id },
-      });
+      req.user = payload;
       next();
     });
   }

@@ -1,27 +1,34 @@
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
-import FormControl from "@mui/material/FormControl";
-import FormHelperText from "@mui/material/FormHelperText";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
-import InputLabel from "@mui/material/InputLabel";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import TextField from "@mui/material/TextField";
-import axios from "axios";
+
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  Backdrop,
+  CircularProgress,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField
+} from "@mui/material";
 import { useFormik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import FormHelperText from "@mui/material/FormHelperText";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
+import { clearErrors, loginUser } from "../../actions/userAction";
 import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
 import Auth from "./Auth";
 
-function SignUp() {
+function Login() {
   let navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const { loading, isAuthenticated, error } = useSelector(
+    (state) => state.user
+  );
   const formik = useFormik({
     initialValues: {
       account: "",
@@ -32,40 +39,32 @@ function SignUp() {
       password: Yup.string().required("Không được để trống"),
     }),
     onSubmit: (values) => {
-      setIsLoading(true);
-      axios
-        .post("http://localhost:8080/api/v1/login", values)
-        .then((res) => {
-          setIsLoading(false);
-          navigate("/");
-        })
-        .catch((error) => {
-          setIsLoading(true);
-          toast.error(error.response.data.message, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-        });
+      dispatch(loginUser(values));
     },
   });
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [dispatch, error, isAuthenticated, navigate]);
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
   return (
     <>
-      {isLoading && (
+      {loading && (
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={isLoading}
+          open={loading}
         >
           <CircularProgress color="inherit" />
         </Backdrop>
@@ -177,4 +176,5 @@ function SignUp() {
     </>
   );
 }
-export default SignUp;
+
+export default Login;

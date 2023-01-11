@@ -8,9 +8,14 @@ import {
   settingsIcon,
   switchAccountIcon,
 } from "./SvgIcons";
-
+import { logoutUser } from "../../actions/userAction";
+import { useDispatch, useSelector } from "react-redux";
 
 function ProfileDetails({ setProfileToggle }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user } = useSelector((state) => state.user);
   const tabs = [
     {
       title: "Trang cá nhân",
@@ -33,7 +38,11 @@ function ProfileDetails({ setProfileToggle }) {
       redirect: "/",
     },
   ];
-
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    navigate("/login");
+    toast.success("Logout Successfully");
+  };
   return (
     <ClickAwayListener onClickAway={() => setProfileToggle(false)}>
       <div className="absolute w-56 bg-white rounded  drop-shadow top-14 right-0 md:right-72 md:top-14 border">
@@ -51,7 +60,7 @@ function ProfileDetails({ setProfileToggle }) {
             </Link>
           ))}
           <button
-            // onClick={handleLogout}
+            onClick={handleLogout}
             className="flex rounded-b border-t-2 items-center gap-3 p-2.5 text-sm pl-4 cursor-pointer hover:bg-gray-50"
           >
             Đăng xuất
