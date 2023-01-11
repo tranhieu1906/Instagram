@@ -40,12 +40,12 @@ const Sidebar = () => {
                     <div className="flex flex-col">
                         <div className="flex items-center space-x-1.5">
                             {['About', 'Help', 'Press', 'API', 'Jobs', 'Privacy', 'Terms', 'Locations'].map((el, i) => (
-                                <a href="#" key={i}>{el}</a>
+                                <a href="/#" key={i}>{el}</a>
                             ))}
                         </div>
                         <div className="flex items-center space-x-1.5">
                             {['Top Accounts', 'Hashtags', 'Language'].map((el, i) => (
-                                <a href="#" key={i}>{el}</a>
+                                <a href="/#" key={i}>{el}</a>
                             ))}
                         </div>
                     </div>

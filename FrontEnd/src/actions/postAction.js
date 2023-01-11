@@ -9,8 +9,8 @@ import {
 
 export const addNewPost = (postData) => async (dispatch) => {
   try {
-    dispatch(NEW_POST_REQUEST);
-    const { data } = await axios.post("/post/new", postData);
+    dispatch({ type: NEW_POST_REQUEST });
+    const { data } = await axios.post("/api/v1/post/new", postData);
     dispatch({
       type: NEW_POST_SUCCESS,
       payload: data,

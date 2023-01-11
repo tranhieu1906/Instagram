@@ -20,7 +20,7 @@ function ProfileDetails({ setProfileToggle }) {
     {
       title: "Trang cá nhân",
       icon: profileIcon,
-      // redirect: `/${user.username}`,
+      redirect: `/${user.username}`,
     },
     {
       title: "Đã lưu",
