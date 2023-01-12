@@ -36,13 +36,13 @@ class PostController {
       const post = await PostRepo.findOne({
         where: { id: req.params.id },
         relations: {
-          user: true,
+          postedBy: true,
         },
       });
       if (!post) {
         return next(createError(401, "Post Not Found"));
       }
-      if (post.user.id !== req.user.data.id) {
+      if (post.postedBy.id !== req.user.data.id) {
         return next(createError(401, "User Not Authenticated"));
       }
       await deleteFile(post.image_url);
@@ -61,13 +61,13 @@ class PostController {
       const post = await PostRepo.findOne({
         where: { id: req.params.id },
         relations: {
-          user: true,
+          postedBy: true,
         },
       });
       if (!post) {
         return next(createError(401, "Post Not Found"));
       }
-      if (post.user.id !== req.user.data.id) {
+      if (post.postedBy.id !== req.user.data.id) {
         return next(createError(401, "User Not Authenticated"));
       }
       post.content = req.body.content;
@@ -86,7 +86,7 @@ class PostController {
       const post = await PostRepo.findOne({
         where: { id: req.params.id },
         relations: {
-          user: true,
+          postedBy: true,
           likes: true,
         },
       });
@@ -196,8 +196,10 @@ class PostController {
     }
   }
   // show followers posts
-  async followePosts(req, res, next) {
+  async followersPosts(req, res, next) {
     try {
+      const currentPage = Number(req.query.page) || 1;
+      const skipPosts = 4 * (currentPage - 1);
       const users = await FollowRepo.createQueryBuilder("follow")
         .leftJoinAndSelect("follow.following", "user AS u")
         .leftJoinAndSelect("follow.follower", "u")
@@ -207,18 +209,29 @@ class PostController {
       users.map((user) => arr.push(user.follower));
       const posts = await PostRepo.find({
         where: {
-          user: arr,
+          postedBy: arr,
         },
         relations: {
-          user: true,
+          postedBy: true,
           likes: true,
           comments: true,
         },
         order: {
           created_at: "ASC",
         },
+        skip: skipPosts,
+        take: 4,
       });
-      res.status(200).json(posts);
+      // const totalPosts = await PostRepo.find({
+      //   where :{
+      //     user : In([...arr])
+      //   }
+      // })
+       return res.status(200).json({
+         success: true,
+         posts: posts,
+        //  totalPosts,
+       });
     } catch (error) {
       next(error);
     }
@@ -243,7 +256,7 @@ class PostController {
         },
         relations: {
           likes: true,
-          user: true,
+          postedBy: true,
           comments: true,
         },
       });

@@ -4,6 +4,18 @@ import {
   NEW_POST_RESET,
   NEW_POST_FAIL,
   CLEAR_ERRORS,
+  POST_FOLLOWING_REQUEST,
+  POST_FOLLOWING_SUCCESS,
+  POST_FOLLOWING_RESET,
+  POST_FOLLOWING_FAIL,
+  LIKE_UNLIKE_POST_REQUEST,
+  LIKE_UNLIKE_POST_SUCCESS,
+  LIKE_UNLIKE_POST_FAIL,
+  LIKE_UNLIKE_POST_RESET,
+  NEW_COMMENT_REQUEST,
+  NEW_COMMENT_SUCCESS,
+  NEW_COMMENT_RESET,
+  NEW_COMMENT_FAIL,
 } from "../constants/postConstants";
 
 export const postReducer = (state = { post: {} }, { type, payload }) => {
@@ -29,6 +41,106 @@ export const postReducer = (state = { post: {} }, { type, payload }) => {
       return {
         ...state,
         success: false,
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+export const postOfFollowingReduct = (state = { posts: [] }, { type, payload }) => {
+  switch (type) {
+    case POST_FOLLOWING_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case POST_FOLLOWING_SUCCESS:
+      return {
+        loading: false,
+        posts: [...state.posts, ...payload.posts],
+        totalPosts: payload.totalPosts,
+      };
+    case POST_FOLLOWING_RESET:
+      return {
+        ...state,
+        posts: [],
+        totalPosts: 0,
+      };
+    case POST_FOLLOWING_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: payload,
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+export const likePostReducer = (state = {}, { type, payload }) => {
+  switch (type) {
+    case LIKE_UNLIKE_POST_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case LIKE_UNLIKE_POST_SUCCESS:
+      return {
+        loading: false,
+        success: payload.success,
+        message: payload.message,
+      };
+    case LIKE_UNLIKE_POST_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: payload,
+      };
+    case LIKE_UNLIKE_POST_RESET:
+      return {
+        ...state,
+        success: false,
+        message: null,
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+export const newCommentReducer = (state = {}, { type, payload }) => {
+  switch (type) {
+    case NEW_COMMENT_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case NEW_COMMENT_SUCCESS:
+      return {
+        loading: false,
+        success: payload,
+      };
+    case NEW_COMMENT_RESET:
+      return {
+        ...state,
+        success: false,
+      };
+    case NEW_COMMENT_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: payload,
       };
     case CLEAR_ERRORS:
       return {

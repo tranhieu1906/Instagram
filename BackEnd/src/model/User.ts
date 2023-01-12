@@ -38,7 +38,7 @@ export class User {
   @Column({ type: "timestamp", default: () => "now()" })
   created_at: Date;
 
-  @OneToMany(() => Post, (post) => post.user)
+  @OneToMany(() => Post, (post) => post.postedBy)
   posts: Post[];
 
   @OneToMany(() => Comment, (comment) => comment.user)

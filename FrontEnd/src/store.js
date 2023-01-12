@@ -6,12 +6,20 @@ import {
   allUsersReducer,
   followUserReducer,
 } from "./reducers/userReducer";
-import { postReducer } from "./reducers/postReducer";
+import {
+  postReducer,
+  postOfFollowingReduct,
+  likePostReducer,
+  newCommentReducer,
+} from "./reducers/postReducer";
 const reducer = combineReducers({
   user: userReducer,
   newPost: postReducer,
   allUsers: allUsersReducer,
   followUser: followUserReducer,
+  postOfFollowing: postOfFollowingReduct,
+  likePost: likePostReducer,
+  newComment: newCommentReducer,
 });
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));

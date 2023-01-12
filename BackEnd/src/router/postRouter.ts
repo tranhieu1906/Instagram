@@ -16,7 +16,7 @@ Post.post("/post/comment/:id", Posts.newComment)
   .delete("/post/comment/:id", Posts.DeleteComment)
   .put("/post/comment/:id", Posts.updateComment);
 
-Post.get("/posts", Posts.followePosts);
+Post.get("/posts", Posts.followersPosts);
 
 Post.get("/posts/all",Posts.allPosts);
 

@@ -149,7 +149,6 @@ class UserController {
   }
   // AccountDetails
   async getAccountDetails(req, res, next) {
-    console.log(req.user);
     try {
       const user = await UserRepo.findOne({
         relations: {
@@ -290,7 +289,6 @@ class UserController {
             u.id.toString() !== req.user.data.id.toString()
         )
         .slice(-5);
-      console.log("suggestedUsers", suggestedUsers);
       res.status(200).json({
         success: true,
         users: suggestedUsers,
