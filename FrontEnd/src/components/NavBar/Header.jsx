@@ -13,6 +13,7 @@ import ProfileDetails from "./ProfileDetails";
 import NewPost from "./NewPost";
 import { useSelector } from "react-redux";
 import SearchBox from "./SearchBar/SearchBox";
+import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
 
 const Header = () => {
   const { user } = useSelector((state) => state.user);
@@ -36,8 +37,9 @@ const Header = () => {
           <img
             draggable="false"
             className="mt-1.5 w-full h-full object-contain"
-            src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
-            alt=""
+            src={logo}
+            alt="logo"
+            style={{ width: "100px", height: "35px" }}
           />
         </Link>
 

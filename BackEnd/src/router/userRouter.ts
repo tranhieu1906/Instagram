@@ -32,7 +32,6 @@ router.put("/password/reset/:token", UserController.resetPassword);
 router.get("/users", UserController.searchUsers);
 router.get(
   "/users/suggested",
-
   UserController.suggestedUsers
 );
 router.get(

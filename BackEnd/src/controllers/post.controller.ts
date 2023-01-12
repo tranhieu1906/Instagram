@@ -19,7 +19,7 @@ class PostController {
       const postData = {
         content: req.body.content,
         image_url: req.file.location,
-        user: req.user.id,
+        user: req.user.data.id,
       };
       const post = await PostRepo.save(postData);
       res.status(201).json({
@@ -42,7 +42,7 @@ class PostController {
       if (!post) {
         return next(createError(401, "Post Not Found"));
       }
-      if (post.user.id !== req.user.id) {
+      if (post.user.id !== req.user.data.id) {
         return next(createError(401, "User Not Authenticated"));
       }
       await deleteFile(post.image_url);
@@ -67,7 +67,7 @@ class PostController {
       if (!post) {
         return next(createError(401, "Post Not Found"));
       }
-      if (post.user.id !== req.user.id) {
+      if (post.user.id !== req.user.data.id) {
         return next(createError(401, "User Not Authenticated"));
       }
       post.content = req.body.content;
@@ -93,18 +93,18 @@ class PostController {
       if (!post) {
         return next(createError(401, "Post Not Found"));
       }
-      console.log(req.user.id);
+      console.log(req.user.data.id);
       const like = await LikeRepo.findOne({
         relations: {
           user: true,
           post: true,
         },
-        where: { post: { id: req.params.id }, user: { id: req.user.id } },
+        where: { post: { id: req.params.id }, user: { id: req.user.data.id } },
       });
       if (like) {
         await LikeRepo.delete({
           post: req.params.id,
-          user: req.user.id,
+          user: req.user.data.id,
         });
         res.status(200).json({
           success: true,
@@ -113,7 +113,7 @@ class PostController {
       } else {
         await LikeRepo.save({
           post: { id: req.params.id },
-          user: { id: req.user.id },
+          user: { id: req.user.data.id },
         });
         res.status(200).json({
           success: true,
@@ -134,7 +134,7 @@ class PostController {
         return next(createError(401, "Post Not Found"));
       }
       const comment = await CommentRepo.save({
-        user: req.user.id,
+        user: req.user.data.id,
         comment_text: req.body.comment,
         post: req.params.id,
       });
@@ -158,7 +158,7 @@ class PostController {
       if (!comment) {
         return next(createError(401, "Post Not Found"));
       }
-      if (comment.user.id !== req.user.id) {
+      if (comment.user.id !== req.user.data.id) {
         return next(createError(401, "User Not Authenticated"));
       }
       await CommentRepo.delete({ id: req.params.id });
@@ -182,7 +182,7 @@ class PostController {
       if (!comment) {
         return next(createError(401, "comment Not Found"));
       }
-      if (comment.user.id !== req.user.id) {
+      if (comment.user.id !== req.user.data.id) {
         return next(createError(401, "User Not Authenticated"));
       }
       comment.comment_text = req.body.comment;
@@ -201,7 +201,7 @@ class PostController {
       const users = await FollowRepo.createQueryBuilder("follow")
         .leftJoinAndSelect("follow.following", "user AS u")
         .leftJoinAndSelect("follow.follower", "u")
-        .where("follow.following = :id", { id: req.user.id })
+        .where("follow.following = :id", { id: req.user.data.id })
         .getMany();
       let arr = [];
       users.map((user) => arr.push(user.follower));

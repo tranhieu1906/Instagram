@@ -54,6 +54,7 @@ const NewPost = ({ newPost, setNewPost }) => {
     let formData = new FormData();
     formData.set("content", content);
     formData.set("post", post);
+    formData.set("user", user.id);
 
     dispatch(addNewPost(formData));
   };

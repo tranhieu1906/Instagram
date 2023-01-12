@@ -1,13 +1,44 @@
-// import SkeletonUserItem from '../../Layouts/SkeletonUserItem';
-// import UserListItem from './UserListItem';
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { FOLLOW_USER_RESET } from "../../../constants/userConstants";
+import { clearErrors, getSuggestedUsers } from "../../../service/userAction";
+import SkeletonUserItem from "../../Layouts/SkeletonUserList";
+import UserListItem from "./UserListItem";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
+
   const { user } = useSelector((state) => state.user);
+
+  const { error, users, loading } = useSelector((state) => state.allUsers);
+  const {
+    error: followError,
+    success,
+    message,
+  } = useSelector((state) => state.followUser);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+    dispatch(getSuggestedUsers());
+  }, [dispatch, error]);
+
+  useEffect(() => {
+    if (followError) {
+      toast.error(followError);
+      dispatch(clearErrors());
+    }
+    if (success) {
+      toast.success(message);
+
+      dispatch({ type: FOLLOW_USER_RESET });
+    }
+  }, [success, followError, dispatch, message]);
+
   return (
     <div className="fixed lg:right-32 xl:right-56 w-3/12 h-full hidden lg:flex flex-col flex-auto m-8 mt-12 pr-8 -z-1">
       <div className="ml-10 flex flex-col p-2">
@@ -32,25 +63,27 @@ const Sidebar = () => {
             </div>
           </div>
           <span className="text-blue-500 text-xs font-semibold cursor-pointer">
-            Chuyển
+            Switch
           </span>
         </div>
 
         <div className="flex justify-between items-center mt-5">
-          <p className="font-semibold text-gray-500 text-sm">Gợi ý cho bạn</p>
+          <p className="font-semibold text-gray-500 text-sm">
+            Suggestions For You
+          </p>
           <span className="text-black text-xs font-semibold cursor-pointer">
-            Xem tất cả
+            See All
           </span>
         </div>
 
         <div className="flex flex-col flex-auto mt-3 space-y-3.5">
-          {/*{loading ?*/}
-          {/*    Array(5).fill("").map((el, i) => (<SkeletonUserItem key={i} />))*/}
-          {/*    :*/}
-          {/*    users?.map((user) => (*/}
-          {/*        <UserListItem {...user} key={user._id} />*/}
-          {/*    ))*/}
-          {/*}*/}
+          {loading
+            ? Array(5)
+                .fill("")
+                .map((el, i) => <SkeletonUserItem key={i} />)
+            : users?.map((user, index) => (
+                <UserListItem {...user} key={index} />
+              ))}
         </div>
 
         <div className="flex flex-col mt-8 space-y-6 text-xs text-gray-400">

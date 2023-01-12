@@ -13,6 +13,12 @@ import {
   REGISTER_USER_FAIL,
   REGISTER_USER_REQUEST,
   REGISTER_USER_SUCCESS,
+  FOLLOW_USER_REQUEST,
+  FOLLOW_USER_SUCCESS,
+  FOLLOW_USER_FAIL,
+  ALL_USERS_REQUEST,
+  ALL_USERS_SUCCESS,
+  ALL_USERS_FAIL,
 } from "../constants/userConstants";
 
 export const loginUser = (values) => async (dispatch) => {
@@ -53,7 +59,6 @@ export const registerUser = (userData) => async (dispatch) => {
       payload: data.newUser,
       config,
     });
-
   } catch (error) {
     dispatch({
       type: REGISTER_USER_FAIL,
@@ -83,11 +88,47 @@ export const loadUser = () => async (dispatch) => {
 export const logoutUser = () => async (dispatch) => {
   try {
     await axios.get("/api/v1/logout");
-    localStorage.removeItem("token")
+    localStorage.removeItem("token");
     dispatch({ type: LOGOUT_USER_SUCCESS });
   } catch (error) {
     dispatch({
       type: LOGOUT_USER_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const followUser = (userId) => async (dispatch) => {
+  try {
+    dispatch({ type: FOLLOW_USER_REQUEST });
+    const { data } = await axios.get(`/api/v1/follow/${userId}`);
+
+    dispatch({
+      type: FOLLOW_USER_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FOLLOW_USER_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const getSuggestedUsers = () => (dispatch) => {
+  try {
+    dispatch({ type: ALL_USERS_REQUEST });
+
+    setTimeout(async () => {
+      const { data } = await axios.get("/api/v1/users/suggested");
+      dispatch({
+        type: ALL_USERS_SUCCESS,
+        payload: data.users,
+      });
+    }, 600);
+  } catch (error) {
+    dispatch({
+      type: ALL_USERS_FAIL,
       payload: error.response.data.message,
     });
   }

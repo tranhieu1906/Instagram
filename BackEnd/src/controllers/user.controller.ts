@@ -120,13 +120,13 @@ class UserController {
           follower: true,
         },
         where: {
-          following: { id: req.user.id },
+          following: { id: req.user.data.id },
           follower: { id: req.params.id },
         },
       });
       if (follow) {
         FollowRepo.delete({
-          following: { id: req.user.id },
+          following: { id: req.user.data.id },
           follower: { id: req.params.id },
         });
         res.status(200).json({
@@ -135,7 +135,7 @@ class UserController {
         });
       } else {
         FollowRepo.save({
-          user: { id: req.user.id },
+          following: { id: req.user.data.id },
           follower: { id: req.params.id },
         });
         res.status(200).json({
@@ -149,7 +149,7 @@ class UserController {
   }
   // AccountDetails
   async getAccountDetails(req, res, next) {
-    console.log(req.user)
+    console.log(req.user);
     try {
       const user = await UserRepo.findOne({
         relations: {
@@ -286,11 +286,11 @@ class UserController {
       const suggestedUsers = users
         .filter(
           (u) =>
-            !u.followers.includes(req.user.id) &&
-            u.id.toString() !== req.user.id.toString()
+            !u.followers.includes(req.user.data.id) &&
+            u.id.toString() !== req.user.data.id.toString()
         )
         .slice(-5);
-
+      console.log("suggestedUsers", suggestedUsers);
       res.status(200).json({
         success: true,
         users: suggestedUsers,
