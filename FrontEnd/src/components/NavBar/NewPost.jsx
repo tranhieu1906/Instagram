@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import { addNewPost, clearErrors } from "../../actions/postAction";
+import { addNewPost, clearErrors } from "../../service/postAction";
 import { NEW_POST_RESET } from "../../constants/postConstants";
 import { emojiIcon } from "../Home/SvgIcons";
 import "react-toastify/dist/ReactToastify.css";
@@ -51,7 +51,6 @@ const NewPost = ({ newPost, setNewPost }) => {
       toast.error("Empty Caption");
       return;
     }
-    console.log(content);
     let formData = new FormData();
     formData.set("content", content);
     formData.set("post", post);

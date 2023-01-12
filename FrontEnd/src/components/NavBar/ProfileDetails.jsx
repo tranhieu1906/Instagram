@@ -8,7 +8,7 @@ import {
   settingsIcon,
   switchAccountIcon,
 } from "./SvgIcons";
-import { logoutUser } from "../../actions/userAction";
+import { logoutUser } from "../../service/userAction";
 import { useDispatch, useSelector } from "react-redux";
 
 function ProfileDetails({ setProfileToggle }) {
