@@ -4,10 +4,11 @@ import data from "@emoji-mart/data";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { addNewPost, clearErrors } from "../../actions/postAction";
+import { toast, ToastContainer } from "react-toastify";
+import { addNewPost, clearErrors } from "../../service/postAction";
 import { NEW_POST_RESET } from "../../constants/postConstants";
 import { emojiIcon } from "../Home/SvgIcons";
+import "react-toastify/dist/ReactToastify.css";
 
 const NewPost = ({ newPost, setNewPost }) => {
   const dispatch = useDispatch();
@@ -16,9 +17,9 @@ const NewPost = ({ newPost, setNewPost }) => {
   const { loading, success, error } = useSelector((state) => state.newPost);
   const { user } = useSelector((state) => state.user);
 
-  const [postImage, setPostImage] = useState("");
+  const [post, setPostImage] = useState("");
   const [postPreview, setPostPreview] = useState("");
-  const [caption, setCaption] = useState("");
+  const [content, setCaption] = useState("");
   const [showEmojis, setShowEmojis] = useState(false);
   const [dragged, setDragged] = useState(false);
 
@@ -42,19 +43,17 @@ const NewPost = ({ newPost, setNewPost }) => {
 
   const newPostSubmitHandler = (e) => {
     e.preventDefault();
-    if (!postImage) {
+    if (!post) {
       toast.error("Select Image");
       return;
     }
-    if (!caption.trim()) {
+    if (!content.trim()) {
       toast.error("Empty Caption");
       return;
     }
-
-    const formData = new FormData();
-
-    formData.set("caption", caption);
-    formData.set("post", postImage);
+    let formData = new FormData();
+    formData.set("content", content);
+    formData.set("post", post);
 
     dispatch(addNewPost(formData));
   };
@@ -92,7 +91,7 @@ const NewPost = ({ newPost, setNewPost }) => {
         {loading && <LinearProgress />}
 
         <div className="flex sm:flex-row sm:items-start items-center flex-col w-full">
-          {postImage ? (
+          {post ? (
             <div className="bg-black h-48 sm:h-[80vh] w-full">
               <img
                 draggable="false"
@@ -161,7 +160,7 @@ const NewPost = ({ newPost, setNewPost }) => {
                 name="caption"
                 cols="40"
                 rows="12"
-                value={caption}
+                value={content}
                 onChange={(e) => setCaption(e.target.value)}
                 onClick={() => setShowEmojis(false)}
               ></textarea>
@@ -181,25 +180,29 @@ const NewPost = ({ newPost, setNewPost }) => {
                       skin="3"
                       data={data}
                       onEmojiSelect={(e) => {
-                        setCaption(caption + e.native);
+                        setCaption(content + e.native);
                         setShowEmojis(false);
                       }}
                     />
                   </div>
                 )}
-
-                <button
-                  onClick={newPostSubmitHandler}
-                  disabled={loading}
-                  className="bg-primary-blue text-white px-6 py-1.5 rounded font-medium hover:drop-shadow-lg uppercase text-sm tracking-wider"
-                >
-                  Post
-                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </Dialog>
   );
 };

@@ -18,7 +18,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
-import { clearErrors, registerUser } from '../../actions/userAction';
+import { clearErrors, registerUser } from '../../service/userAction';
 import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
 import Auth from "./Auth";
 

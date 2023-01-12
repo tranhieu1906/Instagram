@@ -1,26 +1,30 @@
 import { Suspense, lazy, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
-import { loadUser } from "./actions/userAction";
+import { loadUser } from "./service/userAction";
 import axios from "./api/axios";
 
 import PrivateRoute from "./Router/PrivateRouter";
 import Header from "./components/NavBar/Header";
 import ForgotPassword from "./components/User/ForgotPassword";
+import NotFound from "./components/Errors/NotFound";
 
 const SignUp = lazy(() => import("./components/User/SignUp"));
 const Login = lazy(() => import("./components/User/Login"));
 const Home = lazy(() => import("./components/Home/Home"));
-
+const UpdateProfile = lazy(() =>
+  import("./components/User/Update/UpdateProfile")
+);
+const Update = lazy(() => import("./components/User/Update/Update"));
 
 function App() {
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.user);
 
-   useEffect(() => {
-     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("token");
-  
-   }, []);
+  useEffect(() => {
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("token");
+  }, []);
 
   useEffect(() => {
     dispatch(loadUser());
@@ -41,6 +45,19 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route
+            path="/accounts/edit"
+            element={
+              <PrivateRoute>
+                <Update>
+                  <UpdateProfile />
+                </Update>
+              </PrivateRoute>
+            }
+          />
+          <Route path="*" element={<NotFound />}>
+
+          </Route>
         </Routes>
       </Suspense>
     </>

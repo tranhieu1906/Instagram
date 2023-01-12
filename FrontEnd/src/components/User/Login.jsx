@@ -1,4 +1,3 @@
-
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Backdrop,
@@ -8,18 +7,18 @@ import {
   InputAdornment,
   InputLabel,
   OutlinedInput,
-  TextField
+  TextField,
 } from "@mui/material";
+import FormHelperText from "@mui/material/FormHelperText";
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import FormHelperText from "@mui/material/FormHelperText";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
-import { clearErrors, loginUser } from "../../actions/userAction";
+import { clearErrors, loginUser } from "../../service/userAction";
 import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
 import Auth from "./Auth";
 

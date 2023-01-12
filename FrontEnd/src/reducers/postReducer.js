@@ -15,9 +15,9 @@ export const postReducer = (state = { post: {} }, { type, payload }) => {
       };
     case NEW_POST_SUCCESS:
       return {
-        ...state,
         loading: false,
-        post: payload,
+        success: payload.success,
+        post: payload.post,
       };
     case NEW_POST_FAIL:
       return {
