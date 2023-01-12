@@ -11,16 +11,19 @@ import ForgotPassword from "./components/User/ForgotPassword";
 const SignUp = lazy(() => import("./components/User/SignUp"));
 const Login = lazy(() => import("./components/User/Login"));
 const Home = lazy(() => import("./components/Home/Home"));
-
+const UpdateProfile = lazy(() =>
+  import("./components/User/Update/UpdateProfile")
+);
+const Update = lazy(() => import("./components/User/Update/Update"));
 
 function App() {
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.user);
 
-   useEffect(() => {
-     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("token");
-  
-   }, []);
+  useEffect(() => {
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("token");
+  }, []);
 
   useEffect(() => {
     dispatch(loadUser());
@@ -38,6 +41,16 @@ function App() {
             element={
               <PrivateRoute>
                 <Home />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/accounts/edit"
+            element={
+              <PrivateRoute>
+                <Update>
+                  <UpdateProfile />
+                </Update>
               </PrivateRoute>
             }
           />

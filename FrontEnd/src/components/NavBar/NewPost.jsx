@@ -187,14 +187,6 @@ const NewPost = ({ newPost, setNewPost }) => {
                     />
                   </div>
                 )}
-
-                <button
-                  onClick={newPostSubmitHandler}
-                  disabled={loading}
-                  className="bg-primary-blue text-white px-6 py-1.5 rounded font-medium hover:drop-shadow-lg uppercase text-sm tracking-wider"
-                >
-                  Post
-                </button>
               </div>
             </div>
           </div>
