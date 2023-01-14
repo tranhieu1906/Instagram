@@ -297,8 +297,28 @@ class UserController {
       next(error);
     }
   }
+  async getUserDetail(req, res, next) {
+    try {
+      const username = req.params.username;
+      const user = await UserRepo.createQueryBuilder("user")
+        .leftJoinAndSelect("user.followers", "follower")
+        .leftJoinAndSelect("user.following", "following")
+        .leftJoinAndSelect("user.posts", "post")
+        .leftJoinAndSelect("post.comments", "comment")
+        .leftJoinAndSelect("comment.user", "commentUser")
+        .leftJoinAndSelect("post.postedBy", "postUser")
+        .where("user.username = :username", { username })
+        .getOne();
+      res.status(200).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
   // Get User Details
-  async getUserDetails(req, res, next) {
+  async getUserDetailsById(req, res, next) {
     try {
       const user = await UserRepo.findOne({
         where: { id: req.params.id },

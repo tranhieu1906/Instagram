@@ -14,6 +14,9 @@ import {
   NEW_COMMENT_REQUEST,
   NEW_COMMENT_SUCCESS,
   NEW_COMMENT_FAIL,
+  DELETE_POST_REQUEST,
+  DELETE_POST_SUCCESS,
+  DELETE_POST_FAIL,
 } from "../constants/postConstants";
 
 export const addNewPost = (postData) => async (dispatch) => {
@@ -81,7 +84,7 @@ export const addComment = (postId, comment) => async (dispatch) => {
       { comment },
       config
     );
-
+    console.log(data);
     dispatch({
       type: NEW_COMMENT_SUCCESS,
       payload: data.success,
@@ -89,6 +92,23 @@ export const addComment = (postId, comment) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: NEW_COMMENT_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const deletePost = (postId) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_POST_REQUEST });
+    const { data } = await axios.delete(`/api/v1/post/${postId}`);
+
+    dispatch({
+      type: DELETE_POST_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: DELETE_POST_FAIL,
       payload: error.response.data.message,
     });
   }

@@ -1,10 +1,12 @@
-import axios from "axios";
-import { Picker } from "emoji-mart";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 import moment from "moment";
+import "moment/locale/vi";
 import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import ScrollToBottom from "react-scroll-to-bottom";
+import axios from "../../api/axios";
 import { addComment, likePost } from "../../service/postAction";
 import { likeFill } from "../NavBar/SvgIcons";
 import {
@@ -14,6 +16,7 @@ import {
   moreIcons,
   shareIcon,
 } from "./SvgIcons";
+moment.locale("vi");
 
 const PostItem = ({
   id,
@@ -22,14 +25,12 @@ const PostItem = ({
   comments,
   image_url,
   postedBy,
-  createdAt,
+  created_at,
   setUsersDialog,
   setUsersList,
 }) => {
   const dispatch = useDispatch();
   const commentInput = useRef(null);
-
-  const { user } = useSelector((state) => state.user);
 
   const [allLikes, setAllLikes] = useState(likes);
   const [allComments, setAllComments] = useState(comments);
@@ -41,18 +42,21 @@ const PostItem = ({
 
   const [likeEffect, setLikeEffect] = useState(false);
 
-  const handleLike = () => {
+  const handleLike = async () => {
     setLiked(!liked);
-    dispatch(likePost(id));
-    const { data } = axios.get(`/api/v1/post/detail/${id}`);
+    await dispatch(likePost(id));
+    const { data } = await axios.get(
+      `/api/v1/post/detail/${id}`
+    );
     setAllLikes(data.post.likes);
   };
-
-  const handleComment = (e) => {
+  const handleComment = async (e) => {
     e.preventDefault();
-    dispatch(addComment(id, comment));
+    await dispatch(addComment(id, comment));
     setComment("");
-    const { data } = axios.get(`/api/v1/post/detail/${id}`);
+    const { data } = await axios.get(
+      `/api/v1/post/detail/${id}`
+    );
     setAllComments(data.post.comments);
   };
 
@@ -71,11 +75,9 @@ const PostItem = ({
     }
     handleLike();
   };
-
   useEffect(() => {
-    setLiked(allLikes.some((u) => u.id === user.id));
-  }, [allLikes, user.id]);
-
+    
+  }, []);
   return (
     <div className="flex flex-col border rounded bg-white relative">
       <div className="flex justify-between px-3 py-2.5 border-b items-center">
@@ -158,20 +160,20 @@ const PostItem = ({
             {viewComment
               ? "Hide Comments"
               : allComments.length === 1
-              ? `View ${allComments.length} Comment`
-              : `View All ${allComments.length} Comments`}
+              ? `Hiện thị ${allComments.length} bình luân`
+              : `Hiển thị tất cả ${allComments.length} bình luận`}
           </span>
         ) : (
           <span className="text-[13px] text-gray-500">No Comments Yet!</span>
         )}
         <span className="text-xs text-gray-500 cursor-pointer">
-          {moment(createdAt).fromNow()}
+          {moment(created_at).fromNow()}
         </span>
 
         {viewComment && (
           <ScrollToBottom className="w-full h-52 overflow-y-auto py-1">
-            {allComments.map((c) => (
-              <div className="flex items-start mb-2 space-x-2" key={c.id}>
+            {allComments.map((c, index) => (
+              <div className="flex items-start mb-2 space-x-2" key={index}>
                 <img
                   draggable="false"
                   className="h-7 w-7 rounded-full object-cover mr-0.5"
@@ -205,7 +207,9 @@ const PostItem = ({
         {showEmojis && (
           <div className="absolute bottom-12 -left-2">
             <Picker
-              set="google"
+              theme="light"
+              skin="3"
+              data={data}
               onSelect={(e) => setComment(comment + e.native)}
               title="Emojis"
             />
@@ -220,7 +224,7 @@ const PostItem = ({
           required
           onFocus={() => setShowEmojis(false)}
           onChange={(e) => setComment(e.target.value)}
-          placeholder="Add a comment..."
+          placeholder="Thêm bình luận..."
         />
         <button
           type="submit"
@@ -229,7 +233,7 @@ const PostItem = ({
           } text-sm font-semibold`}
           disabled={comment.trim().length < 1}
         >
-          Post
+          Đăng
         </button>
       </form>
     </div>

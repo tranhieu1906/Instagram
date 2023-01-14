@@ -36,5 +36,6 @@ router.get(
 );
 router.get(
   "/userdetails/:id",
-  UserController.getUserDetails
+  UserController.getUserDetailsById
 );
+router.get("/user/:username", UserController.getUserDetail);

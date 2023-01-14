@@ -93,7 +93,6 @@ class PostController {
       if (!post) {
         return next(createError(401, "Post Not Found"));
       }
-      console.log(req.user.data.id);
       const like = await LikeRepo.findOne({
         relations: {
           user: true,
@@ -222,15 +221,16 @@ class PostController {
         skip: skipPosts,
         take: 4,
       });
-      // const totalPosts = await PostRepo.find({
-      //   where :{
-      //     user : In([...arr])
-      //   }
-      // })
+      const totalPost = await PostRepo.find({
+        where: {
+          postedBy: arr,
+        },
+      });
+      let totalPosts = totalPost.length ;
        return res.status(200).json({
          success: true,
          posts: posts,
-        //  totalPosts,
+         totalPosts,
        });
     } catch (error) {
       next(error);

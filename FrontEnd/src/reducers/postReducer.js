@@ -16,6 +16,10 @@ import {
   NEW_COMMENT_SUCCESS,
   NEW_COMMENT_RESET,
   NEW_COMMENT_FAIL,
+  DELETE_POST_REQUEST,
+  DELETE_POST_SUCCESS,
+  DELETE_POST_FAIL,
+  DELETE_POST_RESET,
 } from "../constants/postConstants";
 
 export const postReducer = (state = { post: {} }, { type, payload }) => {
@@ -141,6 +145,38 @@ export const newCommentReducer = (state = {}, { type, payload }) => {
         ...state,
         loading: false,
         error: payload,
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+export const deletePostReducer = (state = {}, { type, payload }) => {
+  switch (type) {
+    case DELETE_POST_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case DELETE_POST_SUCCESS:
+      return {
+        loading: false,
+        success: payload,
+      };
+    case DELETE_POST_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: payload,
+      };
+    case DELETE_POST_RESET:
+      return {
+        ...state,
+        success: false,
       };
     case CLEAR_ERRORS:
       return {

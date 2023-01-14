@@ -19,6 +19,9 @@ import {
   ALL_USERS_REQUEST,
   ALL_USERS_SUCCESS,
   ALL_USERS_FAIL,
+  USER_DETAILS_REQUEST,
+  USER_DETAILS_SUCCESS,
+  USER_DETAILS_FAIL,
 } from "../constants/userConstants";
 
 export const loginUser = (values) => async (dispatch) => {
@@ -129,6 +132,23 @@ export const getSuggestedUsers = () => (dispatch) => {
   } catch (error) {
     dispatch({
       type: ALL_USERS_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const getUserDetails = (username) => async (dispatch) => {
+  try {
+    dispatch({ type: USER_DETAILS_REQUEST });
+    const { data } = await axios.get(`/api/v1/user/${username}`);
+
+    dispatch({
+      type: USER_DETAILS_SUCCESS,
+      payload: data.user,
+    });
+  } catch (error) {
+    dispatch({
+      type: USER_DETAILS_FAIL,
       payload: error.response.data.message,
     });
   }

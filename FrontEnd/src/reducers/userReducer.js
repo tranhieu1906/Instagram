@@ -18,6 +18,10 @@ import {
   FOLLOW_USER_SUCCESS,
   FOLLOW_USER_FAIL,
   FOLLOW_USER_RESET,
+  USER_DETAILS_REQUEST,
+  USER_DETAILS_SUCCESS,
+  USER_DETAILS_FAIL,
+  USER_DETAILS_RESET,
 } from "../constants/userConstants";
 
 export const userReducer = (state = { user: {} }, { type, payload }) => {
@@ -139,3 +143,35 @@ export const followUserReducer = (state = {}, { type, payload }) => {
   }
 };
 
+export const userDetailsReducer = (state = { user: {} }, { type, payload }) => {
+  switch (type) {
+    case USER_DETAILS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case USER_DETAILS_SUCCESS:
+      return {
+        loading: false,
+        user: payload,
+      };
+    case USER_DETAILS_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: payload,
+      };
+    case USER_DETAILS_RESET:
+      return {
+        ...state,
+        user: {},
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};

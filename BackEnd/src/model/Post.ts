@@ -29,6 +29,6 @@ export class Post {
   @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
 
-  @OneToMany(() => Comment, (likes) => likes.post)
+  @OneToMany(() => Like, (likes) => likes.post)
   likes: Like[];
 }
