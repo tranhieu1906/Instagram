@@ -213,6 +213,7 @@ class PostController {
         .leftJoinAndSelect("post.comments", "comments")
         .leftJoinAndSelect("comments.user", "commentUser")
         .leftJoinAndSelect("post.likes", "likes")
+        .leftJoinAndSelect("likes.user", "likeUser")
         .where("user.id IN (:...userIds)", {
           userIds: arr.map((user) => user.id),
         })

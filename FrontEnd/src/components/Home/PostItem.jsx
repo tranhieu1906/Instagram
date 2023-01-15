@@ -3,7 +3,7 @@ import Picker from "@emoji-mart/react";
 import moment from "moment";
 import "moment/locale/vi";
 import { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import ScrollToBottom from "react-scroll-to-bottom";
 import axios from "../../api/axios";
@@ -32,6 +32,8 @@ const PostItem = ({
   const dispatch = useDispatch();
   const commentInput = useRef(null);
 
+  const { user } = useSelector((state) => state.user);
+
   const [allLikes, setAllLikes] = useState(likes);
   const [allComments, setAllComments] = useState(comments);
 
@@ -45,18 +47,14 @@ const PostItem = ({
   const handleLike = async () => {
     setLiked(!liked);
     await dispatch(likePost(id));
-    const { data } = await axios.get(
-      `/api/v1/post/detail/${id}`
-    );
+    const { data } = await axios.get(`/api/v1/post/detail/${id}`);
     setAllLikes(data.post.likes);
   };
   const handleComment = async (e) => {
     e.preventDefault();
     await dispatch(addComment(id, comment));
     setComment("");
-    const { data } = await axios.get(
-      `/api/v1/post/detail/${id}`
-    );
+    const { data } = await axios.get(`/api/v1/post/detail/${id}`);
     setAllComments(data.post.comments);
   };
 
@@ -76,8 +74,10 @@ const PostItem = ({
     handleLike();
   };
   useEffect(() => {
-    
-  }, []);
+    (async function fecthData() {
+      setLiked(allLikes.some((u) => u.user.id === user.id));
+    })();
+  }, [allLikes, user.id]);
   return (
     <div className="flex flex-col border rounded bg-white relative">
       <div className="flex justify-between px-3 py-2.5 border-b items-center">
