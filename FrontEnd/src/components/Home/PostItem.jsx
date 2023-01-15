@@ -186,7 +186,7 @@ const PostItem = ({
                 >
                   {c.user.username}
                 </Link>
-                <p className="text-sm">{c.comment}</p>
+                <p className="text-sm">{c.comment_text}</p>
               </div>
             ))}
           </ScrollToBottom>

@@ -86,7 +86,8 @@ const PostsContainer = () => {
                 setUsersDialog={setUsersDialog}
                 setUsersList={setUsersList}
               />
-            ))}
+            ))
+            }
           </div>
         </InfiniteScroll>
 

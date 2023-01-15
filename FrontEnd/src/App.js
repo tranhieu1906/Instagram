@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import { loadUser } from "./service/userAction";
 import axios from "./api/axios";
+import { ToastContainer } from "react-toastify";
 
 import PrivateRoute from "./Router/PrivateRouter";
 import Header from "./components/NavBar/Header";
 import ForgotPassword from "./components/User/ForgotPassword";
 import NotFound from "./components/Errors/NotFound";
 import Profile from "./components/User/Profile";
-
 
 const SignUp = lazy(() => import("./components/User/SignUp"));
 const Login = lazy(() => import("./components/User/Login"));
@@ -33,6 +33,20 @@ function App() {
   }, [dispatch]);
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      <ToastContainer />
+
       {isAuthenticated && <Header />}
       <Suspense>
         <Routes>

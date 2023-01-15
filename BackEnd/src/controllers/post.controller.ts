@@ -47,11 +47,13 @@ class PostController {
       }
       await deleteFile(post.image_url);
       await PostRepo.delete({ id: req.params.id });
+      console.log(123);
       res.status(200).json({
         success: true,
         message: "Post Deleted",
       });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
@@ -206,33 +208,31 @@ class PostController {
         .getMany();
       let arr = [];
       users.map((user) => arr.push(user.follower));
-      const posts = await PostRepo.find({
-        where: {
-          postedBy: arr,
-        },
-        relations: {
-          postedBy: true,
-          likes: true,
-          comments: true,
-        },
-        order: {
-          created_at: "ASC",
-        },
-        skip: skipPosts,
-        take: 4,
-      });
+      const posts = await PostRepo.createQueryBuilder("post")
+        .leftJoinAndSelect("post.postedBy", "user")
+        .leftJoinAndSelect("post.comments", "comments")
+        .leftJoinAndSelect("comments.user", "commentUser")
+        .leftJoinAndSelect("post.likes", "likes")
+        .where("user.id IN (:...userIds)", {
+          userIds: arr.map((user) => user.id),
+        })
+        .orderBy("post.created_at", "DESC")
+        .skip(skipPosts)
+        .take(4)
+        .getMany();
       const totalPost = await PostRepo.find({
         where: {
           postedBy: arr,
         },
       });
-      let totalPosts = totalPost.length ;
-       return res.status(200).json({
-         success: true,
-         posts: posts,
-         totalPosts,
-       });
+      let totalPosts = totalPost.length;
+      return res.status(200).json({
+        success: true,
+        posts: posts,
+        totalPosts,
+      });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }

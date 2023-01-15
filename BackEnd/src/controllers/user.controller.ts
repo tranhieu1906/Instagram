@@ -306,6 +306,7 @@ class UserController {
         .leftJoinAndSelect("user.posts", "post")
         .leftJoinAndSelect("post.comments", "comment")
         .leftJoinAndSelect("comment.user", "commentUser")
+        .leftJoinAndSelect("post.likes", "like")
         .leftJoinAndSelect("post.postedBy", "postUser")
         .where("user.username = :username", { username })
         .getOne();

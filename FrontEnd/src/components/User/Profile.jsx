@@ -2,43 +2,40 @@ import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
-    clearErrors,
-    followUser,
-    getUserDetails,
+  clearErrors,
+  followUser,
+  getUserDetails,
 } from "../../service/userAction";
 import PostContainer from "./Posts/PostContainer";
 
 import { toast } from "react-toastify";
-// import BackdropLoader from "../Layouts/BackdropLoader";
 import {
-    FOLLOW_USER_RESET,
+  FOLLOW_USER_RESET,
+  USER_DETAILS_RESET,
 } from "../../constants/userConstants";
-import UsersDialog from "../Layouts/UsersDialog";
-import {
-    metaballsMenu,
-    postsIconFill,
-    postsIconOutline,
-    reelsIcon,
-    savedIconFill,
-    savedIconOutline,
-    settingsIcon,
-    taggedIcon,
-} from "./SvgIcons";
-// import { NEW_CHAT_RESET } from "../../constants/chatConstants";
 import NotFound from "../Errors/NotFound";
 import MetaData from "../Layouts/MetaData";
+import UsersDialog from "../Layouts/UsersDialog";
+import {
+  metaballsMenu,
+  postsIconFill,
+  postsIconOutline,
+  reelsIcon,
+  savedIconFill,
+  savedIconOutline,
+  settingsIcon,
+  taggedIcon,
+} from "./SvgIcons";
 
 const Profile = () => {
   const dispatch = useDispatch();
   const params = useParams();
-  const navigate = useNavigate();
 
   const [follow, setFollow] = useState(false);
   const [viewModal, setViewModal] = useState(false);
   const [followersModal, setFollowersModal] = useState(false);
-  const [usersArr, setUsersArr] = useState([]);
   const [savedTab, setSavedTab] = useState(false);
 
   const { user, error, loading } = useSelector((state) => state.userDetails);
@@ -57,13 +54,11 @@ const Profile = () => {
   const handleFollowersModal = () => {
     setFollowersModal(true);
     setViewModal(true);
-    setUsersArr(user?.followers);
   };
 
   const handleFollowingModal = () => {
     setViewModal(true);
     setFollowersModal(false);
-    setUsersArr(user?.following);
   };
 
   const closeModal = () => {
@@ -86,35 +81,29 @@ const Profile = () => {
       dispatch({ type: FOLLOW_USER_RESET });
     }
 
-    // return () => {
-    //     dispatch({ type: USER_DETAILS_RESET })
-    // }
+    return () => {
+        dispatch({ type: USER_DETAILS_RESET })
+    }
   }, [dispatch, error, params.username, followError, success, message]);
 
   useEffect(() => {
     setFollow(user?.followers?.some((u) => u.id === loggedInUser.id));
   }, [user,loggedInUser.id]);
 
-//   useEffect(() => {
-    
-//     if (chat) {
-//       const friendId = chat.users?.find((id) => id !== loggedInUser.id);
-//       navigate(`/direct/t/${chat.id}/${friendId}`);
-//       dispatch({ type: NEW_CHAT_RESET });
-//     }
-//   }, [dispatch, chatError, chat, navigate]);
 
   return (
     <>
       <MetaData
         title={`${user?.name} (@${user?.username}) • Instagram photos and videos`}
       />
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={loading}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={loading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
 
       {user ? (
         <div className="mt-16 xl:w-2/3 mx-auto">
@@ -124,7 +113,7 @@ const Profile = () => {
               <img
                 draggable="false"
                 className="w-40 h-40 rounded-full object-cover"
-                src={user.avatar}
+                src={user.profile_picture}
                 alt=""
               />
             </div>

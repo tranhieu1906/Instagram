@@ -3,12 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { clearErrors } from "../../../service/postAction";
-import { getUserDetails } from "../../../service/userAction";
 import {
   DELETE_POST_RESET,
   LIKE_UNLIKE_POST_RESET,
   NEW_COMMENT_RESET,
-  SAVE_UNSAVE_POST_RESET,
 } from "../../../constants/postConstants";
 import PostItem from "./PostItem";
 
@@ -29,7 +27,6 @@ const PostContainer = ({ posts, id }) => {
   );
 
   useEffect(() => {
-    dispatch(getUserDetails(params.username));
     if (likeError) {
       toast.error(likeError);
       dispatch(clearErrors());
@@ -68,7 +65,7 @@ const PostContainer = ({ posts, id }) => {
 
   return (
     <div className="grid grid-cols-3 gap-1 sm:gap-8 my-1 mb-8" id={id}>
-      {posts?.map((post, i) => <PostItem {...post} key={i} />).reverse()}
+      {posts?.map((post, index) => <PostItem {...post} key={index} />).reverse()}
     </div>
   );
 };
