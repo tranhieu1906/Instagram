@@ -9,6 +9,7 @@ const UpdateProfile = () => {
   const avatarInput = useRef(null);
 
   const { user } = useSelector((state) => state.user);
+  const { error, isUpdated, loading } = useSelector((state) => state.profile);
 
   const [avatarPreview, setAvatarPreview] = useState("");
   const [userName, setUserName] = useState(user.username);
@@ -114,7 +115,7 @@ const UpdateProfile = () => {
         </div>
         <button
           type="submit"
-          disabled={"loading"}
+          disabled={loading}
           className="bg-primary-blue font-medium rounded text-white py-2 w-40 mx-auto text-sm"
         >
           Thay đổi

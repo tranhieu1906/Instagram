@@ -62,7 +62,6 @@ const PostContainer = ({ posts, id }) => {
     deleteSuccess,
     params.username,
   ]);
-
   return (
     <div className="grid grid-cols-3 gap-1 sm:gap-8 my-1 mb-8" id={id}>
       {posts?.map((post, index) => <PostItem {...post} key={index} />).reverse()}

@@ -82,14 +82,13 @@ const Profile = () => {
     }
 
     return () => {
-        dispatch({ type: USER_DETAILS_RESET })
-    }
+      dispatch({ type: USER_DETAILS_RESET });
+    };
   }, [dispatch, error, params.username, followError, success, message]);
 
   useEffect(() => {
     setFollow(user?.followers?.some((u) => u.id === loggedInUser.id));
-  }, [user,loggedInUser.id]);
-
+  }, [user, loggedInUser.id]);
 
   return (
     <>
@@ -223,7 +222,6 @@ const Profile = () => {
                 {taggedIcon} tagged
               </span>
             </div>
-
             {/* posts grid data */}
             {savedTab ? (
               <PostContainer posts={user?.saved} id={"saved"} />

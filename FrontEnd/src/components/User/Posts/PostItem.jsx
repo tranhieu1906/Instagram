@@ -55,7 +55,7 @@ const PostItem = ({
   };
 
   useEffect(() => {
-    setLiked(likes.some((id) => id === user.id));
+    setLiked(likes.some((u) => u.user.id === user.id));
   }, [likes, user.id]);
 
   const closeDeleteModal = () => {
@@ -87,8 +87,8 @@ const PostItem = ({
           alt="Post"
         />
         <div className="hidden group-hover:flex text-white absolute pointer-events-none gap-4">
-          <span>
-            <FavoriteIcon /> {likes.length}
+          <span className="flex gap-0.5">
+            {liked ? likeFill : <FavoriteIcon />} {likes.length}
           </span>
           <span>
             <ModeCommentIcon /> {comments.length}
@@ -204,7 +204,9 @@ const PostItem = ({
                   >
                     {c.user.username}
                   </Link>
-                  <p className="text-sm whitespace-pre-line">{c.comment_text}</p>
+                  <p className="text-sm whitespace-pre-line">
+                    {c.comment_text}
+                  </p>
                 </div>
               ))}
             </div>
