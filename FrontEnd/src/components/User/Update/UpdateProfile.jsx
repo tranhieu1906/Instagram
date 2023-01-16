@@ -1,24 +1,47 @@
-import { useState, useRef } from "react";
-import MetaData from "../../Layouts/MetaData";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { UPDATE_PROFILE_RESET } from "../../../constants/userConstants";
+import {
+  clearErrors,
+  loadUser,
+  updateProfile,
+} from "../../../service/userAction";
 
 const UpdateProfile = () => {
   const dispatch = useDispatch();
-  const navgate = useNavigate();
+  const navigate = useNavigate();
   const avatarInput = useRef(null);
 
   const { user } = useSelector((state) => state.user);
   const { error, isUpdated, loading } = useSelector((state) => state.profile);
 
-  const [avatarPreview, setAvatarPreview] = useState("");
-  const [userName, setUserName] = useState(user.username);
-  const [oldAvatar] = useState(user.profile_picture);
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [oldAvatar, setOldAvatar] = useState("");
   const [avatar, setAvatar] = useState("");
-  const [name, setName] = useState(user.name);
-  const [email, setEmail] = useState(user.email);
+  const [avatarPreview, setAvatarPreview] = useState("");
 
-  const handleUpdate = () => {};
+  const handleUpdate = (e) => {
+    e.preventDefault();
+
+    const userCheck = /^[a-z0-9_.-]{6,25}$/gim;
+
+    if (!userCheck.test(username)) {
+      toast.error("Username không hợp lệ");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.set("name", name);
+    formData.set("username", username);
+    formData.set("email", email);
+    formData.set("avatar", avatar);
+    dispatch(updateProfile(formData));
+  };
+
   const handleAvatarChange = (e) => {
     const reader = new FileReader();
     setAvatar("");
@@ -30,9 +53,29 @@ const UpdateProfile = () => {
     reader.readAsDataURL(e.target.files[0]);
     setAvatar(e.target.files[0]);
   };
+
+  useEffect(() => {
+    if (user) {
+      setUsername(user.username);
+      setName(user.name);
+      setEmail(user.email);
+      setOldAvatar(user.profile_picture);
+    }
+    if (error) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+    if (isUpdated) {
+      toast.success("Profile Updated");
+      dispatch(loadUser());
+      navigate(`/${username}`);
+
+      dispatch({ type: UPDATE_PROFILE_RESET });
+    }
+  }, [dispatch, user, error, isUpdated]);
+
   return (
     <>
-      <MetaData title="Edit Profile • Instagram" />
       <form
         onSubmit={handleUpdate}
         encType="multipart/form-data"
@@ -48,12 +91,12 @@ const UpdateProfile = () => {
             />
           </div>
           <div className="flex flex-col gap-0">
-            <span className="text-xl">{userName}</span>
+            <span className="text-xl">{username}</span>
             <label
               onClick={(e) => avatarInput.current.click()}
               className="text-sm font-medium text-primary-blue cursor-pointer"
             >
-              Thay đổi ảnh đại diện
+              Change Profile Photo
             </label>
             <input
               type="file"
@@ -66,7 +109,7 @@ const UpdateProfile = () => {
           </div>
         </div>
         <div className="flex w-full gap-8 text-right items-center">
-          <span className="w-1/4 font-semibold">Tên</span>
+          <span className="w-1/4 font-semibold">Name</span>
           <input
             className="border rounded p-1 w-3/4"
             type="text"
@@ -76,31 +119,16 @@ const UpdateProfile = () => {
             required
           />
         </div>
-        <div className="flex w-full text-right items-center">
-          <p className="w-1/4"></p>
-          <p className="w-3/4 text-gray-400 font-thin text-xs pl-6 text-left">
-            Hãy lấy tên mà bạn thường dùng để tài khoản của bạn dễ tìm thấy hơn.
-            Đó có thể là tên đầy đủ, biệt danh hoặc tên doanh nghiệp. Bạn chỉ có
-            thể đổi tên mình 2 lần trong vòng 14 ngày.
-          </p>
-        </div>
         <div className="flex w-full gap-8 text-right items-center">
-          <span className="w-1/4 font-semibold">Tên người dùng</span>
+          <span className="w-1/4 font-semibold">Username</span>
           <input
             className="border rounded p-1 w-3/4"
             type="text"
             placeholder="Username"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
-        </div>
-        <div className="flex w-full text-right items-center">
-          <p className="w-1/4"></p>
-          <p className="w-3/4 text-gray-400 font-thin text-xs pl-6 text-left">
-            Thông thường, bạn sẽ có thêm 14 ngày để đổi tên người dùng lại thành{" "}
-            {name}
-          </p>
         </div>
         <div className="flex w-full gap-8 text-right items-center">
           <span className="w-1/4 font-semibold">Email</span>
@@ -118,10 +146,11 @@ const UpdateProfile = () => {
           disabled={loading}
           className="bg-primary-blue font-medium rounded text-white py-2 w-40 mx-auto text-sm"
         >
-          Thay đổi
+          Submit
         </button>
       </form>
     </>
   );
 };
+
 export default UpdateProfile;

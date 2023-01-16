@@ -40,7 +40,7 @@ const PostContainer = ({ posts, id }) => {
       dispatch(clearErrors());
     }
     if (commentSuccess) {
-      toast.success("Comment Added");
+      toast.success("Comment đã thêm !");
       dispatch({ type: NEW_COMMENT_RESET });
     }
     if (deleteError) {
@@ -48,7 +48,7 @@ const PostContainer = ({ posts, id }) => {
       dispatch(clearErrors());
     }
     if (deleteSuccess) {
-      toast.success("Post Deleted");
+      toast.success("Post đã xóa");
       dispatch({ type: DELETE_POST_RESET });
     }
   }, [

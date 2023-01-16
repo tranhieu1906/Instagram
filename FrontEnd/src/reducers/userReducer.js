@@ -189,6 +189,7 @@ export const userDetailsReducer = (state = { user: {} }, { type, payload }) => {
       return state;
   }
 };
+
 export const profileReducer = (state = {}, { type, payload }) => {
   switch (type) {
     case UPDATE_PROFILE_REQUEST:

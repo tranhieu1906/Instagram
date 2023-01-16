@@ -251,16 +251,14 @@ class PostController {
   // Get Post Details
   async getPostDetails(req, res, next) {
     try {
-      const post = await PostRepo.findOne({
-        where: {
-          id: req.params.id,
-        },
-        relations: {
-          likes: true,
-          postedBy: true,
-          comments: true,
-        },
-      });
+      const post = await PostRepo.createQueryBuilder("post")
+        .leftJoinAndSelect("post.postedBy", "user")
+        .leftJoinAndSelect("post.comments", "comments")
+        .leftJoinAndSelect("comments.user", "commentUser")
+        .leftJoinAndSelect("post.likes", "likes")
+        .leftJoinAndSelect("likes.user", "likeUser")
+        .where("post.id = :id", { id: req.params.id })
+        .getOne();
       if (!post) {
         return next(createError(404, "Post Not Found"));
       }

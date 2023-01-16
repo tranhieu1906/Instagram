@@ -204,7 +204,7 @@ const SearchBox = () => {
               ) : users.length > 0 ? (
                 users.map((user) => <SearchUserItem {...user} key={user._id} />)
               ) : (
-                <span className="text-gray-400 text-sm">No results found.</span>
+                <span className="text-gray-400 text-sm">Không tìm thấy kết quả.</span>
               )}
             </div>
           </>

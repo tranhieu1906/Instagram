@@ -86,7 +86,7 @@ class UserController {
     try {
       const { oldPassword, newPassword } = req.body;
       const user = await UserRepo.findOne({
-        where: { id: req.user.id },
+        where: { id: req.user.data.id },
       });
       const isPasswordMatched = await bcrypt.compare(
         oldPassword,
@@ -155,7 +155,7 @@ class UserController {
           posts: true,
           followers: true,
         },
-        where: { posts: { id: req.params.id }, id: req.user.id },
+        where: { posts: { id: req.params.id }, id: req.user.data.id },
       });
       res.json({ user: user });
     } catch (error) {
@@ -165,11 +165,11 @@ class UserController {
   // updateProfile
   async updateProfile(req, res, next) {
     try {
-      const { newUsername, newName, newEmail } = req.body;
-      const user = await UserRepo.findOneBy(req.user.id);
-      user.username = newUsername;
-      user.name = newName;
-      user.email = newEmail;
+      const { name, username, email } = req.body;
+      const user = await UserRepo.findOneBy(req.user.data.id);
+      user.username = username;
+      user.name = name;
+      user.email = email;
       await UserRepo.save(user);
       res.status(200).json({
         success: true,
@@ -183,7 +183,7 @@ class UserController {
   async updateAvatar(req, res, next) {
     try {
       const newAvatar = req.file.location;
-      const user = await UserRepo.findOneBy(req.user.id);
+      const user = await UserRepo.findOneBy(req.user.data.id);
       user.profile_picture = newAvatar;
       await UserRepo.save(user);
       res.status(200).json({

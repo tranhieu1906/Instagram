@@ -36,7 +36,6 @@ const PostItem = ({
 
   const [allLikes, setAllLikes] = useState(likes);
   const [allComments, setAllComments] = useState(comments);
-
   const [liked, setLiked] = useState(false);
   const [comment, setComment] = useState("");
   const [viewComment, setViewComment] = useState(false);
@@ -48,6 +47,7 @@ const PostItem = ({
     setLiked(!liked);
     await dispatch(likePost(id));
     const { data } = await axios.get(`/api/v1/post/detail/${id}`);
+    console.log(data.post.likes);
     setAllLikes(data.post.likes);
   };
   const handleComment = async (e) => {
@@ -172,6 +172,7 @@ const PostItem = ({
 
         {viewComment && (
           <ScrollToBottom className="w-full h-52 overflow-y-auto py-1">
+            {console.log(allComments)}
             {allComments.map((c, index) => (
               <div className="flex items-start mb-2 space-x-2" key={index}>
                 <img
