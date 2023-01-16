@@ -86,7 +86,7 @@ class UserController {
     try {
       const { oldPassword, newPassword } = req.body;
       const user = await UserRepo.findOne({
-        where: { id: req.user.id },
+        where: { id: req.user.data.id },
       });
       const isPasswordMatched = await bcrypt.compare(
         oldPassword,
@@ -120,13 +120,13 @@ class UserController {
           follower: true,
         },
         where: {
-          following: { id: req.user.id },
+          following: { id: req.user.data.id },
           follower: { id: req.params.id },
         },
       });
       if (follow) {
         FollowRepo.delete({
-          following: { id: req.user.id },
+          following: { id: req.user.data.id },
           follower: { id: req.params.id },
         });
         res.status(200).json({
@@ -135,7 +135,7 @@ class UserController {
         });
       } else {
         FollowRepo.save({
-          user: { id: req.user.id },
+          following: { id: req.user.data.id },
           follower: { id: req.params.id },
         });
         res.status(200).json({
@@ -149,14 +149,13 @@ class UserController {
   }
   // AccountDetails
   async getAccountDetails(req, res, next) {
-    console.log(req.user)
     try {
       const user = await UserRepo.findOne({
         relations: {
           posts: true,
           followers: true,
         },
-        where: { posts: { id: req.params.id }, id: req.user.id },
+        where: { posts: { id: req.params.id }, id: req.user.data.id },
       });
       res.json({ user: user });
     } catch (error) {
@@ -166,11 +165,11 @@ class UserController {
   // updateProfile
   async updateProfile(req, res, next) {
     try {
-      const { newUsername, newName, newEmail } = req.body;
-      const user = await UserRepo.findOneBy(req.user.id);
-      user.username = newUsername;
-      user.name = newName;
-      user.email = newEmail;
+      const { name, username, email } = req.body;
+      const user = await UserRepo.findOneBy(req.user.data.id);
+      user.username = username;
+      user.name = name;
+      user.email = email;
       await UserRepo.save(user);
       res.status(200).json({
         success: true,
@@ -184,7 +183,7 @@ class UserController {
   async updateAvatar(req, res, next) {
     try {
       const newAvatar = req.file.location;
-      const user = await UserRepo.findOneBy(req.user.id);
+      const user = await UserRepo.findOneBy(req.user.data.id);
       user.profile_picture = newAvatar;
       await UserRepo.save(user);
       res.status(200).json({
@@ -286,11 +285,10 @@ class UserController {
       const suggestedUsers = users
         .filter(
           (u) =>
-            !u.followers.includes(req.user.id) &&
-            u.id.toString() !== req.user.id.toString()
+            !u.followers.includes(req.user.data.id) &&
+            u.id.toString() !== req.user.data.id.toString()
         )
         .slice(-5);
-
       res.status(200).json({
         success: true,
         users: suggestedUsers,
@@ -299,8 +297,30 @@ class UserController {
       next(error);
     }
   }
+  async getUserDetail(req, res, next) {
+    try {
+      const username = req.params.username;
+      const user = await UserRepo.createQueryBuilder("user")
+        .leftJoinAndSelect("user.followers", "follower")
+        .leftJoinAndSelect("user.following", "following")
+        .leftJoinAndSelect("user.posts", "post")
+        .leftJoinAndSelect("post.comments", "comment")
+        .leftJoinAndSelect("comment.user", "commentUser")
+        .leftJoinAndSelect("post.likes", "like")
+        .leftJoinAndSelect("like.user","likeUser")
+        .leftJoinAndSelect("post.postedBy", "postUser")
+        .where("user.username = :username", { username })
+        .getOne();
+      res.status(200).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
   // Get User Details
-  async getUserDetails(req, res, next) {
+  async getUserDetailsById(req, res, next) {
     try {
       const user = await UserRepo.findOne({
         where: { id: req.params.id },

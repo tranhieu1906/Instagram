@@ -19,7 +19,7 @@ class PostController {
       const postData = {
         content: req.body.content,
         image_url: req.file.location,
-        user: req.user.id,
+        user: req.user.data.id,
       };
       const post = await PostRepo.save(postData);
       res.status(201).json({
@@ -36,22 +36,24 @@ class PostController {
       const post = await PostRepo.findOne({
         where: { id: req.params.id },
         relations: {
-          user: true,
+          postedBy: true,
         },
       });
       if (!post) {
         return next(createError(401, "Post Not Found"));
       }
-      if (post.user.id !== req.user.id) {
+      if (post.postedBy.id !== req.user.data.id) {
         return next(createError(401, "User Not Authenticated"));
       }
       await deleteFile(post.image_url);
       await PostRepo.delete({ id: req.params.id });
+      console.log(123);
       res.status(200).json({
         success: true,
         message: "Post Deleted",
       });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
@@ -61,13 +63,13 @@ class PostController {
       const post = await PostRepo.findOne({
         where: { id: req.params.id },
         relations: {
-          user: true,
+          postedBy: true,
         },
       });
       if (!post) {
         return next(createError(401, "Post Not Found"));
       }
-      if (post.user.id !== req.user.id) {
+      if (post.postedBy.id !== req.user.data.id) {
         return next(createError(401, "User Not Authenticated"));
       }
       post.content = req.body.content;
@@ -86,25 +88,24 @@ class PostController {
       const post = await PostRepo.findOne({
         where: { id: req.params.id },
         relations: {
-          user: true,
+          postedBy: true,
           likes: true,
         },
       });
       if (!post) {
         return next(createError(401, "Post Not Found"));
       }
-      console.log(req.user.id);
       const like = await LikeRepo.findOne({
         relations: {
           user: true,
           post: true,
         },
-        where: { post: { id: req.params.id }, user: { id: req.user.id } },
+        where: { post: { id: req.params.id }, user: { id: req.user.data.id } },
       });
       if (like) {
         await LikeRepo.delete({
           post: req.params.id,
-          user: req.user.id,
+          user: req.user.data.id,
         });
         res.status(200).json({
           success: true,
@@ -113,7 +114,7 @@ class PostController {
       } else {
         await LikeRepo.save({
           post: { id: req.params.id },
-          user: { id: req.user.id },
+          user: { id: req.user.data.id },
         });
         res.status(200).json({
           success: true,
@@ -134,7 +135,7 @@ class PostController {
         return next(createError(401, "Post Not Found"));
       }
       const comment = await CommentRepo.save({
-        user: req.user.id,
+        user: req.user.data.id,
         comment_text: req.body.comment,
         post: req.params.id,
       });
@@ -158,7 +159,7 @@ class PostController {
       if (!comment) {
         return next(createError(401, "Post Not Found"));
       }
-      if (comment.user.id !== req.user.id) {
+      if (comment.user.id !== req.user.data.id) {
         return next(createError(401, "User Not Authenticated"));
       }
       await CommentRepo.delete({ id: req.params.id });
@@ -182,7 +183,7 @@ class PostController {
       if (!comment) {
         return next(createError(401, "comment Not Found"));
       }
-      if (comment.user.id !== req.user.id) {
+      if (comment.user.id !== req.user.data.id) {
         return next(createError(401, "User Not Authenticated"));
       }
       comment.comment_text = req.body.comment;
@@ -196,30 +197,43 @@ class PostController {
     }
   }
   // show followers posts
-  async followePosts(req, res, next) {
+  async followersPosts(req, res, next) {
     try {
+      const currentPage = Number(req.query.page) || 1;
+      const skipPosts = 4 * (currentPage - 1);
       const users = await FollowRepo.createQueryBuilder("follow")
         .leftJoinAndSelect("follow.following", "user AS u")
         .leftJoinAndSelect("follow.follower", "u")
-        .where("follow.following = :id", { id: req.user.id })
+        .where("follow.following = :id", { id: req.user.data.id })
         .getMany();
       let arr = [];
       users.map((user) => arr.push(user.follower));
-      const posts = await PostRepo.find({
+      const posts = await PostRepo.createQueryBuilder("post")
+        .leftJoinAndSelect("post.postedBy", "user")
+        .leftJoinAndSelect("post.comments", "comments")
+        .leftJoinAndSelect("comments.user", "commentUser")
+        .leftJoinAndSelect("post.likes", "likes")
+        .leftJoinAndSelect("likes.user", "likeUser")
+        .where("user.id IN (:...userIds)", {
+          userIds: arr.map((user) => user.id),
+        })
+        .orderBy("post.created_at", "DESC")
+        .skip(skipPosts)
+        .take(4)
+        .getMany();
+      const totalPost = await PostRepo.find({
         where: {
-          user: arr,
-        },
-        relations: {
-          user: true,
-          likes: true,
-          comments: true,
-        },
-        order: {
-          created_at: "ASC",
+          postedBy: arr,
         },
       });
-      res.status(200).json(posts);
+      let totalPosts = totalPost.length;
+      return res.status(200).json({
+        success: true,
+        posts: posts,
+        totalPosts,
+      });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
@@ -237,16 +251,14 @@ class PostController {
   // Get Post Details
   async getPostDetails(req, res, next) {
     try {
-      const post = await PostRepo.findOne({
-        where: {
-          id: req.params.id,
-        },
-        relations: {
-          likes: true,
-          user: true,
-          comments: true,
-        },
-      });
+      const post = await PostRepo.createQueryBuilder("post")
+        .leftJoinAndSelect("post.postedBy", "user")
+        .leftJoinAndSelect("post.comments", "comments")
+        .leftJoinAndSelect("comments.user", "commentUser")
+        .leftJoinAndSelect("post.likes", "likes")
+        .leftJoinAndSelect("likes.user", "likeUser")
+        .where("post.id = :id", { id: req.params.id })
+        .getOne();
       if (!post) {
         return next(createError(404, "Post Not Found"));
       }

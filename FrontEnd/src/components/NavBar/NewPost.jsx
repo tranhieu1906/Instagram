@@ -54,6 +54,7 @@ const NewPost = ({ newPost, setNewPost }) => {
     let formData = new FormData();
     formData.set("content", content);
     formData.set("post", post);
+    formData.set("user", user.id);
 
     dispatch(addNewPost(formData));
   };
@@ -79,7 +80,7 @@ const NewPost = ({ newPost, setNewPost }) => {
     <Dialog open={newPost} onClose={() => setNewPost(false)} maxWidth="xl">
       <div className="flex flex-col sm:w-screen max-w-4xl">
         <div className="bg-white py-3 border-b px-4 flex justify-between w-full">
-          <span className="font-medium">Create new post</span>
+          <span className="font-medium">Tạo bài post mới</span>
           <button
             onClick={newPostSubmitHandler}
             disabled={loading}
@@ -130,7 +131,7 @@ const NewPost = ({ newPost, setNewPost }) => {
                   fill="currentColor"
                 ></path>
               </svg>
-              <p className="text-xl">Drag photos and videos here</p>
+              <p className="text-xl">Thả ảnh và video tại đây</p>
               <input
                 type="file"
                 accept="image/*"

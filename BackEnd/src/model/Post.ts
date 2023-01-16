@@ -24,11 +24,11 @@ export class Post {
   image_url: string;
 
   @ManyToOne(() => User, (user) => user.posts)
-  user: User;
+  postedBy: User;
 
   @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
 
-  @OneToMany(() => Comment, (likes) => likes.post)
+  @OneToMany(() => Like, (likes) => likes.post)
   likes: Like[];
 }

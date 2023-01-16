@@ -1,8 +1,5 @@
-
 const MetaData = ({ title }) => {
-  return (
-      <title>{title}</title>
-  );
+  return (document.title = title);
 };
 
 export default MetaData;

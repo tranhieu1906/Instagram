@@ -1,8 +1,8 @@
 import { ClickAwayListener } from "@mui/material";
-import axios from "axios";
+import axios from "../../../api/axios";
 import { useEffect, useState } from "react";
 import { searchIcon } from "../SvgIcons";
-// import SearchUserItem from "./SearchUserItem";
+import SearchUserItem from "./SearchUserItem";
 
 const SearchBox = () => {
   const [users, setUsers] = useState([]);
@@ -62,7 +62,7 @@ const SearchBox = () => {
                   : users.length < 1 && "justify-center items-center"
               } absolute overflow-y-auto overflow-x-hidden flex flex-col top-[49px] w-[23rem] -left-11 h-80 bg-white drop-shadow-xl rounded`}
             >
-              {/* {loading ? (
+              {loading ? (
                 <svg
                   aria-label="Loading..."
                   className="h-6 w-6 my-2 animate-spin"
@@ -204,8 +204,8 @@ const SearchBox = () => {
               ) : users.length > 0 ? (
                 users.map((user) => <SearchUserItem {...user} key={user._id} />)
               ) : (
-                <span className="text-gray-400 text-sm">No results found.</span>
-              )} */}
+                <span className="text-gray-400 text-sm">Không tìm thấy kết quả.</span>
+              )}
             </div>
           </>
         )}
