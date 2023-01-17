@@ -16,10 +16,11 @@ class PostController {
   // add posts
   async newPost(req, res, next) {
     try {
+      console.log(req.user.data.id);
       const postData = {
         content: req.body.content,
         image_url: req.file.location,
-        user: req.user.data.id,
+        postedBy: req.user.data.id,
       };
       const post = await PostRepo.save(postData);
       res.status(201).json({
@@ -47,13 +48,11 @@ class PostController {
       }
       await deleteFile(post.image_url);
       await PostRepo.delete({ id: req.params.id });
-      console.log(123);
       res.status(200).json({
         success: true,
         message: "Post Deleted",
       });
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }

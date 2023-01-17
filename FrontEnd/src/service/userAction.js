@@ -37,7 +37,8 @@ export const loginUser = (values) => async (dispatch) => {
     };
     const { data } = await axios.post("/api/v1/login", values, config);
     const token = data.accessToken;
-    localStorage.setItem("token", token);
+    await localStorage.setItem("token", token);
+    axios.defaults.headers.common["Authorization"] = "Bearer " + token;
     dispatch({
       type: LOGIN_USER_SUCCESS,
       payload: data.user,

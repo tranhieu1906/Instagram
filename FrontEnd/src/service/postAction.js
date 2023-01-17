@@ -104,7 +104,7 @@ export const deletePost = (postId) => async (dispatch) => {
 
     dispatch({
       type: DELETE_POST_SUCCESS,
-      payload: data.success,
+      payload: {message : data.success, postId},
     });
   } catch (error) {
     dispatch({

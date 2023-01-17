@@ -51,6 +51,7 @@ const PostItem = ({
 
   const handleDeletePost = () => {
     dispatch(deletePost(id));
+    setOpen(false)
     setDeleteModal(false);
   };
 

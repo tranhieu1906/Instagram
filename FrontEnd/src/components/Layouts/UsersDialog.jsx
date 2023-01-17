@@ -2,6 +2,7 @@ import { Dialog } from "@mui/material";
 import UserListItem from "./UserListItem";
 
 const UsersDialog = ({ open, onClose, title, usersList }) => {
+  console.log(usersList)
   return (
     <Dialog open={open} onClose={onClose}>
       <div className="flex flex-col w-72 sm:w-96">
@@ -44,7 +45,7 @@ const UsersDialog = ({ open, onClose, title, usersList }) => {
         </div>
         <div className="overflow-x-hidden h-96 w-full p-3">
           {usersList?.map((u) => (
-            <UserListItem {...u} key={u._id} />
+            <UserListItem {...u} key={u.id} />
           ))}
         </div>
       </div>
