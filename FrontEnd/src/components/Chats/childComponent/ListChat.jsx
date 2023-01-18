@@ -18,8 +18,7 @@ export default function ListChat() {
     let [listChat, setListChat] = useState([]);
 
     const showChat = (idChat) => {
-        console.log(idChat)
-        navigate(`/chat/${idChat}`);
+
     }
 
     useEffect(() => {
@@ -27,25 +26,30 @@ export default function ListChat() {
         axios.get("/api/v1/chat/list").then((response) => {
             let listRoom = response.data.listChat;
             setListChat(listRoom)
-            console.log(listChat)
         }).catch((error) => {
-            throw new Error(error)
+            console.log(error)
         })
     },[]);
 
     return (
-        <List sx={{width: '100%', maxWidth: 400, bgcolor: 'background.paper'}}>
-            {listChat.map(userChat => (
-                <ListItemButton onClick={ event => showChat(userChat.id)}>
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar alt="avatar"  />
-                        </ListItemAvatar>
-                        <ListItemText primary= {userChat.roomName} secondary="Jan 9, 2014"/>
-                    </ListItem>
-                </ListItemButton>
-            ))
-            }
-        </List>
+        <>
+            {listChat.length > 0 && (
+                <List sx={{width: '100%', maxWidth: 400, bgcolor: 'background.paper'}}>
+                    { listChat.map(userChat => (
+                        <ListItemButton onClick={ event => showChat(userChat.id)}>
+                            <ListItem>
+                                <ListItemAvatar>
+                                    <Avatar alt="avatar"  />
+                                </ListItemAvatar>
+                                <ListItemText primary= {userChat.roomName} secondary="Jan 9, 2014"/>
+                            </ListItem>
+                        </ListItemButton>
+                    ))
+                    }
+                </List>
+            )}
+        </>
+
+
     )
 }
