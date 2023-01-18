@@ -1,8 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Entity, Column,ManyToMany, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { Post } from "./Post";
 import { Comment } from "./Comment";
 import { Like } from "./Like";
 import { Follow } from "./Follow";
+import { Rooms} from "./Room";
 import { Messages } from "./Messages";
 
 @Entity()
@@ -53,9 +54,13 @@ export class User {
   @OneToMany(() => Follow, (follow) => follow.follower)
   followers: Follow[];
 
-  // @OneToMany(() => Messages, (message) => message.target)
-  // target: Messages[];
-  //
-  // @OneToMany(() => Messages, (message) => message.source)
-  // sources: Messages[];
+  @ManyToMany(() => Rooms, (rooms) => rooms.users)
+  rooms: Rooms[];
+
+  @OneToMany(() => Rooms, (rooms) => rooms.Admin)
+  AdGroup: Rooms[];
+
+  @OneToMany(() => Messages, (message) => message.content)
+  messages : Messages[];
+
 }

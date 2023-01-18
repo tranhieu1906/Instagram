@@ -1,6 +1,7 @@
 import {
     Entity,
     Column,
+    OneToMany,
     ManyToOne,
     PrimaryGeneratedColumn,
 } from "typeorm";
@@ -17,12 +18,16 @@ export class Messages {
     room: Rooms;
 
     @ManyToOne(() => User, (Users) => Users.name)
-    author: User[]
+    author: User;
+
+    @OneToMany(() => User, (User) => User)
+    users: User[];
+
     @Column({type: "varchar"})
     content: string;
 
     @Column({
-        type: "timestamp"
+        type: "timestamp", default: () => "now()"
     })
-    time: string
+    time: Date;
 }

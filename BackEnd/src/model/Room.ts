@@ -2,6 +2,7 @@ import {
     Entity,
     Column,
     OneToMany,
+    ManyToOne,
     ManyToMany,
     JoinTable,
     PrimaryGeneratedColumn,
@@ -21,16 +22,15 @@ export class Rooms {
     @Column({type: "varchar"})
     roomName: string;
 
-    @ManyToMany(() => User)
-
+    @ManyToMany(() => User, (user) => user.rooms)
     @JoinTable({
         name: "users-join-room"
     })
-    participation: User[];
+    users: User[];
 
     @OneToMany(() => Messages, (Messages) => Messages.room)
-    messages: Messages;
+    messages: Messages[];
 
-    @OneToMany(() => User, (User) => User)
-    user: User[];
+    @ManyToOne(() => User, (User) => User.AdGroup)
+    Admin : User;
 }

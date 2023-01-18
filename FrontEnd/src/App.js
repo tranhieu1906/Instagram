@@ -10,6 +10,7 @@ import Header from "./components/NavBar/Header";
 import ForgotPassword from "./components/User/ForgotPassword";
 import NotFound from "./components/Errors/NotFound";
 import Profile from "./components/User/Profile";
+import ViewChat from "./components/Chats/ViewChat";
 
 const SignUp = lazy(() => import("./components/User/SignUp"));
 const Login = lazy(() => import("./components/User/Login"));
@@ -54,6 +55,7 @@ function App() {
           <Route path="/register" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/password/forgot" element={<ForgotPassword />} />
+            <Route path="/direct/inbox" element={<ViewChat/>}/>
           <Route
             path="/:username"
             element={
