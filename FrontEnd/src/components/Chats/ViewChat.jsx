@@ -77,7 +77,7 @@ export default function ViewChat () {
                     </div>
 
                     <div className="flex justify-center items-center chat">
-                        <ChatBody/>
+                        <ChatBody onClose = {handleClickListItem}/>
                     </div>
                 </div>
             </Container>
