@@ -64,7 +64,6 @@ const PostsContainer = () => {
     setPage((prev) => prev + 1);
     dispatch(getPostsOfFollowing(page));
   };
-
   return (
     <>
       <div className="flex flex-col w-full lg:w-2/3 sm:mt-6 sm:px-8 mb-8">

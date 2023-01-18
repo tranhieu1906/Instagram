@@ -55,7 +55,7 @@ const NewPost = ({ newPost, setNewPost }) => {
     formData.set("content", content);
     formData.set("post", post);
     formData.set("user", user.id);
-
+    
     dispatch(addNewPost(formData));
   };
 
@@ -133,10 +133,9 @@ const NewPost = ({ newPost, setNewPost }) => {
               </svg>
               <p className="text-xl">Thả ảnh và video tại đây</p>
               <input
-                type="file"
-                accept="image/*"
+                  id="upload" type="file" accept="image/*"
                 onChange={handleFileChange}
-                className="absolute h-full w-full opacity-0"
+                className="absolute h-full w-full opacity-0 cursor-pointer"
               />
             </div>
           )}
