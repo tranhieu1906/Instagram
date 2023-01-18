@@ -37,12 +37,15 @@ export const loginUser = (values) => async (dispatch) => {
     };
     const { data } = await axios.post("/api/v1/login", values, config);
     const token = data.accessToken;
-    await localStorage.setItem("token", token);
+    localStorage.setItem("token", token);
+
     axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+
     dispatch({
       type: LOGIN_USER_SUCCESS,
       payload: data.user,
     });
+
   } catch (error) {
     dispatch({
       type: LOGIN_USER_FAIL,
@@ -84,6 +87,7 @@ export const loadUser = () => async (dispatch) => {
       type: LOAD_USER_SUCCESS,
       payload: data.user,
     });
+
   } catch (error) {
     dispatch({
       type: LOAD_USER_FAIL,

@@ -78,9 +78,9 @@ const PostsContainer = () => {
           loader={<SpinLoader />}
         >
           <div className="w-full h-full mt-1 sm:mt-6 flex flex-col space-y-4">
-            {posts?.map((post) => (
+            {posts?.map((post,index) => (
               <PostItem
-                key={post.id}
+                key={index}
                 {...post}
                 setUsersDialog={setUsersDialog}
                 setUsersList={setUsersList}

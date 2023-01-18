@@ -17,38 +17,35 @@ export default function ListChat() {
   const { user } = useSelector((state) => state.user);
   let [listChat, setListChat] = useState([]);
 
-  const showChat = (idChat) => {
-    console.log(idChat);
-    navigate(`/chat/${idChat}`);
-  };
+    const showChat = (idChat) => {
+        console.log(idChat)
+        navigate(`/chat/${idChat}`);
+    }
 
-  useEffect(() => {
-    fecthData();
-  }, []);
-  const fecthData = async () => {
-    await axios
-      .get("/api/v1/chat/list")
-      .then((response) => {
-        let listRoom = response.data.listChat;
-        setListChat(listRoom);
-        console.log(listChat);
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
-  };
-  return (
-    <List sx={{ width: "100%", maxWidth: 400, bgcolor: "background.paper" }}>
-      {listChat.map((userChat) => (
-        <ListItemButton onClick={(event) => showChat(userChat.id)}>
-          <ListItem>
-            <ListItemAvatar>
-              <Avatar alt="avatar" />
-            </ListItemAvatar>
-            <ListItemText primary={userChat.roomName} secondary="Jan 9, 2014" />
-          </ListItem>
-        </ListItemButton>
-      ))}
-    </List>
-  );
+    useEffect(() => {
+        console.log(axios.defaults.headers)
+        axios.get("/api/v1/chat/list").then((response) => {
+            let listRoom = response.data.listChat;
+            setListChat(listRoom)
+            console.log(listChat)
+        }).catch((error) => {
+            throw new Error(error)
+        })
+    },[]);
+
+    return (
+        <List sx={{width: '100%', maxWidth: 400, bgcolor: 'background.paper'}}>
+            {listChat.map(userChat => (
+                <ListItemButton onClick={ event => showChat(userChat.id)}>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar alt="avatar"  />
+                        </ListItemAvatar>
+                        <ListItemText primary= {userChat.roomName} secondary="Jan 9, 2014"/>
+                    </ListItem>
+                </ListItemButton>
+            ))
+            }
+        </List>
+    )
 }

@@ -1,8 +1,9 @@
-import PostsContainer from './PostsContainer'
-import SideBar from "./SideBar/SideBar";
 import MetaData from "../Layouts/MetaData";
+import PostsContainer from './PostsContainer';
+import SideBar from "./SideBar/SideBar";
 
 const Home = () => {
+
   return (
     <>
       <MetaData title="Instagram" />
