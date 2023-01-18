@@ -302,12 +302,14 @@ class UserController {
       const username = req.params.username;
       const user = await UserRepo.createQueryBuilder("user")
         .leftJoinAndSelect("user.followers", "follower")
+        .leftJoinAndSelect("follower.following", "followerUser")
         .leftJoinAndSelect("user.following", "following")
+        .leftJoinAndSelect("following.follower", "followingUser")
         .leftJoinAndSelect("user.posts", "post")
         .leftJoinAndSelect("post.comments", "comment")
         .leftJoinAndSelect("comment.user", "commentUser")
         .leftJoinAndSelect("post.likes", "like")
-        .leftJoinAndSelect("like.user","likeUser")
+        .leftJoinAndSelect("like.user", "likeUser")
         .leftJoinAndSelect("post.postedBy", "postUser")
         .where("user.username = :username", { username })
         .getOne();

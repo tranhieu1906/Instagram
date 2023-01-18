@@ -2,7 +2,6 @@ import { Dialog } from "@mui/material";
 import UserListItem from "./UserListItem";
 
 const UsersDialog = ({ open, onClose, title, usersList }) => {
-  console.log(usersList)
   return (
     <Dialog open={open} onClose={onClose}>
       <div className="flex flex-col w-72 sm:w-96">
@@ -44,9 +43,15 @@ const UsersDialog = ({ open, onClose, title, usersList }) => {
           </svg>
         </div>
         <div className="overflow-x-hidden h-96 w-full p-3">
-          {usersList?.map((u) => (
-            <UserListItem {...u} key={u.id} />
-          ))}
+          {usersList?.map((u) => {
+            if (u.user) {
+              return <UserListItem {...u.user} key={u.id} />;
+            } else if (u.follower) {
+              return <UserListItem {...u.follower} key={u.id} />;
+            }else{
+              return <UserListItem {...u.following} key={u.id} />;
+            }
+          })}
         </div>
       </div>
     </Dialog>

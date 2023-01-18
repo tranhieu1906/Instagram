@@ -202,7 +202,7 @@ const SearchBox = () => {
                   ></rect>
                 </svg>
               ) : users.length > 0 ? (
-                users.map((user) => <SearchUserItem {...user} key={user._id} />)
+                users.map((user) => <SearchUserItem {...user} key={user.id} />)
               ) : (
                 <span className="text-gray-400 text-sm">Không tìm thấy kết quả.</span>
               )}
