@@ -47,8 +47,8 @@ const Profile = () => {
   } = useSelector((state) => state.followUser);
 
   const handleFollow = () => {
-    // setFollow(!follow);
     dispatch(followUser(user.id));
+    setFollow(!follow);
   };
 
   const handleFollowersModal = () => {
@@ -87,9 +87,8 @@ const Profile = () => {
   }, [dispatch, error, params.username, followError, success, message]);
 
   useEffect(() => {
-    setFollow(user?.followers?.some((u) => u.id === loggedInUser.id));
+    setFollow(user?.followers?.some((u) => u.following.id === loggedInUser.id));
   }, [user, loggedInUser.id]);
-
   return (
     <>
       <MetaData

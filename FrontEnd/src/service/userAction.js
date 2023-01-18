@@ -109,7 +109,6 @@ export const followUser = (userId) => async (dispatch) => {
   try {
     dispatch({ type: FOLLOW_USER_REQUEST });
     const { data } = await axios.get(`/api/v1/follow/${userId}`);
-
     dispatch({
       type: FOLLOW_USER_SUCCESS,
       payload: data,
