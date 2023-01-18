@@ -36,13 +36,17 @@ export const loginUser = (values) => async (dispatch) => {
       },
     };
     const { data } = await axios.post("/api/v1/login", values, config);
+    console.log(data)
     const token = data.accessToken;
-    await localStorage.setItem("token", token);
+    localStorage.setItem("token", token);
+
     axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+
     dispatch({
       type: LOGIN_USER_SUCCESS,
       payload: data.user,
     });
+
   } catch (error) {
     dispatch({
       type: LOGIN_USER_FAIL,
@@ -77,6 +81,7 @@ export const registerUser = (userData) => async (dispatch) => {
 export const loadUser = () => async (dispatch) => {
   try {
     dispatch({ type: LOAD_USER_REQUEST });
+    console.log(localStorage.getItem('token'))
 
     const { data } = await axios.get("/api/v1/me");
 
@@ -84,6 +89,7 @@ export const loadUser = () => async (dispatch) => {
       type: LOAD_USER_SUCCESS,
       payload: data.user,
     });
+
   } catch (error) {
     dispatch({
       type: LOAD_USER_FAIL,

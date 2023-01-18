@@ -28,9 +28,8 @@ export default function ChatBody (props) {
                     <Button variant="contained" onClick={addChat}>gửi tin nhắn</Button>
                 </div>
             ): (
-                <h1>regrtg</h1>
+                <h1></h1>
             )}
-
         </>
     )
 }

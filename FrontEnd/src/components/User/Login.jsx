@@ -43,6 +43,7 @@ function Login() {
   });
 
   useEffect(() => {
+    console.log(isAuthenticated)
     if (error) {
       toast.error(error);
       dispatch(clearErrors());
