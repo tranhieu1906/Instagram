@@ -163,6 +163,7 @@ export const deletePostReducer = (state = {}, { type, payload }) => {
         loading: true,
       };
     case DELETE_POST_SUCCESS:
+      
       return {
         loading: false,
         success: payload,

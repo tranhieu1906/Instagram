@@ -37,7 +37,8 @@ export const loginUser = (values) => async (dispatch) => {
     };
     const { data } = await axios.post("/api/v1/login", values, config);
     const token = data.accessToken;
-    localStorage.setItem("token", token);
+    await localStorage.setItem("token", token);
+    axios.defaults.headers.common["Authorization"] = "Bearer " + token;
     dispatch({
       type: LOGIN_USER_SUCCESS,
       payload: data.user,
@@ -108,7 +109,6 @@ export const followUser = (userId) => async (dispatch) => {
   try {
     dispatch({ type: FOLLOW_USER_REQUEST });
     const { data } = await axios.get(`/api/v1/follow/${userId}`);
-
     dispatch({
       type: FOLLOW_USER_SUCCESS,
       payload: data,
@@ -144,7 +144,6 @@ export const getUserDetails = (username) => async (dispatch) => {
   try {
     dispatch({ type: USER_DETAILS_REQUEST });
     const { data } = await axios.get(`/api/v1/user/${username}`);
-    console.log(data)
     dispatch({
       type: USER_DETAILS_SUCCESS,
       payload: data.user,

@@ -16,7 +16,6 @@ const UserListItem = ({ id, profile_picture, username, name, followers }) => {
     setFollow(!follow);
     dispatch(followUser(id));
   };
-
   return (
     <div className="flex justify-between items-center mb-3">
       <div className="flex space-x-3 items-center">

@@ -43,9 +43,15 @@ const UsersDialog = ({ open, onClose, title, usersList }) => {
           </svg>
         </div>
         <div className="overflow-x-hidden h-96 w-full p-3">
-          {usersList?.map((u) => (
-            <UserListItem {...u} key={u._id} />
-          ))}
+          {usersList?.map((u) => {
+            if (u.user) {
+              return <UserListItem {...u.user} key={u.id} />;
+            } else if (u.follower) {
+              return <UserListItem {...u.follower} key={u.id} />;
+            }else{
+              return <UserListItem {...u.following} key={u.id} />;
+            }
+          })}
         </div>
       </div>
     </Dialog>

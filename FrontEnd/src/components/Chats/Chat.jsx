@@ -40,10 +40,11 @@ function Chat({ socket, username, room }) {
             </div>
             <div className="">
                 <ScrollToBottom className="">
-                    {listMessage.map((messageContent) => {
+                    {listMessage.map((messageContent,index) => {
                         return (
                             <div
                                 id={username === messageContent.author ? "you" : "other"}
+                                key={index}
                             >
                                 <div>
                                     <div>

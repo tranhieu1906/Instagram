@@ -1,5 +1,6 @@
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
+import { Dialog } from "@mui/material";
 import moment from "moment";
 import "moment/locale/vi";
 import { useEffect, useRef, useState } from "react";
@@ -43,11 +44,11 @@ const PostItem = ({
 
   const [likeEffect, setLikeEffect] = useState(false);
 
+  const [deleteModal, setDeleteModal] = useState(false);
   const handleLike = async () => {
     setLiked(!liked);
     await dispatch(likePost(id));
     const { data } = await axios.get(`/api/v1/post/detail/${id}`);
-    console.log(data.post.likes);
     setAllLikes(data.post.likes);
   };
   const handleComment = async (e) => {
@@ -73,6 +74,13 @@ const PostItem = ({
     }
     handleLike();
   };
+
+  const closeDeleteModal = () => {
+    setDeleteModal(false);
+  };
+
+  const handleDeleteComment = () => {};
+
   useEffect(() => {
     (async function fecthData() {
       setLiked(allLikes.some((u) => u.user.id === user.id));
@@ -164,15 +172,14 @@ const PostItem = ({
               : `Hiển thị tất cả ${allComments.length} bình luận`}
           </span>
         ) : (
-          <span className="text-[13px] text-gray-500">No Comments Yet!</span>
+          <span className="text-[13px] text-gray-500">Không có Comment!</span>
         )}
-        <span className="text-xs text-gray-500 cursor-pointer">
+        <span className="text-xs text-gray-500">
           {moment(created_at).fromNow()}
         </span>
 
         {viewComment && (
           <ScrollToBottom className="w-full h-52 overflow-y-auto py-1">
-            {console.log(allComments)}
             {allComments.map((c, index) => (
               <div className="flex items-start mb-2 space-x-2" key={index}>
                 <img
@@ -181,18 +188,39 @@ const PostItem = ({
                   src={c.user.profile_picture}
                   alt="avatar"
                 />
-                <Link
-                  to={`/${c.user}`}
-                  className="text-sm font-semibold hover:underline"
-                >
-                  {c.user.username}
-                </Link>
-                <p className="text-sm">{c.comment_text}</p>
+                <div className="w-2/4">
+                  <Link
+                    to={`/${c.user}`}
+                    className="text-sm font-semibold hover:underline"
+                  >
+                    {c.user.username}
+                  </Link>
+                  <span className="text-sm ml-2	">{c.comment_text}</span>
+                  <div className="flex gap-12">
+                    <p className="text-sm ">{moment(c.created_at).fromNow()}</p>
+                    <span
+                      className="cursor-pointer"
+                      onClick={() => setDeleteModal(true)}
+                    >
+                      {moreIcons}
+                    </span>
+                  </div>
+                </div>
               </div>
             ))}
           </ScrollToBottom>
         )}
       </div>
+      <Dialog open={deleteModal} onClose={closeDeleteModal} maxWidth="xl">
+        <div className="flex flex-col items-center w-80">
+          <button
+            onClick={closeDeleteModal}
+            className="py-2.5 w-full hover:bg-gray-50"
+          >
+            Cancel
+          </button>
+        </div>
+      </Dialog>
 
       <form
         onSubmit={handleComment}

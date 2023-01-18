@@ -25,28 +25,29 @@ function App() {
   const { isAuthenticated } = useSelector((state) => state.user);
 
   useEffect(() => {
-    axios.defaults.headers.common["Authorization"] =
-      "Bearer " + localStorage.getItem("token");
+    setHeaderApi();
   }, []);
-
+  const setHeaderApi = async () => {
+    await (axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("token"));
+  };
   useEffect(() => {
     dispatch(loadUser());
   }, [dispatch]);
   return (
     <>
       <ToastContainer
-        position="top-right"
-        autoClose={5000}
+        position="bottom-left"
+        autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
         draggable
-        pauseOnHover
+        pauseOnHover={false}
         theme="light"
       />
-      <ToastContainer />
 
       {isAuthenticated && <Header />}
       <Suspense>

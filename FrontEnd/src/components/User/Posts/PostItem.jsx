@@ -6,6 +6,8 @@ import moment from "moment";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import axios from "../../../api/axios";
+
 import { addComment, deletePost, likePost } from "../../../service/postAction";
 import {
   commentIcon,
@@ -23,43 +25,35 @@ const PostItem = ({
   comments,
   image_url,
   postedBy,
-  createdAt,
+  created_at,
 }) => {
+  const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const commentInput = useRef(null);
 
-  const [open, setOpen] = useState(false);
+  const { user } = useSelector((state) => state.user);
+
+  const [allLikes, setAllLikes] = useState(likes);
+  const [allComments, setAllComments] = useState(comments);
   const [liked, setLiked] = useState(false);
   const [comment, setComment] = useState("");
   const [showEmojis, setShowEmojis] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
 
   const [likeEffect, setLikeEffect] = useState(false);
 
-  const { user } = useSelector((state) => state.user);
-
-  const handleLike = () => {
+  const [deleteModal, setDeleteModal] = useState(false);
+  const handleLike = async () => {
     setLiked(!liked);
-    dispatch(likePost(id));
+    await dispatch(likePost(id));
+    const { data } = await axios.get(`/api/v1/post/detail/${id}`);
+    setAllLikes(data.post.likes);
   };
-
-  const handleComment = (e) => {
+  const handleComment = async (e) => {
     e.preventDefault();
-    dispatch(addComment(id, comment));
+    await dispatch(addComment(id, comment));
     setComment("");
-  };
-
-  const handleDeletePost = () => {
-    dispatch(deletePost(id));
-    setDeleteModal(false);
-  };
-
-  useEffect(() => {
-    setLiked(likes.some((u) => u.user.id === user.id));
-  }, [likes, user.id]);
-
-  const closeDeleteModal = () => {
-    setDeleteModal(false);
+    const { data } = await axios.get(`/api/v1/post/detail/${id}`);
+    setAllComments(data.post.comments);
   };
 
   const setLike = () => {
@@ -73,6 +67,21 @@ const PostItem = ({
     handleLike();
   };
 
+  const closeDeleteModal = () => {
+    setDeleteModal(false);
+  };
+
+   const handleDeletePost = () => {
+     dispatch(deletePost(id));
+     setDeleteModal(false);
+   };
+
+
+  useEffect(() => {
+    (async function fecthData() {
+      setLiked(allLikes.some((u) => u.user.id === user.id));
+    })();
+  }, [allLikes, user.id]);
   return (
     <>
       <div
@@ -88,10 +97,10 @@ const PostItem = ({
         />
         <div className="hidden group-hover:flex text-white absolute pointer-events-none gap-4">
           <span className="flex gap-0.5">
-            {liked ? likeFill : <FavoriteIcon />} {likes.length}
+            {liked ? likeFill : <FavoriteIcon />} {allLikes.length}
           </span>
           <span>
-            <ModeCommentIcon /> {comments.length}
+            <ModeCommentIcon /> {allComments.length}
           </span>
         </div>
       </div>
@@ -188,7 +197,7 @@ const PostItem = ({
                 {content}
               </p>
 
-              {comments.map((c, index) => (
+              {allComments.map((c, index) => (
                 <div className="flex items-start space-x-1 mb-3" key={index}>
                   <Link to={`/${c.user.username}`}>
                     <img
@@ -230,12 +239,12 @@ const PostItem = ({
 
                 {/* likes  */}
                 <span className="w-full font-semibold text-sm">
-                  {likes.length} likes
+                  {allLikes.length} likes
                 </span>
 
                 {/* time */}
                 <span className="text-xs text-gray-500">
-                  {moment(createdAt).fromNow()}
+                  {moment(created_at).fromNow()}
                 </span>
               </div>
 
