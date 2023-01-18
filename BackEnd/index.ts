@@ -8,6 +8,8 @@ import Token from "./src/middlewares/jwt.middleware";
 import { AppDataSource } from "./src/config/data-source";
 import { Post } from "./src/router/postRouter";
 import { router } from "./src/router/userRouter";
+import { chatRouter} from "./src/router/chatRouter";
+import { messageRouter } from "./src/router/messageRouter";
 import http from "http";
 import { Server } from "socket.io";
 const PORT = process.env.PORT || 8080;
@@ -31,6 +33,8 @@ app.use(cors());
 app.use("/api/v1", router);
 app.use(Token.veryfyAccessToken);
 app.use("/api/v1", Post);
+app.use("/api/v1", chatRouter);
+app.use("/api/v1", messageRouter)
 
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
@@ -40,7 +44,16 @@ app.use((err, req, res, next) => {
   });
 });
 
-const server = http.createServer(app);
+app.listen(PORT, () => {
+  console.log("App running with port: " + PORT);
+});
+
+// const io = require("socket.io")(server, {
+//   pingTimeout: 60000,
+//   cors: {
+//     origin: "http://localhost:3000",
+//   },
+// });
 
 // const io = new Server(server, {
 //   cors: {
@@ -65,6 +78,3 @@ const server = http.createServer(app);
 //   });
 // });
 
-server.listen(PORT, () => {
-  console.log("App running with port: " + PORT);
-});
