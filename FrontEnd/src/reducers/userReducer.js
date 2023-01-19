@@ -8,6 +8,7 @@ import {
   LOGIN_USER_SUCCESS,
   LOGOUT_USER_FAIL,
   LOGOUT_USER_SUCCESS,
+  AUTH_TOKEN_RECEIVED,
   REGISTER_USER_FAIL,
   REGISTER_USER_REQUEST,
   REGISTER_USER_SUCCESS,
@@ -89,6 +90,10 @@ export const userReducer = (state = { user: {} }, { type, payload }) => {
         ...state,
         error: null,
       };
+    case AUTH_TOKEN_RECEIVED:
+      return {
+        isAuthenticated: true,
+      };  
     default:
       return state;
   }

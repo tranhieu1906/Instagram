@@ -8,6 +8,7 @@ import {
   loadUser,
   updateProfile,
 } from "../../../service/userAction";
+import MetaData from "../../Layouts/MetaData";
 
 const UpdateProfile = () => {
   const dispatch = useDispatch();
@@ -76,6 +77,8 @@ const UpdateProfile = () => {
 
   return (
     <>
+      <MetaData title="Edit Profile • Instagram" />
+
       <form
         onSubmit={handleUpdate}
         encType="multipart/form-data"

@@ -36,7 +36,6 @@ function App() {
   useEffect(() => {
     dispatch(loadUser());
   }, [dispatch]);
-  console.log(isAuthenticated);
   return (
     <>
       <ToastContainer
@@ -58,43 +57,34 @@ function App() {
           <Route path="/register" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/password/forgot" element={<ForgotPassword />} />
-          {isAuthenticated && (
-            <>
-              <Route
-                path="/"
-                element={
-                  <PrivateRoute>
-                    <Home />
-                  </PrivateRoute>
-                }
-              />
-              <Route path="/direct/inbox" element={<ViewChat />} />
-              <Route
-                path="/:username"
-                element={
-                  <PrivateRoute>
-                    <Profile />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/accounts/edit"
-                element={
-                  <PrivateRoute>
-                    <Update>
-                      <UpdateProfile />
-                    </Update>
-                  </PrivateRoute>
-                }
-              />
-            </>
-          )}
-          {setTimeout(
-            () => (
-              <Route path="*" element={<NotFound />} />
-            ),
-            500
-          )}
+          <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                <Home />
+              </PrivateRoute>
+            }
+          />
+          <Route path="/direct/inbox" element={<ViewChat />} />
+          <Route
+            path="/:username"
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/accounts/edit"
+            element={
+              <PrivateRoute>
+                <Update>
+                  <UpdateProfile />
+                </Update>
+              </PrivateRoute>
+            }
+          />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
     </>

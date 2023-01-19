@@ -215,7 +215,6 @@ class UserController {
       try {
         await sendEmail({
           email: user.email,
-          templateId: process.env.SENDGRID_RESET_TEMPLATEID,
           data: {
             reset_url: resetPasswordUrl,
           },

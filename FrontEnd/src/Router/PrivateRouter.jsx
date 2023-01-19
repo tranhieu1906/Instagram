@@ -2,14 +2,13 @@ import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 const PrivateRoute = ({ children }) => {
-    const { loading, isAuthenticated } = useSelector(state => state.user);
+    const { loading } = useSelector(state => state.user);
 
     return (
-        <>
-            {!loading && (
-                !isAuthenticated ? <Navigate to="/login" /> : children
-            )}
-        </>
+      <>
+        {!loading &&
+          (!localStorage.getItem("token") ? <Navigate to="/login" /> : children)}
+      </>
     );
 };
 

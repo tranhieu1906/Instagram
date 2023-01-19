@@ -1,21 +1,31 @@
-import sgMail from "@sendgrid/mail";
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+import nodemailer from "nodemailer";
 
 export const sendEmail = async (options) => {
-  const msg = {
-    to: options.email,
-    from: process.env.SENDGRID_MAIL,
-    templateId: options.templateId,
-    dynamic_template_data: options.data,
-  };
-
-  sgMail
-    .send(msg)
-    .then(() => {
-      console.log("Email Sent");
-    })
-    .catch((error) => {
-      console.error(error);
+  console.log(options);
+  try {
+    const transporter = nodemailer.createTransport({
+      host: "smtp.ethereal.email",
+      port: 587,
+      secure: false,
+      auth: {
+        user: "nguyentranhieugttn@gmail.com",
+        pass: "Hieu@19062004",
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
     });
-};
 
+    await transporter.sendMail({
+      from: "nguyentranhieugttn@gmail.com",
+      subject: "subject",
+      to: options.email,
+      text: options.data,
+    });
+
+    console.log("email sent sucessfully");
+  } catch (error) {
+    console.log(error, "email not sent");
+  }
+};

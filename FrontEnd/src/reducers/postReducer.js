@@ -55,7 +55,10 @@ export const postReducer = (state = { post: {} }, { type, payload }) => {
       return state;
   }
 };
-export const postOfFollowingReduct = (state = { posts: [] }, { type, payload }) => {
+export const postOfFollowingReduct = (
+  state = { posts: [] },
+  { type, payload }
+) => {
   switch (type) {
     case POST_FOLLOWING_REQUEST:
       return {
@@ -163,21 +166,20 @@ export const deletePostReducer = (state = {}, { type, payload }) => {
         loading: true,
       };
     case DELETE_POST_SUCCESS:
-      
       return {
         loading: false,
         success: payload,
+      };
+    case DELETE_POST_RESET:
+      return {
+        ...state,
+        success: false,
       };
     case DELETE_POST_FAIL:
       return {
         ...state,
         loading: false,
         error: payload,
-      };
-    case DELETE_POST_RESET:
-      return {
-        ...state,
-        success: false,
       };
     case CLEAR_ERRORS:
       return {
