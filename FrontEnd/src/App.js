@@ -15,6 +15,7 @@ import Profile from "./components/User/Profile";
 const SignUp = lazy(() => import("./components/User/SignUp"));
 const Login = lazy(() => import("./components/User/Login"));
 const Home = lazy(() => import("./components/Home/Home"));
+const ResetPassword = lazy(() => import("./components/User/ResetPassword"));
 const UpdateProfile = lazy(() =>
   import("./components/User/Update/UpdateProfile")
 );
@@ -57,6 +58,8 @@ function App() {
           <Route path="/register" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/password/forgot" element={<ForgotPassword />} />
+          <Route path="/password/reset/:token" element={<ResetPassword />} />
+
           <Route
             path="/"
             element={

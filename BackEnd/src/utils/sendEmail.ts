@@ -1,27 +1,23 @@
-
 import nodemailer from "nodemailer";
 
 export const sendEmail = async (options) => {
-  console.log(options);
   try {
     const transporter = nodemailer.createTransport({
-      host: "smtp.ethereal.email",
+      service: "gmail",
+      host: "smtp.gmail.com",
       port: 587,
       secure: false,
       auth: {
         user: "nguyentranhieugttn@gmail.com",
-        pass: "Hieu@19062004",
-      },
-      tls: {
-        rejectUnauthorized: false,
+        pass: "ppfibrvfwfdlnedo",
       },
     });
 
     await transporter.sendMail({
-      from: "nguyentranhieugttn@gmail.com",
+      from: options.email,
       subject: "subject",
       to: options.email,
-      text: options.data,
+      text: options.data.reset_url,
     });
 
     console.log("email sent sucessfully");

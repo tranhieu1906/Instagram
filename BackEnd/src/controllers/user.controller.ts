@@ -209,9 +209,7 @@ class UserController {
       user.resetPasswordToken = resetPasswordToken;
       user.resetPasswordExpiry = new Date(Date.now() + 15 * 60 * 1000);
       UserRepo.save(user);
-      const resetPasswordUrl = `https://${req.get(
-        "host"
-      )}/password/reset/${resetPasswordToken}`;
+      const resetPasswordUrl = `http://localhost:3000/password/reset/${resetPasswordToken}`;
       try {
         await sendEmail({
           email: user.email,
@@ -232,27 +230,34 @@ class UserController {
   }
   // Reset Password
   async resetPassword(req, res, next) {
-    const resetPasswordToken = crypto
-      .createHash("sha256")
-      .update(req.params.token)
-      .digest("hex");
-    const user = await UserRepo.findOneBy({
-      resetPasswordToken: resetPasswordToken,
-      resetPasswordExpiry: MoreThan(new Date(Date.now())),
-    });
-    if (!user) {
-      createError(404, "User Not Found");
-    }
-    user.password = req.body.password;
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpiry = undefined;
+    try {
+      const resetPasswordToken = crypto
+        .createHash("sha256")
+        .update(req.params.token)
+        .digest("hex");
+      const user = await UserRepo.findOneBy({
+        resetPasswordToken: req.params.token,
+        resetPasswordExpiry: MoreThan(new Date(Date.now())),
+      });
+      if (!user) {
+        createError(404, "User Not Found");
+      }
+      let password = req.body.password;
+      let hashPassword = await bcrypt.hash(password, 10);
+      user.password = hashPassword;
+      user.resetPasswordToken = null;
+      user.resetPasswordExpiry = null;
 
-    await UserRepo.save(user);
-    const accessToken = await Token.signAccessToken({ id: user.id });
-    res.cookie("token", accessToken, {
-      maxAge: 1000 * 60 * 60 * 24,
-      httpOnly: true,
-    });
+      await UserRepo.save(user);
+      const accessToken = await Token.signAccessToken({ id: user.id });
+      res.cookie("token", accessToken, {
+        maxAge: 1000 * 60 * 60 * 24,
+        httpOnly: true,
+      });
+      res.json("oke")
+    } catch (error) {
+      next(error);
+    }
   }
   // User Search
   async searchUsers(req, res, next) {
