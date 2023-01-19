@@ -35,11 +35,13 @@ const ResetPassword = () => {
   };
 
   useEffect(() => {
+    console.log(123);
     if (error) {
       toast.error(error);
       dispatch(clearErrors());
     }
     if (success) {
+      
       toast.success("Password Updated Successfully");
       navigate("/login");
     }
