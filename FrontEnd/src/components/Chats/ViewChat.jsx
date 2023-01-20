@@ -12,11 +12,15 @@ import ChatBody from "./childComponent/ChatBody";
 
 
 export default function ViewChat () {
-    const [presentRoom, setPresentRoom] = useState()
+    const [presentRoom, setPresentRoom] = useState(null)
     const [open, setOpen] = React.useState(false);
     const handleClickListItem = () => {
         setOpen(true);
     };
+
+    const updatePresentRoom = (idChat) => {
+        setPresentRoom(idChat)
+    }
 
     const handleClose = () => {
         setOpen(false);
@@ -72,13 +76,20 @@ export default function ViewChat () {
                             </div>
                         </div>
                         <div className="listChat-body">
-                            <ListChat/>
+                            <ListChat
+                                open = {open}
+                                chatNow = {updatePresentRoom}
+                            />
                         </div>
                     </div>
-
-                    <div className="flex justify-center items-center chat">
-                        <ChatBody onClose = {handleClickListItem}/>
+                    {/*className="flex justify-center items-center chat"*/}
+                    <div className="chat">
+                        <ChatBody
+                            onClose = {handleClickListItem}
+                            chatId = {presentRoom}
+                        />
                     </div>
+
                 </div>
             </Container>
             <CssBaseline/>

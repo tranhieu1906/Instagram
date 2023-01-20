@@ -11,6 +11,7 @@ import ForgotPassword from "./components/User/ForgotPassword";
 import NotFound from "./components/Errors/NotFound";
 import Profile from "./components/User/Profile";
 import ViewChat from "./components/Chats/ViewChat";
+import ChatBody from "./components/Chats/childComponent/ChatBody";
 import {LOGIN_USER_SUCCESS} from "./constants/userConstants";
 
 const SignUp = lazy(() => import("./components/User/SignUp"));
@@ -96,8 +97,6 @@ function App() {
 
                     </Routes>
                 </Suspense>
-
-
         </>
     );
 }
