@@ -1,12 +1,62 @@
+import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import Auth from "./Auth";
-function ResetPassword() {
-     const [newPassword, setNewPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { clearErrors, resetPassword } from "../../service/userAction";
+import { useDispatch, useSelector } from "react-redux";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+
+const ResetPassword = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const params = useParams();
+
+  const { error, success, loading } = useSelector(
+    (state) => state.forgotPassword
+  );
+
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (newPassword.length < 8) {
+      toast.warn("Password length must be atleast 8 characters");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      toast.error("Password Doesn't Match");
+      return;
+    }
+    dispatch(resetPassword(params.token, newPassword));
+  };
+
+  useEffect(() => {
+    console.log(123);
+    if (error) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+    if (success) {
+      
+      toast.success("Password Updated Successfully");
+      navigate("/login");
+    }
+  }, [dispatch, error, success, navigate]);
+
   return (
     <>
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <Auth>
         <div className="bg-white border flex flex-col gap-2 p-4 pt-10">
           <img
@@ -16,7 +66,7 @@ function ResetPassword() {
             alt=""
           />
           <form
-            //   onSubmit={handleSubmit}
+            onSubmit={handleSubmit}
             className="flex flex-col justify-center items-center gap-3 m-3 md:m-8"
           >
             <TextField
@@ -66,5 +116,6 @@ function ResetPassword() {
       </Auth>
     </>
   );
-}
+};
+
 export default ResetPassword;

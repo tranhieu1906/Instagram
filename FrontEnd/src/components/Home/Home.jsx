@@ -1,14 +1,8 @@
-import PostsContainer from './PostsContainer'
-import SideBar from "./SideBar/SideBar";
 import MetaData from "../Layouts/MetaData";
-import { useEffect} from "react";
-import axios from "../../api/axios";
+import PostsContainer from './PostsContainer';
+import SideBar from "./SideBar/SideBar";
 
 const Home = () => {
-
-    useEffect(() => {
-        console.log(axios.defaults.headers)
-    })
 
   return (
     <>
