@@ -68,23 +68,19 @@ const ForgotPassword = () => {
               type="submit"
               className="bg-primary-blue font-medium py-2 rounded text-white w-full"
             >
-              Submit
+              Gửi liên kết đăng nhập
             </button>
-            <span className="my-3 text-gray-500">OR</span>
-            <Link
-              to="/password/forgot"
-              className="text-sm font-medium text-blue-800"
-            >
-              Forgot password?
+            <span className="my-3 text-gray-500">Hoặc</span>
+            <Link to="/register" className="text-sm font-medium text-blue-800">
+              Tạo tài khoản mới
             </Link>
           </form>
         </div>
 
         <div className="bg-white border p-5 text-center">
           <span>
-            Don't have an account?{" "}
-            <Link to="/register" className="text-primary-blue">
-              Sign up
+            <Link to="/login" className="text-primary-blue">
+              Quay lại đăng nhập?
             </Link>
           </span>
         </div>
