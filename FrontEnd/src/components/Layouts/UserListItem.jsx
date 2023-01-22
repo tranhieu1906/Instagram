@@ -3,14 +3,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { followUser } from "../../service/userAction";
 
-const UserListItem = ({ id, profile_picture, username, name, followers }) => {
+const UserListItem = ({
+  id,
+  profile_picture,
+  username,
+  name,
+  follower: followers,
+}) => {
+  console.log(followers);
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.user);
-
-  const [follow, setFollow] = useState(
-    followers?.some((id) => id === user._id)
-  );
+  const [follow, setFollow] = useState(followers?.some((id) => id === user.id));
 
   const handleFollow = () => {
     setFollow(!follow);
@@ -38,7 +42,7 @@ const UserListItem = ({ id, profile_picture, username, name, followers }) => {
           <span className="text-gray-400 text-sm">{name}</span>
         </div>
       </div>
-      {id !== user.id &&
+      {/* {id !== user.id &&
         (follow ? (
           <button
             onClick={handleFollow}
@@ -53,7 +57,7 @@ const UserListItem = ({ id, profile_picture, username, name, followers }) => {
           >
             Follow
           </button>
-        ))}
+        ))} */}
     </div>
   );
 };

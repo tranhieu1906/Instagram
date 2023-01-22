@@ -4,12 +4,14 @@ import {
   homeFill,
   homeOutline,
   likeOutline,
+  likeFill,
   messageFill,
   messageOutline,
   postUploadOutline,
 } from "./SvgIcons";
 import { Link, useLocation } from "react-router-dom";
 import ProfileDetails from "./ProfileDetails";
+import NotificationDetails from "./NotificationDetails";
 import NewPost from "./NewPost";
 import { useSelector } from "react-redux";
 import SearchBox from "./SearchBar/SearchBox";
@@ -24,6 +26,7 @@ const Header = () => {
   const location = useLocation();
   const [onHome, setOnHome] = useState(false);
   const [onChat, setOnChat] = useState(false);
+  const [Notification, setNotification] = useState(false);
 
   useEffect(() => {
     setOnHome(location.pathname === "/");
@@ -58,7 +61,12 @@ const Header = () => {
           </div>
 
           <span className="hidden sm:block">{exploreOutline}</span>
-          <span className="hidden sm:block">{likeOutline}</span>
+          <span
+            className={`cursor-pointer`}
+            onClick={() => setNotification(!Notification)}
+          >
+            {Notification ? likeFill : likeOutline}
+          </span>
 
           <div
             onClick={() => setProfileToggle(!profileToggle)}
@@ -79,6 +87,9 @@ const Header = () => {
 
         {profileToggle && (
           <ProfileDetails setProfileToggle={setProfileToggle} />
+        )}
+        {Notification && (
+          <NotificationDetails setNotification={setNotification} />
         )}
 
         <NewPost newPost={newPost} setNewPost={setNewPost} />

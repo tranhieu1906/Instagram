@@ -127,7 +127,7 @@ const Profile = () => {
                       to="/accounts/edit"
                       className="border font-medium hover:bg-gray-50 text-sm rounded px-2 py-1"
                     >
-                      Edit Profile
+                      Chỉnh sửa trang cá nhân
                     </Link>
                     <Link to="/accounts/edit">{settingsIcon}</Link>
                   </div>
@@ -155,22 +155,23 @@ const Profile = () => {
                 )}
               </div>
 
-              <div className="flex justify-between items-center max-w-[21.5rem]">
+              <div className="flex justify-between items-center max-w-[28.5rem]">
                 <div className="cursor-pointer">
                   <span className="font-semibold">{user.posts?.length}</span>{" "}
-                  posts
+                  bài viết
                 </div>
                 <div onClick={handleFollowersModal} className="cursor-pointer">
                   <span className="font-semibold">
                     {user.followers?.length}
                   </span>{" "}
-                  followers
+                  người theo dõi
                 </div>
                 <div onClick={handleFollowingModal} className="cursor-pointer">
+                  Đang theo dõi{" "}
                   <span className="font-semibold">
                     {user.following?.length}
                   </span>{" "}
-                  following
+                  người dùng
                 </div>
               </div>
             </div>
@@ -178,14 +179,14 @@ const Profile = () => {
 
           {followersModal ? (
             <UsersDialog
-              title="Followers"
+              title="Người theo dõi"
               open={viewModal}
               onClose={closeModal}
               usersList={user?.followers}
             />
           ) : (
             <UsersDialog
-              title="Following"
+              title="Đang theo dõi"
               open={viewModal}
               onClose={closeModal}
               usersList={user?.following}
