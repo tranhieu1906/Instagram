@@ -1,19 +1,19 @@
-import {useState, useEffect} from "react";
-import {useSelector} from "react-redux";
-import "../../App.css";
-import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import FindCreateChat from "./childComponent/FindCreateChat";
+import { ListItem } from "@mui/material";
 import Container from '@mui/material/Container';
-import {Badge, ListItem, PropTypes, styled} from "@mui/material";
-import axios from "../../api/axios";
-import ListChat from "./childComponent/ListChat";
+import CssBaseline from '@mui/material/CssBaseline';
+import * as React from 'react';
+import { useState } from "react";
+import "../../App.css";
 import ChatBody from "./childComponent/ChatBody";
+import FindCreateChat from "./childComponent/FindCreateChat";
+import ListChat from "./childComponent/ListChat";
+
 
 
 export default function ViewChat ({socket}) {
     const [presentRoom, setPresentRoom] = useState(null)
     const [open, setOpen] = React.useState(false);
+
     const handleClickListItem = () => {
         setOpen(true);
     };

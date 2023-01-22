@@ -17,6 +17,7 @@ import {
 } from "../../Home/SvgIcons";
 import { likeFill } from "../../NavBar/SvgIcons";
 import { metaballsMenu } from "../SvgIcons";
+import { loadUser } from "../../../service/userAction";
 
 const PostItem = ({
   id,
@@ -71,11 +72,10 @@ const PostItem = ({
     setDeleteModal(false);
   };
 
-   const handleDeletePost = () => {
-     dispatch(deletePost(id));
-     setDeleteModal(false);
-   };
-
+  const handleDeletePost = () => {
+    dispatch(deletePost(id));
+    setDeleteModal(false);
+  };
 
   useEffect(() => {
     (async function fecthData() {

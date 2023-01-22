@@ -15,11 +15,11 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import PasswordStrengthBar from "react-password-strength-bar";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
-import { clearErrors, registerUser } from '../../service/userAction';
 import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
+import { clearErrors, registerUser } from '../../service/userAction';
 import Auth from "./Auth";
 
 function SignUp() {
@@ -216,19 +216,6 @@ function SignUp() {
           </span>
                 </div>
             </Auth>
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
-            <ToastContainer/>
         </>
     );
 }

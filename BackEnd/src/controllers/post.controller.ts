@@ -1,4 +1,4 @@
-import { Comment } from "./../model/Comment";
+import { Comment } from "../model/Comment";
 import { Follow } from "../model/Follow";
 import { User } from "../model/User";
 import { Post } from "../model/Post";
@@ -206,6 +206,9 @@ class PostController {
         .where("follow.following = :id", { id: req.user.data.id })
         .getMany();
       let arr = [];
+      if (!users){
+        next()
+      } 
       users.map((user) => arr.push(user.follower));
       const posts = await PostRepo.createQueryBuilder("post")
         .leftJoinAndSelect("post.postedBy", "user")
@@ -220,11 +223,14 @@ class PostController {
         .skip(skipPosts)
         .take(4)
         .getMany();
-      const totalPost = await PostRepo.find({
-        where: {
-          postedBy: arr,
-        },
-      });
+        if (!posts){
+          next()
+        }
+          const totalPost = await PostRepo.find({
+            where: {
+              postedBy: arr,
+            },
+          });
       let totalPosts = totalPost.length;
       return res.status(200).json({
         success: true,
@@ -232,7 +238,6 @@ class PostController {
         totalPosts,
       });
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }

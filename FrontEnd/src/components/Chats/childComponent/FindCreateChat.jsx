@@ -114,11 +114,11 @@ export default function AddChat(props) {
             </div>
             <DialogContent dividers style={{height: 400}}>
                 <List dense sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                    {listUsers.map((user) => {
+                    {listUsers.map((user,index) => {
                         const labelId = `checkbox-list-secondary-label-${user.id}`;
                         return (
                             <ListItem
-                                key={user.id}
+                                key={index}
                                 secondaryAction={
                                     <Checkbox
                                         edge="end"

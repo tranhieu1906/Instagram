@@ -50,7 +50,6 @@ const Profile = () => {
     dispatch(followUser(user.id));
     setFollow(!follow);
   };
-
   const handleFollowersModal = () => {
     setFollowersModal(true);
     setViewModal(true);

@@ -1,16 +1,10 @@
-import PostsContainer from './PostsContainer'
-import SideBar from "./SideBar/SideBar";
 import MetaData from "../Layouts/MetaData";
-import { useEffect} from "react";
-import axios from "../../api/axios";
-import {useSelector} from "react-redux";
+import PostsContainer from './PostsContainer';
+import SideBar from "./SideBar/SideBar";
+
 
 const Home = () => {
     const { user } = useSelector((state) => state.user);
-
-    useEffect(() => {
-        console.log(axios.defaults.headers)
-    })
 
   return (
     <>

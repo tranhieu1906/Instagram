@@ -1,12 +1,48 @@
+import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import Auth from "./Auth";
+import { Link } from "react-router-dom";
+import { clearErrors, forgotPassword } from "../../service/userAction";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
-function ForgotPassword() {
+const ForgotPassword = () => {
+  const dispatch = useDispatch();
+
+  const { error, message, loading } = useSelector(
+    (state) => state.forgotPassword
+  );
+
   const [email, setEmail] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(forgotPassword(email));
+    setEmail("");
+  };
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+    if (message) {
+      toast.success(message);
+    }
+  }, [dispatch, error, message]);
+
   return (
     <>
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <Auth>
         <div className="bg-white border flex flex-col gap-2 p-4 pt-10">
           <img
@@ -16,7 +52,7 @@ function ForgotPassword() {
             alt=""
           />
           <form
-            // onSubmit={handleSubmit}
+            onSubmit={handleSubmit}
             className="flex flex-col justify-center items-center gap-3 m-3 md:m-8"
           >
             <TextField
@@ -35,23 +71,22 @@ function ForgotPassword() {
               Gửi liên kết đăng nhập
             </button>
             <span className="my-3 text-gray-500">Hoặc</span>
-            <Link to="/login" className="text-sm font-medium text-blue-800">
-              Quay lại đăng nhập ?
+            <Link to="/register" className="text-sm font-medium text-blue-800">
+              Tạo tài khoản mới
             </Link>
           </form>
         </div>
 
         <div className="bg-white border p-5 text-center">
           <span>
-            Không có tài khoản ư?{" "}
-            <Link to="/register" className="text-primary-blue">
-              Đăng Ký
+            <Link to="/login" className="text-primary-blue">
+              Quay lại đăng nhập?
             </Link>
           </span>
         </div>
       </Auth>
     </>
   );
-}
+};
 
 export default ForgotPassword;
