@@ -2,9 +2,7 @@ import MetaData from "../Layouts/MetaData";
 import PostsContainer from './PostsContainer';
 import SideBar from "./SideBar/SideBar";
 
-
 const Home = () => {
-    const { user } = useSelector((state) => state.user);
 
   return (
     <>

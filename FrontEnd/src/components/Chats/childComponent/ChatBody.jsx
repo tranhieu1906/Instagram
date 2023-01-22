@@ -27,9 +27,9 @@ export default function ChatBody(props) {
                     content: message,
                     chatId: chatId
                 }).then((res) => {
-                    let data = res.data.message
-                    socket.emit("new-Message", res.data);
-                    setListMessages([...listMessages,])
+                    let data = res.data.newMessage
+                    socket.emit("new-Message", data);
+                    setListMessages([...listMessages,data])
                 })
             }
         }catch (error) {
