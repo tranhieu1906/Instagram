@@ -60,7 +60,6 @@ const getUser = (username) => {
 };
 
 io.on("connection", (socket) => {
-  console.log(`User Connected: ${socket.id}`);
 
   socket.on("setup", (userData) => {
     socket.join(userData._id);

@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import ScrollToBottom from "react-scroll-to-bottom";
 import axios from "../../api/axios";
-import { addComment, likePost } from "../../service/postAction";
+import { addComment, likePost, removeComment } from "../../service/postAction";
 import { likeFill } from "../NavBar/SvgIcons";
 import {
   commentIcon,
@@ -43,6 +43,8 @@ const PostItem = ({
   const [viewComment, setViewComment] = useState(false);
   const [showEmojis, setShowEmojis] = useState(false);
 
+  const [idUserComment, setIdUserComment] = useState();
+  const [idComment, setIdComment] = useState();
   const [likeEffect, setLikeEffect] = useState(false);
 
   const [deleteModal, setDeleteModal] = useState(false);
@@ -85,7 +87,12 @@ const PostItem = ({
     setDeleteModal(false);
   };
 
-  const handleDeleteComment = () => {};
+  const handleDeleteComment = async () => {
+    await dispatch(removeComment(idComment));
+    const { data } = await axios.get(`/api/v1/post/detail/${id}`);
+    setAllComments(data.post.comments);
+    setDeleteModal(false);
+  };
 
   useEffect(() => {
     (async function fecthData() {
@@ -206,7 +213,11 @@ const PostItem = ({
                     <p className="text-sm ">{moment(c.created_at).fromNow()}</p>
                     <span
                       className="cursor-pointer"
-                      onClick={() => setDeleteModal(true)}
+                      onClick={() => {
+                        setDeleteModal(true);
+                        setIdUserComment(c.user.id);
+                        setIdComment(c.id)
+                      }}
                     >
                       {moreIcons}
                     </span>
@@ -219,7 +230,7 @@ const PostItem = ({
       </div>
       <Dialog open={deleteModal} onClose={closeDeleteModal} maxWidth="xl">
         <div className="flex flex-col items-center w-80">
-          {postedBy.id === user.id && (
+          {idUserComment === user.id && (
             <button
               onClick={handleDeleteComment}
               className="text-red-600 font-medium border-b py-2.5 w-full hover:bg-red-50"

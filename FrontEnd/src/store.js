@@ -15,6 +15,7 @@ import {
   likePostReducer,
   newCommentReducer,
   deletePostReducer,
+  deleteCommentReducer,
 } from "./reducers/postReducer";
 const reducer = combineReducers({
   user: userReducer,
@@ -29,6 +30,7 @@ const reducer = combineReducers({
   likePost: likePostReducer,
   newComment: newCommentReducer,
   deletePost: deletePostReducer,
+  deleteComment: deleteCommentReducer,
 });
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));

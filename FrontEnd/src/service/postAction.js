@@ -17,6 +17,9 @@ import {
   DELETE_POST_REQUEST,
   DELETE_POST_SUCCESS,
   DELETE_POST_FAIL,
+  DELETE_COMMENT_REQUEST,
+  DELETE_COMMENT_SUCCESS,
+  DELETE_COMMENT_FAIL,
 } from "../constants/postConstants";
 
 export const addNewPost = (postData) => async (dispatch) => {
@@ -92,6 +95,23 @@ export const addComment = (postId, comment) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: NEW_COMMENT_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+export const removeComment = (postId) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_COMMENT_REQUEST });
+    const { data } = await axios.delete(
+      `/api/v1/post/comment/${postId}`,
+    );
+    dispatch({
+      type: DELETE_COMMENT_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: DELETE_COMMENT_FAIL,
       payload: error.response.data.message,
     });
   }
