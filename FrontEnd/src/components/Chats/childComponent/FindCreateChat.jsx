@@ -27,9 +27,9 @@ export default function AddChat(props) {
             .then((response) => {
                 setListUser(response.data.users)
             }).catch((error) => {
-            throw new Error(error.message)
+            console.log(error.message)
         })
-    }
+    };
 
     const handleToggle = (user) => () => {
         const currentIndex = checked.indexOf(user);
@@ -68,6 +68,7 @@ export default function AddChat(props) {
             setListUser([])
         }
     }, [ open]);
+
     return (
         <Dialog
             sx={{'& .MuiDialog-paper': {width: 400, maxHeight: 500}}}

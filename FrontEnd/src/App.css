@@ -65,3 +65,17 @@
     float: right;
     width: 50px;
 }
+
+.message-send {
+    height: 40px;
+    border: 1px solid #263238;
+    border-top: none;
+    display: flex;
+}
+
+
+
+.view-message {
+    width: 750px;
+    height: 550px;
+}

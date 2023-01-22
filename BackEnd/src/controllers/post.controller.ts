@@ -1,4 +1,4 @@
-import { Comment } from "./../model/Comment";
+import { Comment } from "../model/Comment";
 import { Follow } from "../model/Follow";
 import { User } from "../model/User";
 import { Post } from "../model/Post";

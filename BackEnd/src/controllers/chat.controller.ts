@@ -1,9 +1,45 @@
 import { User } from "../model/User";
 import { Rooms} from "../model/Room";
+import { Messages } from "../model/Messages";
 import { AppDataSource } from "../config/data-source";
 const UserRepository = AppDataSource.getRepository(User);
 const RoomRepository = AppDataSource.getRepository(Rooms);
+const MessageRepository = AppDataSource.getRepository(Messages)
 class Chat {
+
+    async getDataChat(req, res) {
+        try {
+
+            let user = req.user.data
+            let chatId = req.params.id;
+            let dataChat = await RoomRepository.find({
+                relations: {
+                    users: true,
+                },
+                where: {id : chatId}
+            });
+
+            let dataMessage = await MessageRepository.find({
+                relations: {
+                    author: true
+                },
+                where: {
+                    room: dataChat
+                }
+            })
+
+            res.status(200).json({
+                success: true,
+                dataChat: dataChat[0],
+                dataMessage: dataMessage,
+            })
+        }catch (err) {
+            res.status(500).json({
+                success: false,
+                message: err.message
+            })
+        }
+    }
 
     async findCreateChat(req, res) {
         try {
@@ -59,7 +95,7 @@ class Chat {
             let user = req.user.data
             let listChat = await RoomRepository.find({
                 where: {
-                    users: user.id
+                    users: {id: user.id}
                 },
                 relations: {
                     users: true,
@@ -76,6 +112,7 @@ class Chat {
             })
         }
     }
+
 
     async createChatGroup(req,res) {
         try {

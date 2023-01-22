@@ -5,4 +5,5 @@ import MessageController  from "../controllers/messager.controller";
 export const messageRouter = Router();
 messageRouter.use(Token.veryfyAccessToken)
 messageRouter.post('/message/send', MessageController.sendMessage);
-messageRouter.post("/message/get", MessageController.getMessage)
+messageRouter.get("/message/get", MessageController.getMessage);
+

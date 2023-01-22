@@ -2,7 +2,6 @@ import { User } from "../model/User";
 import { Rooms} from "../model/Room";
 import { Messages } from "../model/Messages"
 import { AppDataSource } from "../config/data-source";
-const UserRepository = AppDataSource.getRepository(User);
 const RoomRepository = AppDataSource.getRepository(Rooms);
 const MessageRepository = AppDataSource.getRepository(Messages);
 
@@ -32,13 +31,14 @@ class MessageController {
     }
 
     async getMessage(req,res) {
-        let chatId = req.body.chatId;
+        let chatId = req.query.chatId;
+        let room = await RoomRepository.findOneBy({id: chatId})
         let dataMessage = await MessageRepository.find({
             relations: {
                 author: true
             },
             where: {
-                room: chatId,
+                room: room,
             }
         })
 
