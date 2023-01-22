@@ -4,6 +4,7 @@ import {Route, Routes} from "react-router-dom";
 import {loadUser} from "./service/userAction";
 import axios from "./api/axios";
 import {ToastContainer} from "react-toastify";
+import io from "socket.io-client";
 
 import PrivateRoute from "./Router/PrivateRouter";
 import Header from "./components/NavBar/Header";
@@ -25,6 +26,7 @@ const setHeaderApi = async () => {
     await (axios.defaults.headers.common["Authorization"] =
         "Bearer " + localStorage.getItem("token"));
 };
+const socket = io.connect("http://localhost:8080");
 
 function App() {
     const dispatch = useDispatch();
@@ -64,7 +66,7 @@ function App() {
 
                         {isAuthenticated && (
                             <>
-                                <Route path="/direct/inbox" element={<ViewChat/>}/>
+                                <Route path="/direct/inbox" element={<ViewChat socket={socket}/>}/>
                                 <Route
                                     path="/:username"
                                     element={

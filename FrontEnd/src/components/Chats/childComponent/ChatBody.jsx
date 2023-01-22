@@ -5,23 +5,47 @@ import {Button, ListItem} from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
+import Box from '@mui/material/Box';
+import Input from '@mui/material/Input';
 import * as React from "react";
 import {useParams} from "react-router-dom";
 import login from "../../User/Login";
+const ariaLabel = { 'aria-label': 'description' };
+
 
 export default function ChatBody(props) {
-    let {onClose, chatId} = props;
+    let {onClose, chatId, socket} = props;
     let [listMessages, setListMessages] = useState([]);
     let [presentRoom, setPresentRoom] = useState();
+    let [message, setMessage] = useState("");
+
+    const sendMessage = async () => {
+        try {
+            if (message !== "") {
+                setMessage("")
+                await axios.post(`/api/v1/message/send`, {
+                    content: message,
+                    chatId: chatId
+                }).then((res) => {
+                    let data = res.data.message
+                    socket.emit("new-Message", res.data);
+                    setListMessages([...listMessages,])
+                })
+            }
+        }catch (error) {
+
+        }
+
+    };
 
     useEffect(() => {
         if (chatId !== null) {
             axios.get(`/api/v1/chat/${chatId}`).then((res) => {
-                console.log(res.data);
                 setPresentRoom(res.data.dataChat);
                 let listMessage = res.data.dataMessage;
                 setListMessages( listMessage )
             })
+            socket.emit('join-chat', chatId)
         }
     },[chatId])
 
@@ -61,7 +85,7 @@ export default function ChatBody(props) {
                         </div>
                     </div>
 
-                    <div>
+                    <div className="view-message">
                         {listMessages.map(message => (
                             <div>
                                 <h1>{message.content}</h1>
@@ -72,9 +96,14 @@ export default function ChatBody(props) {
                     </div>
 
                     <div className="message-send">
-                        <input/>
+                        <input
+                            type="text"
+                            value={message}
+                            placeholder="message"
+                            onChange={(e) => setMessage(e.target.value)}
+                        />
+                        <button onClick={sendMessage}>send</button>
                     </div>
-
                 </>
             )}
         </>

@@ -67,8 +67,15 @@
 }
 
 .message-send {
-    float: bottom;
+    height: 40px;
+    border: 1px solid #263238;
+    border-top: none;
+    display: flex;
+}
+
+
+
+.view-message {
     width: 750px;
-    height: 50px;
-    border-top: 2px groove;
+    height: 550px;
 }

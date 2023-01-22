@@ -9,7 +9,7 @@ class Chat {
 
     async getDataChat(req, res) {
         try {
-            console.log(req.params.id)
+
             let user = req.user.data
             let chatId = req.params.id;
             let dataChat = await RoomRepository.find({
@@ -95,7 +95,7 @@ class Chat {
             let user = req.user.data
             let listChat = await RoomRepository.find({
                 where: {
-                    users: user.id
+                    users: {id: user.id}
                 },
                 relations: {
                     users: true,
@@ -112,6 +112,7 @@ class Chat {
             })
         }
     }
+
 
     async createChatGroup(req,res) {
         try {

@@ -3,8 +3,10 @@ import SideBar from "./SideBar/SideBar";
 import MetaData from "../Layouts/MetaData";
 import { useEffect} from "react";
 import axios from "../../api/axios";
+import {useSelector} from "react-redux";
 
 const Home = () => {
+    const { user } = useSelector((state) => state.user);
 
     useEffect(() => {
         console.log(axios.defaults.headers)

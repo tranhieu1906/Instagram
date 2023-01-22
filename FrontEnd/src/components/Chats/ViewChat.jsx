@@ -11,7 +11,7 @@ import ListChat from "./childComponent/ListChat";
 import ChatBody from "./childComponent/ChatBody";
 
 
-export default function ViewChat () {
+export default function ViewChat ({socket}) {
     const [presentRoom, setPresentRoom] = useState(null)
     const [open, setOpen] = React.useState(false);
     const handleClickListItem = () => {
@@ -85,6 +85,7 @@ export default function ViewChat () {
                     {/*className="flex justify-center items-center chat"*/}
                     <div className="chat">
                         <ChatBody
+                            socket = {socket}
                             onClose = {handleClickListItem}
                             chatId = {presentRoom}
                         />
