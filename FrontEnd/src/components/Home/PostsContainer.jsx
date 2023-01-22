@@ -8,6 +8,8 @@ import {
 } from "../../constants/postConstants";
 import UsersDialog from "../Layouts/UsersDialog";
 import PostItem from "./PostItem";
+import StoriesContainer from "./StoriesContainer";
+
 import InfiniteScroll from "react-infinite-scroll-component";
 import SpinLoader from "../Layouts/SpinLoader";
 import SkeletonPost from "../Layouts/SkeletonPost";
@@ -67,6 +69,7 @@ const PostsContainer = () => {
   return (
     <>
       <div className="flex flex-col w-full lg:w-2/3 sm:mt-6 sm:px-8 mb-8">
+        <StoriesContainer />
         {loading &&
           Array(5)
             .fill("")
@@ -78,15 +81,14 @@ const PostsContainer = () => {
           loader={<SpinLoader />}
         >
           <div className="w-full h-full mt-1 sm:mt-6 flex flex-col space-y-4">
-            {posts?.map((post,index) => (
+            {posts?.map((post, index) => (
               <PostItem
                 key={index}
                 {...post}
                 setUsersDialog={setUsersDialog}
                 setUsersList={setUsersList}
               />
-            ))
-            }
+            ))}
           </div>
         </InfiniteScroll>
 
