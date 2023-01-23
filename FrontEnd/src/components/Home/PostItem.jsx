@@ -29,6 +29,7 @@ const PostItem = ({
   created_at,
   setUsersDialog,
   setUsersList,
+  socket,
 }) => {
   const dispatch = useDispatch();
   const commentInput = useRef(null);
@@ -45,10 +46,15 @@ const PostItem = ({
   const [likeEffect, setLikeEffect] = useState(false);
 
   const [deleteModal, setDeleteModal] = useState(false);
-  const handleLike = async () => {
+  const handleLike = async (type) => {
     setLiked(!liked);
     await dispatch(likePost(id));
     const { data } = await axios.get(`/api/v1/post/detail/${id}`);
+    socket.emit("sendNotification", {
+      senderName: user,
+      receiverName: postedBy.username,
+      type,
+    });
     setAllLikes(data.post.likes);
   };
   const handleComment = async (e) => {
@@ -213,6 +219,14 @@ const PostItem = ({
       </div>
       <Dialog open={deleteModal} onClose={closeDeleteModal} maxWidth="xl">
         <div className="flex flex-col items-center w-80">
+          {postedBy.id === user.id && (
+            <button
+              onClick={handleDeleteComment}
+              className="text-red-600 font-medium border-b py-2.5 w-full hover:bg-red-50"
+            >
+              Delete
+            </button>
+          )}
           <button
             onClick={closeDeleteModal}
             className="py-2.5 w-full hover:bg-gray-50"

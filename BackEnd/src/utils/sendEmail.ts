@@ -13,8 +13,8 @@ export const sendEmail = async (options) => {
       port: 587,
       secure: false,
       auth: {
-        user: "nguyentranhieugttn@gmail.com",
-        pass: "ppfibrvfwfdlnedo",
+        user: process.env.NODEMAILER_MAIL,
+        pass: process.env.NODEMAILER_PASSWORD,
       },
     });
 

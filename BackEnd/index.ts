@@ -54,6 +54,11 @@ const io = new Server(server, {
   },
 });
 
+let onlineUsers = [];
+const getUser = (username) => {
+  return onlineUsers.find((user) => user.username === username);
+};
+
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
 
@@ -71,6 +76,21 @@ io.on("connection", (socket) => {
     console.log(dataMessage)
     let room = dataMessage.room;
   })
+  socket.on("sendNotification", ({ senderName, receiverName, type }) => {
+    const receiver = getUser(receiverName);
+    io.to(receiver.socketId).emit("getNotification", {
+      senderName,
+      type,
+    });
+  });
+
+  socket.on("sendText", ({ senderName, receiverName, text }) => {
+    const receiver = getUser(receiverName);
+    io.to(receiver.socketId).emit("getText", {
+      senderName,
+      text,
+    });
+  });
 
 //   socket.on("send_message", (data) => {
 //     socket.to(data.room).emit("receive_message", data);
@@ -80,4 +100,4 @@ io.on("connection", (socket) => {
     console.log("User Disconnected", socket.id);
   });
 });
-
+// io.listen(5000);

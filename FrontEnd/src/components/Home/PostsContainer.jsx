@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { clearErrors, getPostsOfFollowing } from "../../service/postAction";
 import {
   LIKE_UNLIKE_POST_RESET,
   NEW_COMMENT_RESET,
 } from "../../constants/postConstants";
+import { clearErrors, getPostsOfFollowing } from "../../service/postAction";
 import UsersDialog from "../Layouts/UsersDialog";
 import PostItem from "./PostItem";
+import StoriesContainer from "./StoriesContainer";
+
 import InfiniteScroll from "react-infinite-scroll-component";
-import SpinLoader from "../Layouts/SpinLoader";
+import { io } from "socket.io-client";
 import SkeletonPost from "../Layouts/SkeletonPost";
+import SpinLoader from "../Layouts/SpinLoader";
+
 
 const PostsContainer = () => {
   const dispatch = useDispatch();
@@ -18,6 +22,7 @@ const PostsContainer = () => {
   const [usersList, setUsersList] = useState([]);
   const [usersDialog, setUsersDialog] = useState(false);
   const [page, setPage] = useState(2);
+  const [socket, setSocket] = useState(null);
 
   const { loading, error, posts, totalPosts } = useSelector(
     (state) => state.postOfFollowing
@@ -64,9 +69,13 @@ const PostsContainer = () => {
     setPage((prev) => prev + 1);
     dispatch(getPostsOfFollowing(page));
   };
+  useEffect(() => {
+    setSocket(io("http://localhost:5000"));
+  }, []);
   return (
     <>
       <div className="flex flex-col w-full lg:w-2/3 sm:mt-6 sm:px-8 mb-8">
+        <StoriesContainer />
         {loading &&
           Array(5)
             .fill("")
@@ -78,15 +87,15 @@ const PostsContainer = () => {
           loader={<SpinLoader />}
         >
           <div className="w-full h-full mt-1 sm:mt-6 flex flex-col space-y-4">
-            {posts?.map((post,index) => (
+            {posts?.map((post, index) => (
               <PostItem
                 key={index}
                 {...post}
+                socket={socket}
                 setUsersDialog={setUsersDialog}
                 setUsersList={setUsersList}
               />
-            ))
-            }
+            ))}
           </div>
         </InfiniteScroll>
 
