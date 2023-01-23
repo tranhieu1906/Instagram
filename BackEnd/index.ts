@@ -62,12 +62,15 @@ io.on("connection", (socket) => {
     console.log(userData.id)
   });
 
-  socket.on("join_room", (data) => {
+  socket.on("join-room", (data) => {
     socket.join(data);
     console.log(`User with ID: ${socket.id} joined room: ${data}`);
   });
 
-
+  socket.on("send-message", (dataMessage) => {
+    console.log(dataMessage)
+    let room = dataMessage.room;
+  })
 
 //   socket.on("send_message", (data) => {
 //     socket.to(data.room).emit("receive_message", data);

@@ -56,7 +56,7 @@ function App() {
         theme="light"
       />
 
-      {isAuthenticated && <Header />}
+      {isAuthenticated && <Header socket={socket} />}
       <Suspense>
         <Routes>
           <Route path="/register" element={<SignUp />} />
@@ -68,7 +68,7 @@ function App() {
             path="/"
             element={
               <PrivateRoute>
-                <Home />
+                <Home socket={socket}/>
               </PrivateRoute>
             }
           />
