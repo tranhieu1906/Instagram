@@ -38,7 +38,7 @@ app.use("/api/v1", router);
 app.use(Token.veryfyAccessToken);
 app.use("/api/v1", Post);
 app.use("/api/v1", chatRouter);
-app.use("/api/v1", messageRouter)
+app.use("/api/v1", messageRouter);
 
 app.use((err, req, res, next) => {
     res.status(err.status || 500);

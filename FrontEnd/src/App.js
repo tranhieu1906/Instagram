@@ -1,9 +1,9 @@
-import { Suspense, lazy, useEffect } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import axios from "./api/axios";
 import io from "socket.io-client";
+import axios from "./api/axios";
 
 import { loadUser } from "./service/userAction";
 
@@ -13,7 +13,6 @@ import NotFound from "./components/Errors/NotFound";
 import Header from "./components/NavBar/Header";
 import ForgotPassword from "./components/User/ForgotPassword";
 import Profile from "./components/User/Profile";
-
 
 const SignUp = lazy(() => import("./components/User/SignUp"));
 const Login = lazy(() => import("./components/User/Login"));
@@ -27,11 +26,11 @@ const setHeaderApi = async () => {
   await (axios.defaults.headers.common["Authorization"] =
     "Bearer " + localStorage.getItem("token"));
 };
-const socket = io.connect("http://localhost:8080");
 
 function App() {
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.user);
+  const [socket, setSocket] = useState(null);
 
   let jwt = localStorage.getItem("token");
   if (jwt) {
@@ -41,6 +40,10 @@ function App() {
   useEffect(() => {
     dispatch(loadUser());
   }, [dispatch]);
+
+  useEffect(() => {
+    setSocket(io("http://localhost:3000"));
+  }, []);
   return (
     <>
       <ToastContainer
@@ -68,11 +71,11 @@ function App() {
             path="/"
             element={
               <PrivateRoute>
-                <Home socket={socket}/>
+                <Home socket={socket} />
               </PrivateRoute>
             }
           />
-          <Route path="/direct/inbox" element={<ViewChat socket={socket}/>} />
+          <Route path="/direct/inbox" element={<ViewChat socket={socket} />} />
           <Route
             path="/:username"
             element={

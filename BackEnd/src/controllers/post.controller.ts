@@ -155,8 +155,10 @@ class PostController {
           user: true,
         },
       });
+      console.log(comment.user.id);
+      console.log(req.user.data.id);
       if (!comment) {
-        return next(createError(401, "Post Not Found"));
+        return next(createError(404, "Post Not Found"));
       }
       if (comment.user.id !== req.user.data.id) {
         return next(createError(401, "User Not Authenticated"));
