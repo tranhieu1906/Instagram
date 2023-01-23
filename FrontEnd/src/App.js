@@ -42,7 +42,7 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    setSocket(io("http://localhost:3000"));
+    setSocket(io("http://localhost:8080"));
   }, []);
   return (
     <>

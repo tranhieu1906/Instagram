@@ -2,12 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { UPDATE_PROFILE_RESET } from "../../../constants/userConstants";
 import {
   clearErrors,
   loadUser,
   updateProfile,
 } from "../../../service/userAction";
+import { UPDATE_PROFILE_RESET } from "../../../constants/userConstants";
 import MetaData from "../../Layouts/MetaData";
 
 const UpdateProfile = () => {
@@ -26,20 +26,14 @@ const UpdateProfile = () => {
   const [avatarPreview, setAvatarPreview] = useState("");
 
   const handleUpdate = (e) => {
-    e.preventDefault();
-
-    const userCheck = /^[a-z0-9_.-]{6,25}$/gim;
-
-    if (!userCheck.test(username)) {
-      toast.error("Username không hợp lệ");
-      return;
-    }
+    e.preventDefault()
 
     const formData = new FormData();
     formData.set("name", name);
     formData.set("username", username);
     formData.set("email", email);
     formData.set("avatar", avatar);
+
     dispatch(updateProfile(formData));
   };
 
@@ -57,8 +51,8 @@ const UpdateProfile = () => {
 
   useEffect(() => {
     if (user) {
-      setUsername(user.username);
       setName(user.name);
+      setUsername(user.username);
       setEmail(user.email);
       setOldAvatar(user.profile_picture);
     }
@@ -73,7 +67,7 @@ const UpdateProfile = () => {
 
       dispatch({ type: UPDATE_PROFILE_RESET });
     }
-  }, [dispatch, user, error, isUpdated, navigate, username]);
+  }, [dispatch, user, error, isUpdated]);
 
   return (
     <>

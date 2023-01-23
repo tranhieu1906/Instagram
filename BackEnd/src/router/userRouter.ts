@@ -17,12 +17,8 @@ router.use(Token.veryfyAccessToken);
 router.put("/update/password", UserController.UpdatePassword);
 router.put(
   "/update/profile",
-  UserController.updateProfile
-);
-router.put(
-  "/update/avatar",
   uploadAvatar.single("avatar"),
-  UserController.updateAvatar
+  UserController.updateProfile
 );
 
 router.get("/follow/:id", UserController.followUser);
