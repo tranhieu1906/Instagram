@@ -17,7 +17,7 @@ import { useSelector } from "react-redux";
 import SearchBox from "./SearchBar/SearchBox";
 import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
 
-const Header = () => {
+const Header = ({socket}) => {
   const { user } = useSelector((state) => state.user);
 
   const [profileToggle, setProfileToggle] = useState(false);
@@ -88,6 +88,7 @@ const Header = () => {
         {profileToggle && (
           <ProfileDetails setProfileToggle={setProfileToggle} />
         )}
+
         {Notification && (
           <NotificationDetails setNotification={setNotification} />
         )}

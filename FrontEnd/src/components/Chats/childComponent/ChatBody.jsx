@@ -5,11 +5,7 @@ import {Button, ListItem} from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
-import Box from '@mui/material/Box';
-import Input from '@mui/material/Input';
 import * as React from "react";
-import {useParams} from "react-router-dom";
-import login from "../../User/Login";
 const ariaLabel = { 'aria-label': 'description' };
 
 
@@ -20,7 +16,6 @@ export default function ChatBody(props) {
     let [message, setMessage] = useState("");
 
     const sendMessage = async () => {
-        try {
             if (message !== "") {
                 setMessage("")
                 await axios.post(`/api/v1/message/send`, {
@@ -28,14 +23,10 @@ export default function ChatBody(props) {
                     chatId: chatId
                 }).then((res) => {
                     let data = res.data.newMessage
-                    socket.emit("new-Message", data);
+                    socket.emit("send-message", data);
                     setListMessages([...listMessages,data])
                 })
             }
-        }catch (error) {
-
-        }
-
     };
 
     useEffect(() => {
@@ -44,8 +35,8 @@ export default function ChatBody(props) {
                 setPresentRoom(res.data.dataChat);
                 let listMessage = res.data.dataMessage;
                 setListMessages( listMessage )
+                socket.emit('join-room', chatId)
             })
-            socket.emit('join-chat', chatId)
         }
     },[chatId])
 
