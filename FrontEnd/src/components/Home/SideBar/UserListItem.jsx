@@ -14,6 +14,7 @@ const UserListItem = ({ id, username, profile_picture }) => {
     setFollow(!follow);
     dispatch(followUser(id));
   };
+  console.log(loggedInUser);
   useEffect(() => {
     setFollow(user?.followers?.some((u) => u.following.id === loggedInUser.id));
   }, [user, loggedInUser.id]);
