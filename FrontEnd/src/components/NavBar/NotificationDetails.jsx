@@ -1,21 +1,22 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { ClickAwayListener } from "@mui/material";
-import {
-  profileIcon,
-  savedIcon,
-  settingsIcon,
-  switchAccountIcon,
-} from "./SvgIcons";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { addNotification } from "../../service/userAction";
 
-function NotificationDetails({ setNotification }) {
+function NotificationDetails({ setNotification, socket }) {
+  const notifications = useSelector((state) => state.notifications);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const { user } = useSelector((state) => state.user);
-
+  useEffect(() => {
+    socket.on("getNotification", (data) => {
+      dispatch(addNotification(data));
+    });
+  }, [socket, dispatch]);
+  const displayNotification = ({ senderName, type }) => {
+    return (
+      <span className="notification">{`${senderName.username} ${type} your post.`}</span>
+    );
+  };
   return (
     <ClickAwayListener onClickAway={() => setNotification(false)}>
       <div className="absolute w-80 bg-white rounded  drop-shadow top-14 right-0 md:right-72 md:top-14 border">
@@ -23,11 +24,7 @@ function NotificationDetails({ setNotification }) {
 
         <div className="flex flex-col w-full overflow-hidden">
           <div className="flex flex-col w-full overflow-hidden">
-            <span>ábdjabsdjhbạhdbjh</span>
-            <span>ábdjabsdjhbạhdbjh</span>
-            <span>ábdjabsdjhbạhdbjh</span>
-            <span>ábdjabsdjhbạhdbjh</span>
-            <span>ábdjabsdjhbạhdbjh</span>
+            {notifications?.map((n) => displayNotification(n))}
           </div>
         </div>
       </div>

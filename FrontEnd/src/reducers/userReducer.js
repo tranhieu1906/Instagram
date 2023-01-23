@@ -37,6 +37,7 @@ import {
   RESET_PASSWORD_SUCCESS,
   FORGOT_PASSWORD_FAIL,
   RESET_PASSWORD_FAIL,
+  ADD_NOTIFICATION,
 } from "../constants/userConstants";
 
 export const userReducer = (state = { user: {} }, { type, payload }) => {
@@ -99,7 +100,7 @@ export const userReducer = (state = { user: {} }, { type, payload }) => {
     case AUTH_TOKEN_RECEIVED:
       return {
         isAuthenticated: true,
-      };  
+      };
     default:
       return state;
   }
@@ -270,6 +271,18 @@ export const forgotPasswordReducer = (state = {}, { type, payload }) => {
         ...state,
         error: null,
       };
+    default:
+      return state;
+  }
+};
+export const notificationReducer = (state = [], action) => {
+  switch (action.type) {
+    case ADD_NOTIFICATION:
+      return {
+        ...state,
+        notifications: [...state.notifications, action.payload],
+      };
+
     default:
       return state;
   }

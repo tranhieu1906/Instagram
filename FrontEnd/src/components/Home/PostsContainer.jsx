@@ -16,13 +16,12 @@ import SkeletonPost from "../Layouts/SkeletonPost";
 import SpinLoader from "../Layouts/SpinLoader";
 
 
-const PostsContainer = () => {
+const PostsContainer = ({socket}) => {
   const dispatch = useDispatch();
 
   const [usersList, setUsersList] = useState([]);
   const [usersDialog, setUsersDialog] = useState(false);
   const [page, setPage] = useState(2);
-  const [socket, setSocket] = useState(null);
 
   const { loading, error, posts, totalPosts } = useSelector(
     (state) => state.postOfFollowing
@@ -35,6 +34,7 @@ const PostsContainer = () => {
   const { error: commentError, success: commentSuccess } = useSelector(
     (state) => state.newComment
   );
+    const { user } = useSelector((state) => state.user);
 
   const handleClose = () => setUsersDialog(false);
 
@@ -69,9 +69,10 @@ const PostsContainer = () => {
     setPage((prev) => prev + 1);
     dispatch(getPostsOfFollowing(page));
   };
-  // useEffect(() => {
-  //   setSocket(io("http://localhost:5000"));
-  // }, []);
+
+    useEffect(() => {
+      socket?.emit("newUser", user.username);
+    }, [socket, user]);
   return (
     <>
       <div className="flex flex-col w-full lg:w-2/3 sm:mt-6 sm:px-8 mb-8">

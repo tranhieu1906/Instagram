@@ -242,6 +242,12 @@ export const resetPassword = (token, password) => async (dispatch) => {
   }
 };
 
+export const addNotification = (notification) => {
+  return {
+    type: "ADD_NOTIFICATION",
+    payload: notification,
+  };
+};
 
 export const clearErrors = () => async (dispatch) => {
   dispatch({ type: CLEAR_ERRORS });

@@ -6,6 +6,7 @@ const getUser = (username) => {
 module.exports = (io, socket) => {
     const sendNotification = ({senderName, receiverName, type}) => {
         const receiver = getUser(receiverName);
+        console.log(receiver);
         io.to(receiver.socketId).emit("getNotification", {
             senderName,
             type,
