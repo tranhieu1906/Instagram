@@ -20,7 +20,7 @@ import {
   postUploadOutline,
 } from "./SvgIcons";
 
-const Header = ({ socket }) => {
+const Header = ({socket}) => {
   const { user } = useSelector((state) => state.user);
   const notifications = useSelector((state) => state.notifications);
 
@@ -97,6 +97,7 @@ const Header = ({ socket }) => {
         {profileToggle && (
           <ProfileDetails setProfileToggle={setProfileToggle} />
         )}
+
         {Notification && (
           <NotificationDetails
             setNotification={setNotification}
