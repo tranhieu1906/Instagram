@@ -92,8 +92,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendNotification", ({ senderName, receiverName, type }) => {
-    console.log("senderName:", senderName);
     const receiver = getUser(receiverName);
+    console.log("🚀 ~ file: index.ts:96 ~ socket.on ~ receiver", receiver)
     io.to(receiver.socketId).emit("getNotification", {
       senderName,
       type,
@@ -107,4 +107,3 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
   });
 });
-io.listen(5000);

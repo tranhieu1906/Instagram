@@ -1,13 +1,17 @@
 import { ClickAwayListener } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addNotification } from "../../service/userAction";
 
 function NotificationDetails({ setNotification, socket }) {
-  const [notifications, setNotifications] = useState([]);
+  const notifications = useSelector((state) => state.notifications);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     socket.on("getNotification", (data) => {
-      setNotifications((prev) => [...prev, data]);
+      dispatch(addNotification(data));
     });
-  }, [socket]);
+  }, [socket, dispatch]);
   const displayNotification = ({ senderName, type }) => {
     return (
       <span className="notification">{`${senderName.username} ${type} your post.`}</span>
@@ -20,7 +24,7 @@ function NotificationDetails({ setNotification, socket }) {
 
         <div className="flex flex-col w-full overflow-hidden">
           <div className="flex flex-col w-full overflow-hidden">
-            {notifications.map((n) => displayNotification(n))}
+            {notifications?.map((n) => displayNotification(n))}
           </div>
         </div>
       </div>

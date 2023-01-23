@@ -8,6 +8,7 @@ import {
   userDetailsReducer,
   profileReducer,
   forgotPasswordReducer,
+  notificationReducer,
 } from "./reducers/userReducer";
 import {
   postReducer,
@@ -21,7 +22,6 @@ const reducer = combineReducers({
   user: userReducer,
   newPost: postReducer,
   forgotPassword: forgotPasswordReducer,
-
   userDetails: userDetailsReducer,
   allUsers: allUsersReducer,
   profile: profileReducer,
@@ -31,6 +31,7 @@ const reducer = combineReducers({
   newComment: newCommentReducer,
   deletePost: deletePostReducer,
   deleteComment: deleteCommentReducer,
+  notification: notificationReducer
 });
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));

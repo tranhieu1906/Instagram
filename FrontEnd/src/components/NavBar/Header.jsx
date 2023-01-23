@@ -7,19 +7,22 @@ import NewPost from "./NewPost";
 import NotificationDetails from "./NotificationDetails";
 import ProfileDetails from "./ProfileDetails";
 import SearchBox from "./SearchBar/SearchBox";
+import Badge from "@mui/material/Badge";
+
 import {
   exploreOutline,
   homeFill,
   homeOutline,
-  likeFill,
+  likeFillBlack,
   likeOutline,
   messageFill,
   messageOutline,
   postUploadOutline,
 } from "./SvgIcons";
 
-const Header = ({socket}) => {
+const Header = ({ socket }) => {
   const { user } = useSelector((state) => state.user);
+  const notifications = useSelector((state) => state.notifications);
 
   const [profileToggle, setProfileToggle] = useState(false);
   const [newPost, setNewPost] = useState(false);
@@ -28,7 +31,6 @@ const Header = ({socket}) => {
   const [onHome, setOnHome] = useState(false);
   const [onChat, setOnChat] = useState(false);
   const [Notification, setNotification] = useState(false);
-;
   useEffect(() => {
     setOnHome(location.pathname === "/");
     setOnChat(location.pathname.split("/").includes("direct"));
@@ -66,7 +68,13 @@ const Header = ({socket}) => {
             className={`cursor-pointer`}
             onClick={() => setNotification(!Notification)}
           >
-            {Notification ? likeFill : likeOutline}
+            {Notification ? (
+              likeFillBlack
+            ) : (
+              <Badge badgeContent={notifications?.length} color="success">
+                {likeOutline}
+              </Badge>
+            )}
           </span>
 
           <div
@@ -90,7 +98,10 @@ const Header = ({socket}) => {
           <ProfileDetails setProfileToggle={setProfileToggle} />
         )}
         {Notification && (
-          <NotificationDetails setNotification={setNotification} socket={socket}/>
+          <NotificationDetails
+            setNotification={setNotification}
+            socket={socket}
+          />
         )}
 
         <NewPost newPost={newPost} setNewPost={setNewPost} />
