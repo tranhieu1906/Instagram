@@ -70,9 +70,9 @@ const PostsContainer = ({socket}) => {
     dispatch(getPostsOfFollowing(page));
   };
 
-    useEffect(() => {
-      socket?.emit("newUser", user.username);
-    }, [socket, user]);
+    // useEffect(() => {
+    //   socket?.emit("newUser", user.username);
+    // }, [socket, user]);
   return (
     <>
       <div className="flex flex-col w-full lg:w-2/3 sm:mt-6 sm:px-8 mb-8">

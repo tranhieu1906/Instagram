@@ -9,7 +9,7 @@ const Home = ({socket}) => {
 
     useEffect(() => {
         socket.emit('setup', user)
-    },[socket, user]);
+    },[user]);
 
   return (
     <>
