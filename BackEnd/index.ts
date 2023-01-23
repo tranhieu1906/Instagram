@@ -71,3 +71,4 @@ const onConnection = (socket) => {
 }
 
 io.on('connection', onConnection)
+io.listen(5000)

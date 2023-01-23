@@ -40,6 +40,16 @@ export default function ChatBody(props) {
         }
     },[chatId])
 
+    useEffect(() => {
+        console.log(1)
+        socket.on("take-message",(dataMessage) => {
+            console.log(dataMessage)
+            if (dataMessage.room.id === chatId) {
+                setListMessages([...listMessages,dataMessage])
+            }
+        })
+    });
+
     const addChat = () => {
         onClose()
     }

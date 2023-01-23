@@ -69,9 +69,9 @@ const PostsContainer = () => {
     setPage((prev) => prev + 1);
     dispatch(getPostsOfFollowing(page));
   };
-  useEffect(() => {
-    setSocket(io("http://localhost:5000"));
-  }, []);
+  // useEffect(() => {
+  //   setSocket(io("http://localhost:5000"));
+  // }, []);
   return (
     <>
       <div className="flex flex-col w-full lg:w-2/3 sm:mt-6 sm:px-8 mb-8">

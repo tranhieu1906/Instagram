@@ -1,20 +1,32 @@
+import { Rooms} from "../../model/Room";
+import { AppDataSource } from "../../config/data-source";
+const RoomRepository = AppDataSource.getRepository(Rooms);
 module.exports = (io, socket) => {
 
     const setup = (userData) => {
-        socket.join(userData._id);
-        console.log(userData.id)
+        socket.join(userData.id);
     }
 
     const joinRoom = (data) => {
         socket.join(data);
-        console.log(`User with ID: ${socket.id} joined room: ${data}`);
     }
 
-    const sendMessage = (dataMessage) => {
-        let roomId = dataMessage.room.id;
-        console.log(roomId)
+    const sendMessage = async (dataMessage) => {
+        let chatId = dataMessage.room.id;
+        let dataChat = await RoomRepository.find({
+            relations: {
+                users: true,
+            },
+            where: {id : chatId}
+        });
+
+        dataChat[0].users.forEach(user => {
+            if (user.id !== dataMessage.author.id) {
+                socket.in(user.id).emit("take-message", dataMessage);
+            }
+        })
     }
     socket.on("setup", setup);
     socket.on("join-room", joinRoom);
-    socket.on("send-message", sendMessage)
+    socket.on("send-message", sendMessage);
 }
