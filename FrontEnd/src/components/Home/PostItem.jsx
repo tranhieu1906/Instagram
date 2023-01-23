@@ -48,14 +48,14 @@ const PostItem = ({
   const [likeEffect, setLikeEffect] = useState(false);
 
   const [deleteModal, setDeleteModal] = useState(false);
-  const handleLike = async (type) => {
+  const handleLike = async () => {
     setLiked(!liked);
     await dispatch(likePost(id));
     const { data } = await axios.get(`/api/v1/post/detail/${id}`);
     socket.emit("sendNotification", {
       senderName: user,
       receiverName: postedBy.username,
-      type,
+      type: "like",
     });
     setAllLikes(data.post.likes);
   };
@@ -64,6 +64,11 @@ const PostItem = ({
     await dispatch(addComment(id, comment));
     setComment("");
     const { data } = await axios.get(`/api/v1/post/detail/${id}`);
+    socket.emit("sendNotification", {
+      senderName: user,
+      receiverName: postedBy.username,
+      type: "comment",
+    });
     setAllComments(data.post.comments);
   };
 
@@ -216,7 +221,7 @@ const PostItem = ({
                       onClick={() => {
                         setDeleteModal(true);
                         setIdUserComment(c.user.id);
-                        setIdComment(c.id)
+                        setIdComment(c.id);
                       }}
                     >
                       {moreIcons}

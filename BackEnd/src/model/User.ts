@@ -1,3 +1,4 @@
+import { Notification } from './Notification';
 import { Entity, Column,ManyToMany, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { Post } from "./Post";
 import { Comment } from "./Comment";
@@ -42,6 +43,12 @@ export class User {
   @OneToMany(() => Post, (post) => post.postedBy)
   posts: Post[];
 
+  @OneToMany(() => Notification, (notification) => notification.userSend)
+  userSends: Notification[];
+
+  @OneToMany(() => Notification, (notification) => notification.userSend)
+  userGets: Notification[];
+
   @OneToMany(() => Comment, (comment) => comment.user)
   comments: Comment[];
 
@@ -61,6 +68,5 @@ export class User {
   AdGroup: Rooms[];
 
   @OneToMany(() => Messages, (message) => message.content)
-  messages : Messages[];
-
+  messages: Messages[];
 }

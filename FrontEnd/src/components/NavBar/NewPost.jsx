@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { addNewPost, clearErrors } from "../../service/postAction";
 import { NEW_POST_RESET } from "../../constants/postConstants";
 import { emojiIcon } from "../Home/SvgIcons";
+import CloseIcon from "@mui/icons-material/Close";
 import "react-toastify/dist/ReactToastify.css";
 
 const NewPost = ({ newPost, setNewPost }) => {
@@ -94,6 +95,16 @@ const NewPost = ({ newPost, setNewPost }) => {
         <div className="flex sm:flex-row sm:items-start items-center flex-col w-full">
           {post ? (
             <div className="bg-black h-48 sm:h-[80vh] w-full">
+              <div className="text-right">
+                <CloseIcon
+                  color="warning"
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setPostPreview("");
+                    setPostImage("");
+                  }}
+                />
+              </div>
               <img
                 draggable="false"
                 className="object-contain h-full w-full"
@@ -133,7 +144,9 @@ const NewPost = ({ newPost, setNewPost }) => {
               </svg>
               <p className="text-xl">Thả ảnh và video tại đây</p>
               <input
-                  id="upload" type="file" accept="image/*"
+                id="upload"
+                type="file"
+                accept="image/*"
                 onChange={handleFileChange}
                 className="absolute h-full w-full opacity-0 cursor-pointer"
               />
@@ -191,7 +204,6 @@ const NewPost = ({ newPost, setNewPost }) => {
           </div>
         </div>
       </div>
-      
     </Dialog>
   );
 };

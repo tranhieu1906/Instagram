@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
+import { io } from "socket.io-client";
+import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
+import NewPost from "./NewPost";
+import NotificationDetails from "./NotificationDetails";
+import ProfileDetails from "./ProfileDetails";
+import SearchBox from "./SearchBar/SearchBox";
 import {
   exploreOutline,
   homeFill,
   homeOutline,
-  likeOutline,
   likeFill,
+  likeOutline,
   messageFill,
   messageOutline,
   postUploadOutline,
 } from "./SvgIcons";
-import { Link, useLocation } from "react-router-dom";
-import ProfileDetails from "./ProfileDetails";
-import NotificationDetails from "./NotificationDetails";
-import NewPost from "./NewPost";
-import { useSelector } from "react-redux";
-import SearchBox from "./SearchBar/SearchBox";
-import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
 
-const Header = () => {
+const Header = ({socket}) => {
   const { user } = useSelector((state) => state.user);
 
   const [profileToggle, setProfileToggle] = useState(false);
@@ -27,7 +28,7 @@ const Header = () => {
   const [onHome, setOnHome] = useState(false);
   const [onChat, setOnChat] = useState(false);
   const [Notification, setNotification] = useState(false);
-
+;
   useEffect(() => {
     setOnHome(location.pathname === "/");
     setOnChat(location.pathname.split("/").includes("direct"));
@@ -89,7 +90,7 @@ const Header = () => {
           <ProfileDetails setProfileToggle={setProfileToggle} />
         )}
         {Notification && (
-          <NotificationDetails setNotification={setNotification} />
+          <NotificationDetails setNotification={setNotification} socket={socket}/>
         )}
 
         <NewPost newPost={newPost} setNewPost={setNewPost} />
