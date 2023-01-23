@@ -69,6 +69,7 @@ const PostsContainer = ({socket}) => {
     setPage((prev) => prev + 1);
     dispatch(getPostsOfFollowing(page));
   };
+
     useEffect(() => {
       socket?.emit("newUser", user.username);
     }, [socket, user]);
