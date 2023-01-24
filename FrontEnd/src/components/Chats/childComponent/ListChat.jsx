@@ -20,7 +20,6 @@ export default function ListChat(props) {
         axios.get("/api/v1/chat/list").then((response) => {
             let listRoom = response.data.listChat;
             setListChat(listRoom)
-            console.log(listChat)
         }).catch((error) => {
             throw new Error(error)
         })
@@ -32,9 +31,10 @@ export default function ListChat(props) {
                 <List sx={{width: '100%', maxWidth: 400, bgcolor: 'background.paper'}}>
                     { listChat.map(userChat => (
                             <ListItemButton onClick={() => chatNow(userChat.id)}>
-                                <ListItem>
+                                <ListItem
+                                key={userChat.id}>
                                     <ListItemAvatar>
-                                        <Avatar alt="avatar"/>
+                                        <Avatar alt="avatar" src={userChat.avatar[0]}/>
                                     </ListItemAvatar>
                                     <ListItemText primary= {userChat.roomName} secondary="Jan 9, 2014"/>
                                 </ListItem>

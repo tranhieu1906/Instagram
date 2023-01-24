@@ -1,3 +1,4 @@
+import ScrollToBottom from "react-scroll-to-bottom";
 import {useState, useEffect} from "react";
 import "../../../App.css"
 import axios from "../../../api/axios";
@@ -7,6 +8,8 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import * as React from "react";
 const ariaLabel = { 'aria-label': 'description' };
+
+
 
 
 export default function ChatBody(props) {
@@ -42,7 +45,6 @@ export default function ChatBody(props) {
 
     useEffect(() => {
         socket.on("take-message",(dataMessage) => {
-            console.log(dataMessage)
             if (dataMessage.room.id === chatId) {
                 setListMessages([...listMessages,dataMessage])
             }
@@ -78,7 +80,7 @@ export default function ChatBody(props) {
                         <div>
                             <ListItem>
                                 <ListItemAvatar>
-                                    <Avatar alt="avatar"/>
+                                    <Avatar alt="avatar" src={presentRoom.avatar[0]}/>
                                 </ListItemAvatar>
                                 <ListItemText primary={presentRoom.roomName} secondary="Jan 9, 2014"/>
                             </ListItem>
@@ -86,20 +88,20 @@ export default function ChatBody(props) {
                     </div>
 
                     <div className="view-message">
+                        <ScrollToBottom className="show-message">
                         {listMessages.map(message => (
-                            <div>
-                                <h1>{message.content}</h1>
-                                <h1>nguoi gui: {message.author.name}</h1>
-                            </div>
-
+                                <div>
+                                    <h1>{message.content}</h1>
+                                    <h1>nguoi gui: {message.author.name}</h1>
+                                </div>
                         ))}
+                        </ScrollToBottom>
                     </div>
 
                     <div className="message-send">
                         <input
                             type="text"
                             value={message}
-                            placeholder="message"
                             onChange={(e) => setMessage(e.target.value)}
                         />
                         <button onClick={sendMessage}>send</button>
