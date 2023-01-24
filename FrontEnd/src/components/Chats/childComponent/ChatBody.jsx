@@ -1,5 +1,8 @@
-import { useState, useEffect } from "react";
-import "../../../App.css";
+
+import ScrollToBottom from "react-scroll-to-bottom";
+import {useState, useEffect} from "react";
+import "../../../App.css"
+
 import axios from "../../../api/axios";
 import { Button, ListItem } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
@@ -7,6 +10,8 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import * as React from "react";
 const ariaLabel = { "aria-label": "description" };
+
+
 
 export default function ChatBody(props) {
   let { onClose, chatId, socket } = props;
@@ -41,13 +46,14 @@ export default function ChatBody(props) {
     }
   }, [chatId]);
 
-  useEffect(() => {
-    console.log(1);
-    socket?.on("take-message", (dataMessage) => {
-      console.log(dataMessage);
-      if (dataMessage.room.id === chatId) {
-        setListMessages([...listMessages, dataMessage]);
-      }
+
+    useEffect(() => {
+        socket.on("take-message",(dataMessage) => {
+            if (dataMessage.room.id === chatId) {
+                setListMessages([...listMessages,dataMessage])
+            }
+        })
+
     });
   });
 
@@ -120,13 +126,15 @@ export default function ChatBody(props) {
           </div>
 
           <div className="view-message">
-            {listMessages.map((message, index) => (
-              <div key={index}>
-                <h1>{message.content}</h1>
-                <h1>nguoi gui: {message.author.name}</h1>
-              </div>
-            ))}
-          </div>
+                        <ScrollToBottom className="show-message">
+                        {listMessages.map(message => (
+                                <div>
+                                    <h1>{message.content}</h1>
+                                    <h1>nguoi gui: {message.author.name}</h1>
+                                </div>
+                        ))}
+                        </ScrollToBottom>
+                    </div>
 
           <div className="flex items-center gap-3 justify-between border rounded-full py-2.5 px-4 m-5 relative top-9">
             <input

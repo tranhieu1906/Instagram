@@ -2,6 +2,7 @@ import { User } from "../model/User";
 import { Rooms} from "../model/Room";
 import { Messages } from "../model/Messages";
 import { AppDataSource } from "../config/data-source";
+import {chatRouter} from "../router/chatRouter";
 const UserRepository = AppDataSource.getRepository(User);
 const RoomRepository = AppDataSource.getRepository(Rooms);
 const MessageRepository = AppDataSource.getRepository(Messages)
@@ -10,7 +11,7 @@ class Chat {
     async getDataChat(req, res) {
         try {
 
-            let user = req.user.data
+            let dataUser = req.user.data
             let chatId = req.params.id;
             let dataChat = await RoomRepository.find({
                 relations: {
@@ -18,19 +19,30 @@ class Chat {
                 },
                 where: {id : chatId}
             });
-
+            let chat = dataChat[0]
+            let avatars = []
+            if (chat.status === "private") {
+                chat.users.forEach((user) => {
+                    if (user.id !== dataUser.id) {
+                        avatars.push(user.profile_picture);
+                        chat.roomName = user.name
+                        chat.avatar = avatars
+                    }
+                });
+            };
             let dataMessage = await MessageRepository.find({
                 relations: {
-                    author: true
+                    author: true,
                 },
                 where: {
-                    room: dataChat
+                    room: {id: chatId},
                 }
             })
+            console.log(dataMessage)
 
             res.status(200).json({
                 success: true,
-                dataChat: dataChat[0],
+                dataChat: chat,
                 dataMessage: dataMessage,
             })
         }catch (err) {
@@ -71,6 +83,7 @@ class Chat {
                 let newChat = new Rooms();
                 newChat.roomName = ChatName;
                 newChat.users = [user,userChat]
+                newChat.avatar = ""
                 let ChatData = await RoomRepository.save(newChat);
                 res.status(200).json({
                     success : true,
@@ -92,18 +105,53 @@ class Chat {
 
     async getListChat(req,res) {
         try {
-            let user = req.user.data
-            let listChat = await RoomRepository.find({
+            let dataUser = req.user.data
+
+            let userChat = await UserRepository.find({
                 where: {
-                    users: {id: user.id}
+                    id : dataUser.id
                 },
                 relations: {
-                    users: true,
+                    rooms : true
                 }
-            });
+            })
+            let listChat = userChat[0].rooms
+            let dataListChat = []
+            for (let i = 0; i < listChat.length; i++) {
+                let dataChat = await RoomRepository.find({
+                    where: {
+                        id : listChat[i].id,
+                    },
+                    relations: {
+                        users : true
+                    }
+                })
+                let chat = dataChat[0]
+                let avatars = []
+                if (chat.status === 'private') {
+                    chat.users.forEach((user) => {
+                        if (user.id !== dataUser.id) {
+                            avatars.push(user.profile_picture);
+                            chat.roomName = user.name
+                            chat.avatar = avatars
+                            dataListChat.push(chat);
+                        }
+                    })
+                }
+            }
+
+            // let listChat = await RoomRepository.find({
+            //     where: {
+            //         users: {id: user.id}
+            //     },
+            //     relations: {
+            //         users: true,
+            //     }
+            // });
+
             res.status(200).json({
                 success : true,
-                listChat: listChat
+                listChat: dataListChat
             });
         } catch (error) {
             res.status(500).json({

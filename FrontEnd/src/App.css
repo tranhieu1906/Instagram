@@ -66,16 +66,20 @@
     width: 50px;
 }
 
-.message-send {
-    height: 40px;
-    border: 1px solid #263238;
-    border-top: none;
-    display: flex;
+.message-write {
+    background-color: #20e277;
+    float: bottom;
+    height: 80px;
+    width: 750px;
+    border-bottom: 2px groove;
 }
-
 
 
 .view-message {
     width: 750px;
-    height: 550px;
+    height: 520px;
+}
+
+.show-message {
+    height: 520px;
 }

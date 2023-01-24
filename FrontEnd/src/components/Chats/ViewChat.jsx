@@ -5,11 +5,8 @@ import * as React from 'react';
 import { useState } from "react";
 import "../../App.css";
 import ChatBody from "./childComponent/ChatBody";
-import FindCreateChat from "./childComponent/FindCreateChat";
+import AddChat from "./childComponent/FindCreateChat";
 import ListChat from "./childComponent/ListChat";
-
-
-
 
 export default function ViewChat ({socket}) {
     const [presentRoom, setPresentRoom] = useState(null)
@@ -70,9 +67,10 @@ export default function ViewChat ({socket}) {
                                               y2="7.153"></line>
                                     </svg>
                                 </ListItem>
-                                <FindCreateChat
+                                <AddChat
                                     open={open}
                                     onClose={handleClose}
+                                    chatNow = {updatePresentRoom}
                                 />
                             </div>
                         </div>
@@ -91,7 +89,6 @@ export default function ViewChat ({socket}) {
                             chatId = {presentRoom}
                         />
                     </div>
-
                 </div>
             </Container>
             <CssBaseline/>
