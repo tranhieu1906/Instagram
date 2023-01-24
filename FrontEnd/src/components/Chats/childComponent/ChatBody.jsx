@@ -42,7 +42,7 @@ export default function ChatBody(props) {
 
     useEffect(() => {
         console.log(1)
-        socket.on("take-message",(dataMessage) => {
+        socket?.on("take-message",(dataMessage) => {
             console.log(dataMessage)
             if (dataMessage.room.id === chatId) {
                 setListMessages([...listMessages,dataMessage])
@@ -87,8 +87,8 @@ export default function ChatBody(props) {
                     </div>
 
                     <div className="view-message">
-                        {listMessages.map(message => (
-                            <div>
+                        {listMessages.map((message,index) => (
+                            <div key={index}>
                                 <h1>{message.content}</h1>
                                 <h1>nguoi gui: {message.author.name}</h1>
                             </div>

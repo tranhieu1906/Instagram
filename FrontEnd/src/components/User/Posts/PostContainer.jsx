@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -9,11 +9,12 @@ import {
   NEW_COMMENT_RESET,
 } from "../../../constants/postConstants";
 import PostItem from "./PostItem";
+import axios from "../../../api/axios";
 
 const PostContainer = ({ posts, id }) => {
   const dispatch = useDispatch();
   const params = useParams();
-
+  const [allPost, setAllPost] = useState(posts);
   const {
     error: likeError,
     message,
@@ -25,7 +26,10 @@ const PostContainer = ({ posts, id }) => {
   const { error: deleteError, success: deleteSuccess } = useSelector(
     (state) => state.deletePost
   );
-
+  const fechData = async (username) => {
+    const { data } = await axios.get(`/api/v1/user/${username}`);
+    setAllPost(data.user.posts);
+  };
   useEffect(() => {
     if (likeError) {
       toast.error(likeError);
@@ -50,6 +54,7 @@ const PostContainer = ({ posts, id }) => {
     if (deleteSuccess) {
       toast.success("Post đã xóa");
       dispatch({ type: DELETE_POST_RESET });
+      fechData(params.username);
     }
   }, [
     dispatch,
@@ -62,9 +67,12 @@ const PostContainer = ({ posts, id }) => {
     deleteSuccess,
     params.username,
   ]);
+
   return (
     <div className="grid grid-cols-3 gap-1 sm:gap-8 my-1 mb-8" id={id}>
-      {posts?.map((post, index) => <PostItem {...post} key={index} />).reverse()}
+      {allPost
+        ?.map((post, index) => <PostItem {...post} key={index} />)
+        .reverse()}
     </div>
   );
 };
