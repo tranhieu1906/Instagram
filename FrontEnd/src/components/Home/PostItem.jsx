@@ -93,10 +93,12 @@ const PostItem = ({
   };
 
   const handleDeleteComment = async () => {
-    await dispatch(removeComment(idComment));
-    const { data } = await axios.get(`/api/v1/post/detail/${id}`);
-    setAllComments(data.post.comments);
-    setDeleteModal(false);
+    if (window.confirm("Bạn có chắc muốn xóa comment này ?")) {
+      await dispatch(removeComment(idComment));
+      const { data } = await axios.get(`/api/v1/post/detail/${id}`);
+      setAllComments(data.post.comments);
+      setDeleteModal(false);
+    }
   };
 
   useEffect(() => {

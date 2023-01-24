@@ -16,7 +16,6 @@ class PostController {
   // add posts
   async newPost(req, res, next) {
     try {
-      console.log(req.user.data.id);
       const postData = {
         content: req.body.content,
         image_url: req.file.location,

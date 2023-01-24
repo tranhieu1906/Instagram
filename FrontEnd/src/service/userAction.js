@@ -51,7 +51,6 @@ export const loginUser = (values) => async (dispatch) => {
       type: LOGIN_USER_SUCCESS,
       payload: data.user,
     });
-
   } catch (error) {
     dispatch({
       type: LOGIN_USER_FAIL,
@@ -93,7 +92,6 @@ export const loadUser = () => async (dispatch) => {
       type: LOAD_USER_SUCCESS,
       payload: data.user,
     });
-
   } catch (error) {
     dispatch({
       type: LOAD_USER_FAIL,
@@ -169,10 +167,7 @@ export const getUserDetails = (username) => async (dispatch) => {
 export const updateProfile = (userData) => async (dispatch) => {
   try {
     dispatch({ type: UPDATE_PROFILE_REQUEST });
-    const { data } = await axios.put(
-      "/api/v1/update/profile",
-      userData,
-    );
+    const { data } = await axios.put("/api/v1/update/profile", userData);
 
     dispatch({
       type: UPDATE_PROFILE_SUCCESS,

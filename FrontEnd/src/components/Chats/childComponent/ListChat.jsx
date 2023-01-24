@@ -27,22 +27,29 @@ export default function ListChat(props) {
     },[open]);
 
     return (
-        <>
-            {listChat.length > 0 && (
-                <List sx={{width: '100%', maxWidth: 400, bgcolor: 'background.paper'}}>
-                    { listChat.map(userChat => (
-                            <ListItemButton onClick={() => chatNow(userChat.id)}>
-                                <ListItem>
-                                    <ListItemAvatar>
-                                        <Avatar alt="avatar"/>
-                                    </ListItemAvatar>
-                                    <ListItemText primary= {userChat.roomName} secondary="Jan 9, 2014"/>
-                                </ListItem>
-                            </ListItemButton>
-                    ))
-                    }
-                </List>
-            )}
-        </>
-    )
+      <>
+        {listChat.length > 0 && (
+          <List
+            sx={{ width: "100%", maxWidth: 400, bgcolor: "background.paper" }}
+          >
+            {listChat.map((userChat) => (
+              <ListItemButton
+                key={userChat.id}
+                onClick={() => chatNow(userChat.id)}
+              >
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar alt="avatar" />
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={userChat.roomName}
+                    secondary="Jan 9, 2014"
+                  />
+                </ListItem>
+              </ListItemButton>
+            ))}
+          </List>
+        )}
+      </>
+    );
 }
