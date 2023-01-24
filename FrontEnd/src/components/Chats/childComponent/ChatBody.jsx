@@ -128,7 +128,7 @@ export default function ChatBody(props) {
             ))}
           </div>
 
-          <div className="flex items-center gap-3 justify-between border rounded-full py-2.5 px-4 m-5 relative top-9">
+          <div className="flex items-center gap-3 justify-between border rounded-full py-2.5 px-4 m-5 relative bottom-9">
             <input
               type="text"
               value={message}

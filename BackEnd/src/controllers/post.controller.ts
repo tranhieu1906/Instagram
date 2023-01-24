@@ -220,6 +220,7 @@ class PostController {
         .where("user.id IN (:...userIds)", {
           userIds: arr.map((user) => user.id),
         })
+        .orWhere("user.id = :id", { id: req.user.data.id })
         .orderBy("post.created_at", "DESC")
         .skip(skipPosts)
         .take(4)
