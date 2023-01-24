@@ -17,7 +17,6 @@ import {
 } from "../../Home/SvgIcons";
 import { likeFill } from "../../NavBar/SvgIcons";
 import { metaballsMenu } from "../SvgIcons";
-import { loadUser } from "../../../service/userAction";
 
 const PostItem = ({
   id,
@@ -30,6 +29,7 @@ const PostItem = ({
 }) => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+
   const commentInput = useRef(null);
 
   const { user } = useSelector((state) => state.user);
@@ -73,8 +73,11 @@ const PostItem = ({
   };
 
   const handleDeletePost = () => {
-    dispatch(deletePost(id));
-    setDeleteModal(false);
+    if (window.confirm("Bạn có chắc muốn xóa bài viết này ko ?")) {
+      dispatch(deletePost(id));
+      setDeleteModal(false);
+      setOpen(false);
+    }
   };
 
   useEffect(() => {

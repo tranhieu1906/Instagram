@@ -7,6 +7,8 @@ import { AppDataSource } from "../config/data-source";
 import Token from "../middlewares/jwt.middleware";
 import { sendEmail } from "../utils/sendEmail";
 import { Like, MoreThan } from "typeorm";
+const { deleteFile } = require("../utils/awsFunctions");
+
 
 const UserRepo = AppDataSource.getRepository(User);
 const FollowRepo = AppDataSource.getRepository(Follow);
@@ -167,28 +169,30 @@ class UserController {
     try {
       const { name, username, email } = req.body;
       const user = await UserRepo.findOneBy(req.user.data.id);
+      const userExists = await UserRepo.createQueryBuilder("user")
+        .where("user.email = :email OR user.username = :username", {
+          email,
+          username,
+        })
+        .getOne();
+      if (
+        userExists &&
+        userExists.id.toString() !== req.user.data.id.toString()
+      ) {
+        return next(createError(404, "User Already Exists"));
+      }
+      if (req.body.avatar !== "") {
+        await deleteFile(user.profile_picture);
+        user.profile_picture = req.file.location;
+      }
       user.username = username;
       user.name = name;
       user.email = email;
       await UserRepo.save(user);
       res.status(200).json({
+        user: user,
         success: true,
         message: "Update profile successfully",
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
-  // updateAvatar
-  async updateAvatar(req, res, next) {
-    try {
-      const newAvatar = req.file.location;
-      const user = await UserRepo.findOneBy(req.user.data.id);
-      user.profile_picture = newAvatar;
-      await UserRepo.save(user);
-      res.status(200).json({
-        success: true,
-        message: "Update Avatar successfully",
       });
     } catch (error) {
       next(error);
@@ -254,10 +258,10 @@ class UserController {
         maxAge: 1000 * 60 * 60 * 24,
         httpOnly: true,
       });
-       res.status(200).json({
-         success: true,
-         message: `oke`,
-       });
+      res.status(200).json({
+        success: true,
+        message: `oke`,
+      });
     } catch (error) {
       next(error);
     }
