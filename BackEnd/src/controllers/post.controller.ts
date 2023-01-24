@@ -154,8 +154,6 @@ class PostController {
           user: true,
         },
       });
-      console.log(comment.user.id);
-      console.log(req.user.data.id);
       if (!comment) {
         return next(createError(404, "Post Not Found"));
       }
