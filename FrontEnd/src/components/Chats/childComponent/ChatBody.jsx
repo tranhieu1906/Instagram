@@ -47,13 +47,15 @@ export default function ChatBody(props) {
     }
   }, [chatId]);
 
-  useEffect(() => {
-    socket?.on("take-message", (dataMessage) => {
-      if (dataMessage.room.id === chatId) {
-        setListMessages([...listMessages, dataMessage]);
-      }
+    useEffect(() => {
+        socket.on("take-message",(dataMessage) => {
+            if (dataMessage.room.id === chatId) {
+                setListMessages([...listMessages,dataMessage])
+            } else {
+
+            }
+        })
     });
-  });
 
   const addChat = () => {
     onClose();
@@ -122,38 +124,37 @@ export default function ChatBody(props) {
               </ListItem>
             </div>
           </div>
-
           <div className=" w-full flex-1 flex flex-col gap-1.5 overflow-y-auto overflow-x-hidden p-4">
             <ScrollToBottom className="show-message">
-              {listMessages.map((message) => (
-                // đoạn này là tin nhắn bên trái
-                <div className="flex items-end gap-2 max-w-xs pb-2.5">
-                  <img
-                    draggable="false"
-                    className="w-7 h-7 rounded-full object-cover"
-                    // src={avatar}
-                    alt="avatar"
-                  />
-                  <span className="px-4 py-3 text-sm bg-gray-200 rounded-3xl max-w-xs overflow-hidden">
-                    {message.content}
+              {listMessages.map(message =>  (
+                user.id  !== message.author.id? (
+                    <div className="flex items-end gap-2 max-w-xs pb-2.5">
+                      <img
+                          draggable="false"
+                          className="w-7 h-7 rounded-full object-cover"
+                          src={presentRoom.avatar[0]}
+                          alt="avatar"
+                      />
+                      <span className="px-4 py-3 text-sm bg-gray-200 rounded-3xl max-w-xs overflow-hidden">
+                   {message.content}
                   </span>
-                </div>
-                // đoạn này là tin nhắn bên phải
-                // <div className="flex gap-2 max-w-xs pb-2.5 justify-end">
-                //   <span className="px-4 py-3 text-sm bg-gray-200 rounded-3xl max-w-xs overflow-hidden">
-                //     {message.content}
-                //   </span>
-                //   <img
-                //     draggable="false"
-                //     className="w-7 h-7 rounded-full object-cover"
-                //     // src={avatar}
-                //     alt="avatar"
-                //   />
-                // </div>
+                    </div>
+                ): (
+                    <div className="flex gap-2 max-w-xs pb-2.5 justify-end">
+                   <span className="px-4 py-3 text-sm bg-gray-200 rounded-3xl max-w-xs overflow-hidden">
+                     {message.content}
+                   </span>
+                      <img
+                          draggable="false"
+                          className="w-7 h-7 rounded-full object-cover"
+                          src={user.profile_picture}
+                          alt="avatar"
+                      />
+                    </div>
+                )
               ))}
             </ScrollToBottom>
           </div>
-
           <div className="flex items-center gap-3 justify-between border rounded-full py-2.5 px-4 m-5 relative bottom-9">
             <input
               type="text"

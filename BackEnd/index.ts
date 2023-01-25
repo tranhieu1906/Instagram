@@ -12,8 +12,9 @@ import {router} from "./src/router/userRouter";
 import {chatRouter} from "./src/router/chatRouter";
 import {messageRouter} from "./src/router/messageRouter";
 
-const messageHandlers = require("./src/socket/modules/messageModule")
-const notificationHandlers = require("./src/socket/modules/notification")
+const messageHandlers = require("./src/socket/modules/messageModule");
+const notificationHandlers = require("./src/socket/modules/notification");
+const activeStatusHandlers = require("./src/socket/modules/activeStatusHandlers");
 import {Server} from "socket.io";
 
 const PORT = process.env.PORT || 8080;
@@ -59,14 +60,10 @@ const io = new Server(server, {
 });
 
 const onConnection = (socket) => {
-    console.log(`User Connected: ${socket.id}`);
 
+    activeStatusHandlers(io,socket)
     messageHandlers(io, socket)
     notificationHandlers(io, socket)
-
-    socket.on("disconnect", () => {
-        console.log("User Disconnected", socket.id);
-    });
 
 }
 
