@@ -205,9 +205,12 @@ class PostController {
         .where("follow.following = :id", { id: req.user.data.id })
         .getMany();
       let arr = [];
-      if (!users){
-        next()
-      } 
+      if (!users) {
+        return next(createError(404, "User Not Found"));
+      }
+      if (!users.length) {
+        return next(createError(411, "you need to follow to see their posts"));
+      }
       users.map((user) => arr.push(user.follower));
       const posts = await PostRepo.createQueryBuilder("post")
         .leftJoinAndSelect("post.postedBy", "user")
@@ -218,18 +221,19 @@ class PostController {
         .where("user.id IN (:...userIds)", {
           userIds: arr.map((user) => user.id),
         })
+        .orWhere("user.id = :id", { id: req.user.data.id })
         .orderBy("post.created_at", "DESC")
         .skip(skipPosts)
         .take(4)
         .getMany();
-        if (!posts){
-          next()
-        }
-          const totalPost = await PostRepo.find({
-            where: {
-              postedBy: arr,
-            },
-          });
+      if (!posts) {
+        return next(createError(404, "Post Not Found"));
+      }
+      const totalPost = await PostRepo.find({
+        where: {
+          postedBy: arr,
+        },
+      });
       let totalPosts = totalPost.length;
       return res.status(200).json({
         success: true,

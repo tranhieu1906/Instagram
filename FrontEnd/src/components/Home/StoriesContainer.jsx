@@ -31,10 +31,6 @@ const stories = [
     image: "tailwind",
   },
   {
-    title: "Heroku",
-    image: "heroku",
-  },
-  {
     title: "MaterialUI",
     image: "mui",
   },

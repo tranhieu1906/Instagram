@@ -46,7 +46,6 @@ export const getPostsOfFollowing =
 
       setTimeout(async () => {
         const { data } = await axios.get(`/api/v1/posts?page=${page}`);
-
         dispatch({
           type: POST_FOLLOWING_SUCCESS,
           payload: data,
@@ -87,7 +86,6 @@ export const addComment = (postId, comment) => async (dispatch) => {
       { comment },
       config
     );
-    console.log(data);
     dispatch({
       type: NEW_COMMENT_SUCCESS,
       payload: data.success,
