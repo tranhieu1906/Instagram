@@ -66,14 +66,6 @@
     width: 50px;
 }
 
-.message-write {
-    background-color: #20e277;
-    float: bottom;
-    height: 80px;
-    width: 750px;
-    border-bottom: 2px groove;
-}
-
 
 .view-message {
     width: 750px;
@@ -82,4 +74,12 @@
 
 .show-message {
     height: 520px;
+}
+
+#you {
+    float: right;
+}
+
+#author {
+    float: left;
 }
