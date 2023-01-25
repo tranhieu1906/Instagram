@@ -48,7 +48,7 @@ export default function ChatBody(props) {
 
 
     useEffect(() => {
-        socket.on("take-message",(dataMessage) => {
+        socket?.on("take-message",(dataMessage) => {
             if (dataMessage.room.id === chatId) {
                 setListMessages([...listMessages,dataMessage])
             }
