@@ -9,6 +9,7 @@ import Avatar from "@mui/material/Avatar";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import * as React from "react";
+import {useSelector} from "react-redux";
 const ariaLabel = { "aria-label": "description" };
 
 
@@ -18,6 +19,7 @@ export default function ChatBody(props) {
   let [listMessages, setListMessages] = useState([]);
   let [presentRoom, setPresentRoom] = useState();
   let [message, setMessage] = useState("");
+  const { user } = useSelector((state) => state.user);
 
   const sendMessage = async () => {
     if (message !== "") {
@@ -39,6 +41,8 @@ export default function ChatBody(props) {
     if (chatId !== null) {
       axios.get(`/api/v1/chat/${chatId}`).then((res) => {
         setPresentRoom(res.data.dataChat);
+        console.log(presentRoom)
+
         let listMessage = res.data.dataMessage;
         setListMessages(listMessage);
         socket.emit("join-room", chatId);
@@ -114,12 +118,9 @@ export default function ChatBody(props) {
             <div>
               <ListItem>
                 <ListItemAvatar>
-                  <Avatar alt="avatar" />
+                  <Avatar alt="avatar" src={presentRoom.avatar[0]}/>
                 </ListItemAvatar>
-                <ListItemText
-                  primary={presentRoom.roomName}
-                  secondary="Jan 9, 2014"
-                />
+                <ListItemText primary={presentRoom.roomName} secondary="Jan 9, 2014"/>
               </ListItem>
             </div>
           </div>
@@ -127,10 +128,12 @@ export default function ChatBody(props) {
           <div className="view-message">
                         <ScrollToBottom className="show-message">
                         {listMessages.map(message => (
-                                <div>
-                                    <h1>{message.content}</h1>
-                                    <h1>nguoi gui: {message.author.name}</h1>
-                                </div>
+                            <div className="flex items-center gap-3 justify-between border rounded-full py-2.5 px-4 m-5 relative bottom-9">
+                              <div>
+                                <p>{message.content}</p>
+                              </div>
+                              {/*<h1>nguoi gui: {message.author.name}</h1>*/}
+                            </div>
                         ))}
                         </ScrollToBottom>
                     </div>
