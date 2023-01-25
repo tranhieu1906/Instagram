@@ -1,7 +1,6 @@
-
 import ScrollToBottom from "react-scroll-to-bottom";
-import {useState, useEffect} from "react";
-import "../../../App.css"
+import { useState, useEffect } from "react";
+import "../../../App.css";
 
 import axios from "../../../api/axios";
 import { Button, ListItem } from "@mui/material";
@@ -9,10 +8,8 @@ import Avatar from "@mui/material/Avatar";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import * as React from "react";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 const ariaLabel = { "aria-label": "description" };
-
-
 
 export default function ChatBody(props) {
   let { onClose, chatId, socket } = props;
@@ -41,7 +38,7 @@ export default function ChatBody(props) {
     if (chatId !== null) {
       axios.get(`/api/v1/chat/${chatId}`).then((res) => {
         setPresentRoom(res.data.dataChat);
-        console.log(presentRoom)
+        console.log(presentRoom);
 
         let listMessage = res.data.dataMessage;
         setListMessages(listMessage);
@@ -50,15 +47,13 @@ export default function ChatBody(props) {
     }
   }, [chatId]);
 
-
-    useEffect(() => {
-        socket.on("take-message",(dataMessage) => {
-            if (dataMessage.room.id === chatId) {
-                setListMessages([...listMessages,dataMessage])
-            }
-        })
-
+  useEffect(() => {
+    socket?.on("take-message", (dataMessage) => {
+      if (dataMessage.room.id === chatId) {
+        setListMessages([...listMessages, dataMessage]);
+      }
     });
+  });
 
   const addChat = () => {
     onClose();
@@ -118,25 +113,46 @@ export default function ChatBody(props) {
             <div>
               <ListItem>
                 <ListItemAvatar>
-                  <Avatar alt="avatar" src={presentRoom.avatar[0]}/>
+                  <Avatar alt="avatar" src={presentRoom.avatar[0]} />
                 </ListItemAvatar>
-                <ListItemText primary={presentRoom.roomName} secondary="Jan 9, 2014"/>
+                <ListItemText
+                  primary={presentRoom.roomName}
+                  secondary="Jan 9, 2014"
+                />
               </ListItem>
             </div>
           </div>
 
-          <div className="view-message">
-                        <ScrollToBottom className="show-message">
-                        {listMessages.map(message => (
-                            <div className="flex items-center gap-3 justify-between border rounded-full py-2.5 px-4 m-5 relative bottom-9">
-                              <div>
-                                <p>{message.content}</p>
-                              </div>
-                              {/*<h1>nguoi gui: {message.author.name}</h1>*/}
-                            </div>
-                        ))}
-                        </ScrollToBottom>
-                    </div>
+          <div className=" w-full flex-1 flex flex-col gap-1.5 overflow-y-auto overflow-x-hidden p-4">
+            <ScrollToBottom className="show-message">
+              {listMessages.map((message) => (
+                // đoạn này là tin nhắn bên trái
+                <div className="flex items-end gap-2 max-w-xs pb-2.5">
+                  <img
+                    draggable="false"
+                    className="w-7 h-7 rounded-full object-cover"
+                    // src={avatar}
+                    alt="avatar"
+                  />
+                  <span className="px-4 py-3 text-sm bg-gray-200 rounded-3xl max-w-xs overflow-hidden">
+                    {message.content}
+                  </span>
+                </div>
+                // đoạn này là tin nhắn bên phải
+                // <div className="flex gap-2 max-w-xs pb-2.5 justify-end">
+                //   <span className="px-4 py-3 text-sm bg-gray-200 rounded-3xl max-w-xs overflow-hidden">
+                //     {message.content}
+                //   </span>
+                //   <img
+                //     draggable="false"
+                //     className="w-7 h-7 rounded-full object-cover"
+                //     // src={avatar}
+                //     alt="avatar"
+                //   />
+                // </div>
+              ))}
+            </ScrollToBottom>
+          </div>
 
           <div className="flex items-center gap-3 justify-between border rounded-full py-2.5 px-4 m-5 relative bottom-9">
             <input
