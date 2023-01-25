@@ -22,6 +22,9 @@ export class Rooms {
     @Column({type: "varchar"})
     roomName: string;
 
+    @Column({type: "varchar"})
+    avatar: any;
+
     @ManyToMany(() => User, (user) => user.rooms)
     @JoinTable({
         name: "users-join-room"

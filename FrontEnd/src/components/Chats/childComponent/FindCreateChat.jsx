@@ -15,10 +15,9 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Checkbox from '@mui/material/Checkbox';
 import Avatar from '@mui/material/Avatar';
-
 export default function AddChat(props) {
     const [checked, setChecked] = useState([]);
-    const {onClose, open} = props;
+    const {onClose, open, chatNow} = props;
     const [listUsers, setListUser] = useState([]);
     const radioGroupRef = React.useRef(null);
 
@@ -56,10 +55,11 @@ export default function AddChat(props) {
                 userIdChat: checked
             })
                 .then((res) => {
-                    console.log(res.data)
+                    let idChat = res.data.dataChat.id
+                    chatNow(idChat)
+                    onClose();
                 })
         }
-        onClose();
     };
 
     useEffect(() => {
