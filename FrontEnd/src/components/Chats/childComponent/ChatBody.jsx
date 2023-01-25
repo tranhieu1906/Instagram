@@ -55,9 +55,10 @@ export default function ChatBody(props) {
         socket.on("take-message",(dataMessage) => {
             if (dataMessage.room.id === chatId) {
                 setListMessages([...listMessages,dataMessage])
+            } else {
+
             }
         })
-
     });
 
   const addChat = () => {
