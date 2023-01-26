@@ -14,7 +14,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import SkeletonPost from "../Layouts/SkeletonPost";
 import SpinLoader from "../Layouts/SpinLoader";
 
-
 const PostsContainer = () => {
   const dispatch = useDispatch();
 
@@ -34,7 +33,6 @@ const PostsContainer = () => {
     (state) => state.newComment
   );
     const { user } = useSelector((state) => state.user);
-
   const handleClose = () => setUsersDialog(false);
 
   useEffect(() => {
