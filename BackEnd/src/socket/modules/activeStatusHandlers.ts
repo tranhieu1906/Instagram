@@ -19,7 +19,7 @@ module.exports = (io, socket) => {
         await UserRepository.createQueryBuilder()
             .update(User)
             .set({ online: false })
-            .where("id = :id", { id: socket.user.id })
+            .where("id = :id", { id: socket.user?.id })
             .execute().catch(error => {
                 throw new Error(error.message)});
         console.log(socket.id + " disconnected")
