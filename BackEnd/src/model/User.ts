@@ -43,6 +43,9 @@ export class User {
   @Column({ type: "enum", enum: [true, false], default: false })
   online : boolean;
 
+  @Column({ type: "timestamp", nullable: true})
+  last_activity: Date;
+
   @OneToMany(() => Post, (post) => post.postedBy)
   posts: Post[];
 

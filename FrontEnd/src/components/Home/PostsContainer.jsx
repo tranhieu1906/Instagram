@@ -11,12 +11,11 @@ import PostItem from "./PostItem";
 import StoriesContainer from "./StoriesContainer";
 
 import InfiniteScroll from "react-infinite-scroll-component";
-import { io } from "socket.io-client";
 import SkeletonPost from "../Layouts/SkeletonPost";
 import SpinLoader from "../Layouts/SpinLoader";
 
 
-const PostsContainer = ({socket}) => {
+const PostsContainer = () => {
   const dispatch = useDispatch();
 
   const [usersList, setUsersList] = useState([]);
@@ -92,7 +91,7 @@ const PostsContainer = ({socket}) => {
               <PostItem
                 key={index}
                 {...post}
-                socket={socket}
+                // socket={socket}
                 setUsersDialog={setUsersDialog}
                 setUsersList={setUsersList}
               />
