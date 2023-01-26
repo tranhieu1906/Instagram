@@ -3,11 +3,6 @@ import { AppDataSource } from "../../config/data-source";
 const RoomRepository = AppDataSource.getRepository(Rooms);
 module.exports = (io, socket) => {
 
-    const setup = (userData) => {
-        console.log(userData)
-        socket.join(userData.id);
-    }
-
     const joinRoom = (data) => {
         console.log(data)
         socket.join(data);
@@ -29,7 +24,6 @@ module.exports = (io, socket) => {
             }
         })
     }
-    socket.on("setup", setup);
     socket.on("join-room", joinRoom);
     socket.on("send-message", sendMessage);
 }

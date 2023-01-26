@@ -9,7 +9,6 @@ import { sendEmail } from "../utils/sendEmail";
 import { Like, MoreThan } from "typeorm";
 const { deleteFile } = require("../utils/awsFunctions");
 
-
 const UserRepo = AppDataSource.getRepository(User);
 const FollowRepo = AppDataSource.getRepository(Follow);
 class UserController {
