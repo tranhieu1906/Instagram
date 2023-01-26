@@ -100,13 +100,8 @@ export const addComment = (postId, comment) => async (dispatch) => {
 export const removeComment = (postId) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_COMMENT_REQUEST });
-    const { data } = await axios.delete(
-      `/api/v1/post/comment/${postId}`,
-    );
-    dispatch({
-      type: DELETE_COMMENT_SUCCESS,
-      payload: data.success,
-    });
+    await axios.delete(`/api/v1/post/comment/`);
+    dispatch({ type: DELETE_COMMENT_SUCCESS });
   } catch (error) {
     dispatch({
       type: DELETE_COMMENT_FAIL,
@@ -114,6 +109,7 @@ export const removeComment = (postId) => async (dispatch) => {
     });
   }
 };
+
 
 export const deletePost = (postId) => async (dispatch) => {
   try {
