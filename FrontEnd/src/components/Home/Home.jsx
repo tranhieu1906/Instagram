@@ -15,7 +15,7 @@ const Home = ({socket}) => {
     <>
       <MetaData title="Instagram" />
       <div className="flex h-full md:w-4/5 lg:w-4/6 mt-14 mx-auto">
-        <PostsContainer socket={socket} />
+        <PostsContainer />
         <SideBar />
       </div>
     </>

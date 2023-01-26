@@ -3,28 +3,35 @@ import { AppDataSource } from "../../config/data-source";
 const UserRepository = AppDataSource.getRepository(User)
 module.exports = (io, socket) => {
 
-    const setupConnect = async (userData) => {
+    const setupConnect = (userData) => {
+        socket.join(userData.id);
+        console.log(socket.id + " connected");
         socket.user = userData
-        console.log(socket.id + " connected")
-        console.log(socket.user)
-        await UserRepository.createQueryBuilder()
+         UserRepository.createQueryBuilder()
             .update(User)
-            .set({ online: true })
+            .set({ online: true , last_activity: null})
             .where("id = :id", { id: userData.id })
-            .execute().catch(error => {
-                throw new Error(error.message)})
-    }
-
-    const setupDisconnect = async  () => {
-        await UserRepository.createQueryBuilder()
-            .update(User)
-            .set({ online: false })
-            .where("id = :id", { id: socket.user.id })
-            .execute().catch(error => {
+            .execute().then(() => {
+                socket.broadcast.emit("get-active-status", (socket.user.id))
+            })
+            .catch(error => {
                 throw new Error(error.message)});
-        console.log(socket.id + " disconnected")
     }
 
+    const setupDisconnect = () => {
+        console.log(socket.id + "disconnect")
+        if (socket.user) {
+             UserRepository.createQueryBuilder()
+                .update(User)
+                .set({ online: false , last_activity: new Date() })
+                .where("id = :id", { id: socket.user.id })
+                .execute().then(() => {
+                    socket.broadcast.emit("get-active-status", (socket.user.id))
+                })
+                .catch(error => {
+                    throw new Error(error.message)});
+        }
+    }
     socket.on("setup", setupConnect);
     socket.on("disconnect", setupDisconnect);
 }

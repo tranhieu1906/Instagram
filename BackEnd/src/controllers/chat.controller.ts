@@ -27,9 +27,12 @@ class Chat {
                         avatars.push(user.profile_picture);
                         chat.roomName = user.name
                         chat.avatar = avatars
+                        chat.online = user.online
+                        chat.last_activity = user.last_activity
                     }
                 });
             };
+            console.log(chat)
             let dataMessage = await MessageRepository.find({
                 relations: {
                     author: true,
@@ -38,8 +41,6 @@ class Chat {
                     room: {id: chatId},
                 }
             })
-            console.log(dataMessage)
-
             res.status(200).json({
                 success: true,
                 dataChat: chat,
@@ -134,21 +135,13 @@ class Chat {
                             avatars.push(user.profile_picture);
                             chat.roomName = user.name
                             chat.avatar = avatars
+                            chat.online = user.online
+                            chat.last_activity = user.last_activity
                             dataListChat.push(chat);
                         }
                     })
                 }
             }
-
-            // let listChat = await RoomRepository.find({
-            //     where: {
-            //         users: {id: user.id}
-            //     },
-            //     relations: {
-            //         users: true,
-            //     }
-            // });
-
             res.status(200).json({
                 success : true,
                 listChat: dataListChat
@@ -160,7 +153,6 @@ class Chat {
             })
         }
     }
-
 
     async createChatGroup(req,res) {
         try {

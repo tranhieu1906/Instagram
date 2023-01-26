@@ -7,11 +7,11 @@ function NotificationDetails({ setNotification, socket }) {
   const notifications = useSelector((state) => state.notifications);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    socket.on("getNotification", (data) => {
-      dispatch(addNotification(data));
-    });
-  }, [socket, dispatch]);
+  // useEffect(() => {
+  //   socket.on("getNotification", (data) => {
+  //     dispatch(addNotification(data));
+  //   });
+  // }, [socket, dispatch]);
   const displayNotification = ({ senderName, type }) => {
     return (
       <span className="notification">{`${senderName.username} ${type} your post.`}</span>

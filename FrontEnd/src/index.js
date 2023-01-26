@@ -12,7 +12,7 @@ root.render(
   <Provider store={store}>
     <BrowserRouter>
       <HelmetProvider>
-        <App />
+          <App />
       </HelmetProvider>
     </BrowserRouter>
   </Provider>

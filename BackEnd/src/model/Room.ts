@@ -17,6 +17,12 @@ export class Rooms {
   @Column({ type: "enum", enum: ["group", "private"], default: "private" })
   status: string;
 
+  @Column({ type: "enum", enum: [true, false], nullable: true })
+  online : boolean;
+
+  @Column({ type: "timestamp", nullable: true})
+  last_activity: Date;
+
   @Column({ type: "varchar" })
   roomName: string;
 
