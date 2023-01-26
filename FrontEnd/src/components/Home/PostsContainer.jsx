@@ -11,7 +11,6 @@ import PostItem from "./PostItem";
 import StoriesContainer from "./StoriesContainer";
 
 import InfiniteScroll from "react-infinite-scroll-component";
-import { io } from "socket.io-client";
 import SkeletonPost from "../Layouts/SkeletonPost";
 import SpinLoader from "../Layouts/SpinLoader";
 import {
@@ -22,7 +21,8 @@ import {
   shareIcon,
 } from "./SvgIcons";
 
-const PostsContainer = ({ socket }) => {
+
+const PostsContainer = () => {
   const dispatch = useDispatch();
 
   const [usersList, setUsersList] = useState([]);
@@ -87,52 +87,24 @@ const PostsContainer = ({ socket }) => {
           Array(5)
             .fill("")
             .map((el, i) => <SkeletonPost key={i} />)}
-        {posts.length !== 0 ? (
-          <InfiniteScroll
-            dataLength={posts.length}
-            next={fetchMorePosts}
-            hasMore={posts.length !== totalPosts}
-            loader={<SpinLoader />}
-          >
-            <div className="w-full h-full mt-1 sm:mt-6 flex flex-col space-y-4">
-              {posts?.map((post, index) => (
-                <PostItem
-                  key={index}
-                  {...post}
-                  socket={socket}
-                  setUsersDialog={setUsersDialog}
-                  setUsersList={setUsersList}
-                />
-              ))}
-            </div>
-          </InfiniteScroll>
-        ) : (
-          <div className="flex flex-col border rounded bg-white relative">
-            <div className="flex justify-between px-3 py-2.5 border-b items-center">
-              <div className="flex space-x-3 items-center">
-                <img
-                  draggable="false"
-                  className="w-10 h-10 rounded-full object-cover"
-                  src="https://static.cdninstagram.com/rsrc.php/v3/yR/r/lam-fZmwmvn.png"
-                  alt="avatar"
-                />
-                <span className="text-black text-sm font-semibold">
-                  Instagram
-                </span>
-              </div>
-              <span className="cursor-pointer">{moreIcons}</span>
-            </div>
-            <div className="relative flex items-center justify-center">
-              <img
-                alt="description"
-                draggable="false"
-                loading="lazy"
-                className="w-full h-full object-cover object-center"
-                src="https://res.cloudinary.com/practicaldev/image/fetch/s--2fS0sUh8--/c_imagga_scale,f_auto,fl_progressive,h_900,q_auto,w_1600/https://dev-to-uploads.s3.amazonaws.com/i/8y9m1r90a9moi4ufe6lm.png"
+        <InfiniteScroll
+          dataLength={posts.length}
+          next={fetchMorePosts}
+          hasMore={posts.length !== totalPosts}
+          loader={<SpinLoader />}
+        >
+          <div className="w-full h-full mt-1 sm:mt-6 flex flex-col space-y-4">
+            {posts?.map((post, index) => (
+              <PostItem
+                key={index}
+                {...post}
+                // socket={socket}
+                setUsersDialog={setUsersDialog}
+                setUsersList={setUsersList}
               />
-            </div>
+            ))}
           </div>
-        )}
+        </InfiniteScroll>
 
         <UsersDialog
           title="Likes"

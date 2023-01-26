@@ -76,12 +76,12 @@ export default function ViewChat ({socket}) {
                         </div>
                         <div className="listChat-body">
                             <ListChat
+                                socket = {socket}
                                 open = {open}
                                 chatNow = {updatePresentRoom}
                             />
                         </div>
                     </div>
-                    {/*className="flex justify-center items-center chat"*/}
                     <div className="chat">
                         <ChatBody
                             socket = {socket}

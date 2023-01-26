@@ -9,6 +9,9 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import * as React from "react";
 import { useSelector } from "react-redux";
+import StyledBadgeOnline from "./ activeStatus/statusOnline";
+import StyledBadgeOffline from "./ activeStatus/statusOffline";
+import moment from "moment";
 const ariaLabel = { "aria-label": "description" };
 
 export default function ChatBody(props) {
@@ -39,7 +42,6 @@ export default function ChatBody(props) {
       axios.get(`/api/v1/chat/${chatId}`).then((res) => {
         setPresentRoom(res.data.dataChat);
         console.log(presentRoom);
-
         let listMessage = res.data.dataMessage;
         setListMessages(listMessage);
         socket.emit("join-room", chatId);
@@ -112,15 +114,31 @@ export default function ChatBody(props) {
         <>
           <div className="chat-header">
             <div>
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar alt="avatar" src={presentRoom.avatar[0]} />
-                </ListItemAvatar>
-                <ListItemText
-                  primary={presentRoom.roomName}
-                  secondary="Jan 9, 2014"
-                />
-              </ListItem>
+              {presentRoom.online === "true"? (
+                  <ListItem>
+                    <ListItemAvatar>
+                      <StyledBadgeOnline
+                          overlap="circular"
+                          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                          variant="dot">
+                        <Avatar alt="avatar" src={presentRoom.avatar[0]}/>
+                      </StyledBadgeOnline>
+                    </ListItemAvatar>
+                    <ListItemText primary= {presentRoom.roomName}/>
+                  </ListItem>
+              ): (
+                  <ListItem>
+                    <ListItemAvatar>
+                      <StyledBadgeOffline
+                          overlap="circular"
+                          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                          variant="dot">
+                        <Avatar alt="avatar" src={presentRoom.avatar[0]}/>
+                      </StyledBadgeOffline>
+                    </ListItemAvatar>
+                    <ListItemText primary= {presentRoom.roomName} secondary={moment(presentRoom.last_activity).fromNow()}/>
+                  </ListItem>
+              )}
             </div>
           </div>
           <div className=" w-full flex-1 flex flex-col gap-1.5 overflow-y-auto overflow-x-hidden p-4">
