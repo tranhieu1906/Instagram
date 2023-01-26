@@ -161,6 +161,11 @@ export default function ChatBody(props) {
               placeholder="message"
               onChange={(e) => setMessage(e.target.value)}
               className="flex-1 outline-none text-sm"
+              onKeyDown={(e) => {
+                if (e.keyCode === 13) {
+                  sendMessage();
+                }
+              }}
             />
             <button
               onClick={sendMessage}
