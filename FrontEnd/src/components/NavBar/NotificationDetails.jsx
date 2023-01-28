@@ -19,11 +19,11 @@ function NotificationDetails({ setNotification, socket }) {
   };
   return (
     <ClickAwayListener onClickAway={() => setNotification(false)}>
-      <div className="absolute w-80 bg-white rounded drop-shadow top-14 right-0 md:right-72 md:top-14 border">
+      <div className="absolute w-80 bg-white rounded  drop-shadow top-14 right-0 md:right-72 md:top-14 border">
         <div className="absolute right-14 -top-2 rotate-45 h-4 w-4 bg-white rounded-sm border-l border-t"></div>
 
         <div className="flex flex-col w-full overflow-hidden">
-          <div className="flex flex-col w-full overflow-hidden" style={{"min-height":"300px"}}>
+          <div className="flex flex-col w-full overflow-hidden">
             {notifications?.map((n) => displayNotification(n))}
           </div>
         </div>

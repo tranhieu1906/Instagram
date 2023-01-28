@@ -8,12 +8,13 @@ const UserListItem = ({
   profile_picture,
   username,
   name,
-  follower,
+  follower: followers,
 }) => {
+  console.log(followers);
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.user);
-  const [follow, setFollow] = useState(follower?.some((id) => id === user.id));
+  const [follow, setFollow] = useState(followers?.some((id) => id === user.id));
 
   const handleFollow = () => {
     setFollow(!follow);
@@ -41,7 +42,7 @@ const UserListItem = ({
           <span className="text-gray-400 text-sm">{name}</span>
         </div>
       </div>
-      {id !== user.id &&
+      {/* {id !== user.id &&
         (follow ? (
           <button
             onClick={handleFollow}
@@ -56,7 +57,7 @@ const UserListItem = ({
           >
             Follow
           </button>
-        ))}
+        ))} */}
     </div>
   );
 };

@@ -43,9 +43,7 @@ export const loginUser = (values) => async (dispatch) => {
     };
     const { data } = await axios.post("/api/v1/login", values, config);
     const token = data.accessToken;
-    const refreshToken = data.refreshToken;
     localStorage.setItem("token", token);
-    localStorage.setItem("refreshToken", refreshToken);
 
     axios.defaults.headers.common["Authorization"] = "Bearer " + token;
 
