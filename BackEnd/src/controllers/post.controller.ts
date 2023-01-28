@@ -40,7 +40,7 @@ class PostController {
         },
       });
       if (!post) {
-        return next(createError(401, "Post Not Found"));
+        return next(createError(404, "Post Not Found"));
       }
       if (post.postedBy.id !== req.user.data.id) {
         return next(createError(401, "User Not Authenticated"));
@@ -65,7 +65,7 @@ class PostController {
         },
       });
       if (!post) {
-        return next(createError(401, "Post Not Found"));
+        return next(createError(404, "Post Not Found"));
       }
       if (post.postedBy.id !== req.user.data.id) {
         return next(createError(401, "User Not Authenticated"));
@@ -91,7 +91,7 @@ class PostController {
         },
       });
       if (!post) {
-        return next(createError(401, "Post Not Found"));
+        return next(createError(404, "Post Not Found"));
       }
       const like = await LikeRepo.findOne({
         relations: {
@@ -130,7 +130,7 @@ class PostController {
         where: { id: req.params.id },
       });
       if (!post) {
-        return next(createError(401, "Post Not Found"));
+        return next(createError(404, "Post Not Found"));
       }
       const comment = await CommentRepo.save({
         user: req.user.data.id,
@@ -179,7 +179,7 @@ class PostController {
         },
       });
       if (!comment) {
-        return next(createError(401, "comment Not Found"));
+        return next(createError(404, "comment Not Found"));
       }
       if (comment.user.id !== req.user.data.id) {
         return next(createError(401, "User Not Authenticated"));

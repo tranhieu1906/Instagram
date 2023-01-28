@@ -50,7 +50,10 @@ class Token {
     const token = bearerToken[1];
     JWT.verify(token, process.env.SECRET_KEY, (err, payload) => {
       if (err) {
-        return next(createError.Unauthorized());
+        if (err.name === "JsonWebTokenError") {
+          return next(createError.Unauthorized());
+        }
+        return next(createError.Unauthorized(err.message));
       }
       req.user = payload;
       next();

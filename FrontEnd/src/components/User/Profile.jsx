@@ -176,7 +176,7 @@ const Profile = () => {
               </div>
             </div>
           </div>
-
+          {console.log(user)}
           {followersModal ? (
             <UsersDialog
               title="Người theo dõi"
@@ -192,7 +192,6 @@ const Profile = () => {
               usersList={user?.following}
             />
           )}
-
           <div className="border-t sm:ml-8 sm:mr-14">
             {/* tabs */}
             <div className="flex gap-12 justify-center">
