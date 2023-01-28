@@ -21,9 +21,9 @@ class UserController {
       });
       if (user) {
         if (user.username === username) {
-          return next(createError(401, "User doesn't exist"));
+          return next(createError(404, "User doesn't exist"));
         }
-        return next(createError(401, "Email already exists"));
+        return next(createError(404, "Email already exists"));
       }
       let hashPassword = await bcrypt.hash(password, 10);
       const newUser = await UserRepo.save({
@@ -50,17 +50,19 @@ class UserController {
         where: [{ email: account }, { username: account }],
       });
       if (!user) {
-        return next(createError(401, "User doesn't exist"));
+        return next(createError(404, "User doesn't exist"));
       }
       const isPasswordMatched = await bcrypt.compare(password, user.password);
       if (!isPasswordMatched) {
-        return next(createError(401, "Password mismatch"));
+        return next(createError(404, "Password mismatch"));
       }
       const accessToken = await Token.signAccessToken(user);
+      const refreshToken = await Token.signAccessToken(user.id);
       res.status(200).json({
         message: "login successfully",
         user,
         accessToken,
+        refreshToken,
       });
     } catch (error) {
       next(error);
@@ -82,6 +84,13 @@ class UserController {
       next(error);
     }
   }
+  async refreshtoken(req, res, next) {
+    try {
+      
+    } catch (error) {
+      next(error);
+    }
+  }
   // Update Password
   async UpdatePassword(req, res, next) {
     try {
@@ -94,7 +103,7 @@ class UserController {
         user.password
       );
       if (!isPasswordMatched) {
-        return next(createError(401, "Invalid Old Password"));
+        return next(createError(404, "Invalid Old Password"));
       }
       user.password = await bcrypt.hash(newPassword, 10);
       await UserRepo.save(user);
@@ -113,7 +122,7 @@ class UserController {
         where: { id: req.params.id },
       });
       if (!userToFollow) {
-        return next(createError(401, "User Not Found"));
+        return next(createError(404, "User Not Found"));
       }
       const follow = await FollowRepo.findOne({
         relations: {
@@ -313,6 +322,8 @@ class UserController {
       const user = await UserRepo.createQueryBuilder("user")
         .leftJoinAndSelect("user.followers", "follower")
         .leftJoinAndSelect("follower.following", "followerUser")
+
+        .leftJoinAndSelect("followerUser.following", "userFollowing")
         .leftJoinAndSelect("user.following", "following")
         .leftJoinAndSelect("following.follower", "followingUser")
         .leftJoinAndSelect("user.posts", "post")
@@ -323,6 +334,25 @@ class UserController {
         .leftJoinAndSelect("post.postedBy", "postUser")
         .where("user.username = :username", { username })
         .getOne();
+      res.status(200).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getFollowerDetail(req, res, next) {
+    try {
+      const username = req.params.username;
+      const user = await UserRepo.createQueryBuilder("user")
+        .leftJoinAndSelect("user.followers", "followers")
+        .leftJoinAndSelect("followers.follower", "followerUser")
+        .leftJoinAndSelect("followerUser.following", "userFollowing")
+        .leftJoinAndSelect("userFollowing.follower", "followingUser")
+        .where("user.username = :username", { username })
+        .getOne();
+      console.log(user);
       res.status(200).json({
         success: true,
         user,

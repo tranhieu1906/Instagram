@@ -8,13 +8,13 @@ import {
   LIKE_UNLIKE_POST_RESET,
   NEW_COMMENT_RESET,
 } from "../../../constants/postConstants";
+import { USER_DETAILS_SUCCESS } from "../../../constants/userConstants";
 import PostItem from "./PostItem";
 import axios from "../../../api/axios";
 
 const PostContainer = ({ posts, id }) => {
   const dispatch = useDispatch();
   const params = useParams();
-  const [allPost, setAllPost] = useState(posts);
   const {
     error: likeError,
     message,
@@ -28,7 +28,10 @@ const PostContainer = ({ posts, id }) => {
   );
   const fechData = async (username) => {
     const { data } = await axios.get(`/api/v1/user/${username}`);
-    setAllPost(data.user.posts);
+    dispatch({
+      type: USER_DETAILS_SUCCESS,
+      payload: data.user,
+    });
   };
   useEffect(() => {
     if (likeError) {
@@ -70,7 +73,7 @@ const PostContainer = ({ posts, id }) => {
 
   return (
     <div className="grid grid-cols-3 gap-1 sm:gap-8 my-1 mb-8" id={id}>
-      {allPost
+      {posts
         ?.map((post, index) => <PostItem {...post} key={index} />)
         .reverse()}
     </div>
