@@ -9,13 +9,14 @@ const Home = ({socket}) => {
 
     useEffect(() => {
         socket.emit('setup', user)
+        socket?.emit("newUser", user);
     },[user]);
 
   return (
     <>
       <MetaData title="Instagram" />
       <div className="flex h-full md:w-4/5 lg:w-4/6 mt-14 mx-auto">
-        <PostsContainer />
+        <PostsContainer socket={socket} />
         <SideBar />
       </div>
     </>

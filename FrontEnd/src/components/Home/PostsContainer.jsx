@@ -22,7 +22,7 @@ import {
 } from "./SvgIcons";
 
 
-const PostsContainer = () => {
+const PostsContainer = ({socket}) => {
   const dispatch = useDispatch();
 
   const [usersList, setUsersList] = useState([]);
@@ -98,7 +98,7 @@ const PostsContainer = () => {
               <PostItem
                 key={index}
                 {...post}
-                // socket={socket}
+                socket={socket}
                 setUsersDialog={setUsersDialog}
                 setUsersList={setUsersList}
               />

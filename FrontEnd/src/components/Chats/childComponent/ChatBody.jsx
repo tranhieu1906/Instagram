@@ -50,7 +50,7 @@ export default function ChatBody(props) {
   }, [chatId]);
 
     useEffect(() => {
-        socket.on("take-message",(dataMessage) => {
+        socket?.on("take-message",(dataMessage) => {
             if (dataMessage.room.id === chatId) {
                 setListMessages([...listMessages,dataMessage])
             } else {
@@ -158,7 +158,7 @@ export default function ChatBody(props) {
                   </span>
                     </div>
                 ): (
-                    <div className="flex gap-2 max-w-xs pb-2.5 justify-end">
+                    <div className="flex gap-2 pb-2.5 justify-end">
                    <span className="px-4 py-3 text-sm bg-gray-200 rounded-3xl max-w-xs overflow-hidden">
                      {message.content}
                    </span>
