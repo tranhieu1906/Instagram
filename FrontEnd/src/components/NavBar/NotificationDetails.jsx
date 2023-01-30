@@ -36,7 +36,10 @@ function NotificationDetails({ setNotification, socket }) {
         <div className="absolute right-14 -top-2 rotate-45 h-4 w-4 bg-white rounded-sm border-l border-t"></div>
 
         <div className="flex flex-col w-full overflow-hidden">
-          <div className="flex flex-col w-full h-full overflow-hidden" style={{"minHeight":"300px","maxHeight":"350px"}}>
+          <div
+            className="flex flex-col w-full overflow-hidden h-80"
+            style={{ minHeight: "300px", maxHeight: "350px" }}
+          >
             {notification.length > 0 ? (
               notification?.map((n) => displayNotification(n))
             ) : (
