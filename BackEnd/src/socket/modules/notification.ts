@@ -12,6 +12,7 @@ module.exports = (io, socket) => {
             type,
         });
     }
+
     const sendText = ({senderName, receiverName, text}) => {
         const receiver = getUser(receiverName);
         io.to(receiver.socketId).emit("getText", {
