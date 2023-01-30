@@ -39,6 +39,9 @@ export class User {
 
   @Column({ type: "varchar", nullable: true })
   resetPasswordToken: string;
+  
+  @Column({ type: "varchar", nullable: true })
+  socketId: string;
 
   @Column({ type: "timestamp", nullable: true })
   resetPasswordExpiry: Date;

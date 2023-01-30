@@ -7,7 +7,7 @@ module.exports = (io, socket) => {
     socket.user = userData;
     UserRepository.createQueryBuilder()
       .update(User)
-      .set({ online: true, last_activity: null })
+      .set({ online: true, last_activity: null, socketId: socket.id })
       .where("id = :id", { id: userData.id })
       .execute()
       .then(() => {

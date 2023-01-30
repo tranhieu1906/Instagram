@@ -6,9 +6,12 @@ class notificationController {
   async getNotification(req, res, next) {
     try {
       const notification = await NotificationRepo.find({
-        where: { userGet: req.user.data.id },
+        where: {
+          userGet: {
+            id: req.user.data.id,
+          },
+        },
       });
-      console.log(notification);
       res.status(201).json({
         success: true,
         notification,
@@ -17,7 +20,17 @@ class notificationController {
       next(error);
     }
   }
-  async saveNotification(req, res, next) {
+  async sendNotification(req, res, next) {
+    const notificationData = {
+      userSend: req.user.data.id,
+      userGet: req.body.userGet,
+      message: req.body.message,
+    };
+    const notification = await NotificationRepo.save(notificationData);
+    res.status(201).json({
+      success: true,
+      notification,
+    });
     try {
     } catch (error) {
       next(error);

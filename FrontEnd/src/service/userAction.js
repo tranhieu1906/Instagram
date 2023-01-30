@@ -31,6 +31,8 @@ import {
   RESET_PASSWORD_REQUEST,
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_FAIL,
+  GET_NOTIFICATION_REQUEST,
+  GET_NOTIFICATION_SUCCESS,
 } from "../constants/userConstants";
 
 export const loginUser = (values) => async (dispatch) => {
@@ -237,11 +239,17 @@ export const resetPassword = (token, password) => async (dispatch) => {
   }
 };
 
-export const addNotification = (notification) => {
-  return {
-    type: "ADD_NOTIFICATION",
-    payload: notification,
-  };
+export const notificationUser = (dataSocket) => async (dispatch) => {
+  dispatch({ type: GET_NOTIFICATION_REQUEST });
+  let { data } = await axios.get("/api/v1/notification");
+  if (dataSocket) {
+    console.log(dataSocket)
+  } else {
+    dispatch({
+      type: GET_NOTIFICATION_SUCCESS,
+      payload: data.notification,
+    });
+  }
 };
 
 export const clearErrors = () => async (dispatch) => {
