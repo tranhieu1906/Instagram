@@ -12,6 +12,8 @@ import ViewChat from "./components/Chats/ViewChat";
 import NotFound from "./components/Errors/NotFound";
 import Header from "./components/NavBar/Header";
 import ForgotPassword from "./components/User/ForgotPassword";
+import UpdatePassword from "./components/User/Update/UpdatePassword";
+
 import Profile from "./components/User/Profile";
 
 const SignUp = lazy(() => import("./components/User/SignUp"));
@@ -50,7 +52,7 @@ function App() {
     <>
       <ToastContainer
         position="bottom-left"
-        autoClose={3000}
+        autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -92,6 +94,16 @@ function App() {
               <PrivateRoute>
                 <Update>
                   <UpdateProfile />
+                </Update>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/accounts/password/change"
+            element={
+              <PrivateRoute>
+                <Update activeTab={1}>
+                  <UpdatePassword />
                 </Update>
               </PrivateRoute>
             }

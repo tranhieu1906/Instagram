@@ -226,7 +226,6 @@ class PostController {
         .skip(skipPosts)
         .take(4)
         .getMany();
-
       if (!posts) return next(createError(404, "Post Not Found"));
 
       const totalPost = await PostRepo.find({

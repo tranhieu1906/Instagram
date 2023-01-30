@@ -41,7 +41,6 @@ export default function ChatBody(props) {
     if (chatId !== null) {
       axios.get(`/api/v1/chat/${chatId}`).then((res) => {
         setPresentRoom(res.data.dataChat);
-        console.log(presentRoom);
         let listMessage = res.data.dataMessage;
         setListMessages(listMessage);
         socket.emit("join-room", chatId);
