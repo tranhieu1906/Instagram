@@ -1,10 +1,16 @@
-import { Notification } from './Notification';
-import { Entity, Column,ManyToMany, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Notification } from "./Notification";
+import {
+  Entity,
+  Column,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+  OneToMany,
+} from "typeorm";
 import { Post } from "./Post";
 import { Comment } from "./Comment";
 import { Like } from "./Like";
 import { Follow } from "./Follow";
-import { Rooms} from "./Room";
+import { Rooms } from "./Room";
 import { Messages } from "./Messages";
 
 @Entity()
@@ -33,6 +39,9 @@ export class User {
 
   @Column({ type: "varchar", nullable: true })
   resetPasswordToken: string;
+  
+  @Column({ type: "varchar", nullable: true })
+  socketId: string;
 
   @Column({ type: "timestamp", nullable: true })
   resetPasswordExpiry: Date;
@@ -41,9 +50,9 @@ export class User {
   created_at: Date;
 
   @Column({ type: "enum", enum: [true, false], default: false })
-  online : boolean;
+  online: boolean;
 
-  @Column({ type: "timestamp", nullable: true})
+  @Column({ type: "timestamp", nullable: true })
   last_activity: Date;
 
   @OneToMany(() => Post, (post) => post.postedBy)

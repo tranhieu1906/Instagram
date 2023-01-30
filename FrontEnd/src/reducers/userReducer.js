@@ -37,7 +37,9 @@ import {
   RESET_PASSWORD_SUCCESS,
   FORGOT_PASSWORD_FAIL,
   RESET_PASSWORD_FAIL,
-  ADD_NOTIFICATION,
+  GET_NOTIFICATION_REQUEST,
+  GET_NOTIFICATION_SUCCESS,
+  GET_NOTIFICATION_FAIL,
 } from "../constants/userConstants";
 
 export const userReducer = (state = { user: {} }, { type, payload }) => {
@@ -275,14 +277,18 @@ export const forgotPasswordReducer = (state = {}, { type, payload }) => {
       return state;
   }
 };
-export const notificationReducer = (state = [], action) => {
-  switch (action.type) {
-    case ADD_NOTIFICATION:
+export const notificationReducer = (state = { notification : []}, { type, payload }) => {
+  switch (type) {
+    case GET_NOTIFICATION_REQUEST:
       return {
         ...state,
-        notifications: [...state.notifications, action.payload],
+        loading: true,
       };
-
+    case GET_NOTIFICATION_SUCCESS:
+      return {
+        notification: payload,
+        loading: true,
+      };
     default:
       return state;
   }

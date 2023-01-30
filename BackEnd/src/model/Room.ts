@@ -18,9 +18,9 @@ export class Rooms {
   status: string;
 
   @Column({ type: "enum", enum: [true, false], nullable: true })
-  online : boolean;
+  online: boolean;
 
-  @Column({ type: "timestamp", nullable: true})
+  @Column({ type: "timestamp", nullable: true })
   last_activity: Date;
 
   @Column({ type: "varchar" })

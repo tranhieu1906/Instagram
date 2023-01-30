@@ -17,6 +17,7 @@ import {
   moreIcons,
   shareIcon,
 } from "./SvgIcons";
+
 moment.locale("vi");
 
 const PostItem = ({
@@ -29,7 +30,7 @@ const PostItem = ({
   created_at,
   setUsersDialog,
   setUsersList,
-  // socket,
+  socket,
 }) => {
   const dispatch = useDispatch();
   const commentInput = useRef(null);
@@ -52,11 +53,17 @@ const PostItem = ({
     setLiked(!liked);
     await dispatch(likePost(id));
     const { data } = await axios.get(`/api/v1/post/detail/${id}`);
-    // socket.emit("sendNotification", {
-    //   senderName: user,
-    //   receiverName: postedBy.username,
-    //   type: "like",
-    // });
+    if (!liked) {
+      socket.emit("sendNotification", {
+        senderName: user,
+        receiverName: postedBy.username,
+        type: "like",
+      });
+      await axios.post(`/api/v1/notification`, {
+        userGet: postedBy.id,
+        message: `${user.username} like your post.`,
+      });
+    }
     setAllLikes(data.post.likes);
   };
   const handleComment = async (e) => {
@@ -64,11 +71,15 @@ const PostItem = ({
     await dispatch(addComment(id, comment));
     setComment("");
     const { data } = await axios.get(`/api/v1/post/detail/${id}`);
-    // socket.emit("sendNotification", {
-    //   senderName: user,
-    //   receiverName: postedBy.username,
-    //   type: "comment",
-    // });
+    socket.emit("sendNotification", {
+      senderName: user,
+      receiverName: postedBy.username,
+      type: "comment",
+    });
+    await axios.post(`/api/v1/notification`, {
+      userGet: postedBy.id,
+      message: `${user.username} comment your post.`,
+    });
     setAllComments(data.post.comments);
   };
 

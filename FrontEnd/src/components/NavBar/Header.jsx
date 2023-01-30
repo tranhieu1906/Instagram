@@ -1,14 +1,12 @@
+import Badge from "@mui/material/Badge";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
-import { io } from "socket.io-client";
 import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
 import NewPost from "./NewPost";
 import NotificationDetails from "./NotificationDetails";
 import ProfileDetails from "./ProfileDetails";
 import SearchBox from "./SearchBar/SearchBox";
-import Badge from "@mui/material/Badge";
-
 import {
   exploreOutline,
   homeFill,
@@ -20,10 +18,9 @@ import {
   postUploadOutline,
 } from "./SvgIcons";
 
-const Header = ({socket}) => {
+const Header = ({ socket }) => {
   const { user } = useSelector((state) => state.user);
-  const notifications = useSelector((state) => state.notifications);
-
+  const { notification } = useSelector((state) => state.notification);
   const [profileToggle, setProfileToggle] = useState(false);
   const [newPost, setNewPost] = useState(false);
 
@@ -31,10 +28,12 @@ const Header = ({socket}) => {
   const [onHome, setOnHome] = useState(false);
   const [onChat, setOnChat] = useState(false);
   const [Notification, setNotification] = useState(false);
+
   useEffect(() => {
     setOnHome(location.pathname === "/");
     setOnChat(location.pathname.split("/").includes("direct"));
   }, [location]);
+
 
   return (
     <nav className="fixed top-0 w-full border-b bg-white z-10">
@@ -71,7 +70,7 @@ const Header = ({socket}) => {
             {Notification ? (
               likeFillBlack
             ) : (
-              <Badge badgeContent={notifications?.length} color="success">
+              <Badge badgeContent={notification?.length} color="primary">
                 {likeOutline}
               </Badge>
             )}
