@@ -7,13 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { NEW_POST_RESET } from "../../constants/postConstants";
+import { NEW_POST_RESET, RESET_FOLLOWING_SUCCESS } from "../../constants/postConstants";
 import {
   addNewPost,
   clearErrors,
   getPostsOfFollowing,
 } from "../../service/postAction";
-import { RESET_FOLLOWING_SUCCESS } from "../../constants/postConstants";
 import { emojiIcon } from "../Home/SvgIcons";
 
 const NewPost = ({ newPost, setNewPost }) => {

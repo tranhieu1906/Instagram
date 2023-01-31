@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { clearErrors } from "../../../service/postAction";
+import axios from "../../../api/axios";
 import {
   DELETE_POST_RESET,
   LIKE_UNLIKE_POST_RESET,
   NEW_COMMENT_RESET,
 } from "../../../constants/postConstants";
 import { USER_DETAILS_SUCCESS } from "../../../constants/userConstants";
+import { clearErrors } from "../../../service/postAction";
 import PostItem from "./PostItem";
-import axios from "../../../api/axios";
 
 const PostContainer = ({ posts, id }) => {
   const dispatch = useDispatch();

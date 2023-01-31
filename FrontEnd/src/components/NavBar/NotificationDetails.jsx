@@ -1,14 +1,14 @@
-import {ClickAwayListener, Divider, ListItem, Typography} from "@mui/material";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { notificationUser } from "../../service/userAction";
+import { ClickAwayListener, Divider, Typography } from "@mui/material";
+import Avatar from "@mui/material/Avatar";
 import List from "@mui/material/List";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
-import ListItemText from "@mui/material/ListItemText";
-import ScrollToBottom from "react-scroll-to-bottom";
 import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import ScrollToBottom from "react-scroll-to-bottom";
 import axios from "../../api/axios";
+import { notificationUser } from "../../service/userAction";
 function NotificationDetails({ setNotification, socket }) {
   const { notification } = useSelector((state) => state.notification);
   const dispatch = useDispatch();

@@ -2,12 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { UPDATE_PROFILE_RESET } from "../../../constants/userConstants";
 import {
   clearErrors,
   loadUser,
   updateProfile,
 } from "../../../service/userAction";
-import { UPDATE_PROFILE_RESET } from "../../../constants/userConstants";
 import MetaData from "../../Layouts/MetaData";
 
 const UpdateProfile = () => {

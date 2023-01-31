@@ -1,8 +1,8 @@
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import MetaData from "../Layouts/MetaData";
 import PostsContainer from "./PostsContainer";
 import SideBar from "./SideBar/SideBar";
-import { useEffect} from "react";
-import {useSelector} from "react-redux";
 
 const Home = ({socket}) => {
     const { user } = useSelector((state) => state.user);

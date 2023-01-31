@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import TextField from "@mui/material/TextField";
-import Auth from "./Auth";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { clearErrors, resetPassword } from "../../service/userAction";
-import { useDispatch, useSelector } from "react-redux";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
+import Auth from "./Auth";
 
 const ResetPassword = () => {
   const dispatch = useDispatch();
