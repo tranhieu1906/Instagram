@@ -1,47 +1,47 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { followUser } from "../../service/userAction";
+import React, {useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {Link} from "react-router-dom";
+import {followUser} from "../../service/userAction";
 
 const UserListItem = ({
-  id,
-  profile_picture,
-  username,
-  name,
-  follower: followers,
-}) => {
-  const dispatch = useDispatch();
+                          id,
+                          profile_picture,
+                          username,
+                          name,
+                          follower: followers,
+                      }) => {
+    const dispatch = useDispatch();
 
-  const { user } = useSelector((state) => state.user);
-  const [follow, setFollow] = useState(followers?.some((id) => id === user.id));
+    const {user} = useSelector((state) => state.user);
+    const [follow, setFollow] = useState(followers?.some((id) => id === user.id));
 
-  const handleFollow = () => {
-    setFollow(!follow);
-    dispatch(followUser(id));
-  };
-  return (
-    <div className="flex justify-between items-center mb-3">
-      <div className="flex space-x-3 items-center">
-        <Link to={`/${username}`}>
-          <img
-            draggable="false"
-            loading="lazy"
-            className="w-10 h-10 rounded-full object-cover"
-            src={profile_picture}
-            alt=""
-          />
-        </Link>
-        <div className="flex flex-col">
-          <Link
-            to={`/${username}`}
-            className="text-black text-sm font-semibold hover:underline"
-          >
-            {username}
-          </Link>
-          <span className="text-gray-400 text-sm">{name}</span>
-        </div>
-      </div>
-      {/* {id !== user.id &&
+    const handleFollow = () => {
+        setFollow(!follow);
+        dispatch(followUser(id));
+    };
+    return (
+        <div className="flex justify-between items-center mb-3">
+            <div className="flex space-x-3 items-center">
+                <Link to={`/${username}`}>
+                    <img
+                        draggable="false"
+                        loading="lazy"
+                        className="w-10 h-10 rounded-full object-cover"
+                        src={profile_picture}
+                        alt=""
+                    />
+                </Link>
+                <div className="flex flex-col">
+                    <Link
+                        to={`/${username}`}
+                        className="text-black text-sm font-semibold hover:underline"
+                    >
+                        {username}
+                    </Link>
+                    <span className="text-gray-400 text-sm">{name}</span>
+                </div>
+            </div>
+            {/* {id !== user.id &&
         (follow ? (
           <button
             onClick={handleFollow}
@@ -57,8 +57,8 @@ const UserListItem = ({
             Follow
           </button>
         ))} */}
-    </div>
-  );
+        </div>
+    );
 };
 
 export default UserListItem;

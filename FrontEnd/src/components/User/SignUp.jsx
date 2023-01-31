@@ -9,24 +9,24 @@ import InputAdornment from "@mui/material/InputAdornment";
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import TextField from "@mui/material/TextField";
-import { useFormik } from "formik";
-import React, { useEffect, useState } from "react";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import {useFormik} from "formik";
+import React, {useEffect, useState} from "react";
+import {LazyLoadImage} from "react-lazy-load-image-component";
 import PasswordStrengthBar from "react-password-strength-bar";
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import {useDispatch, useSelector} from 'react-redux';
+import {Link, useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
 import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
-import { clearErrors, registerUser } from '../../service/userAction';
+import {clearErrors, registerUser} from '../../service/userAction';
 import Auth from "./Auth";
 
 function SignUp() {
     let navigate = useNavigate();
     const dispatch = useDispatch();
-    
-    const { loading, isAuthenticated, error } = useSelector((state) => state.user);
+
+    const {loading, isAuthenticated, error} = useSelector((state) => state.user);
     const formik = useFormik({
         initialValues: {
             email: "",

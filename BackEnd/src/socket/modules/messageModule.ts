@@ -1,5 +1,6 @@
-import { Rooms} from "../../model/Room";
-import { AppDataSource } from "../../config/data-source";
+import {Rooms} from "../../model/Room";
+import {AppDataSource} from "../../config/data-source";
+
 const RoomRepository = AppDataSource.getRepository(Rooms);
 module.exports = (io, socket) => {
 
@@ -13,7 +14,7 @@ module.exports = (io, socket) => {
             relations: {
                 users: true,
             },
-            where: {id : chatId}
+            where: {id: chatId}
         });
 
         dataChat[0].users.forEach(user => {

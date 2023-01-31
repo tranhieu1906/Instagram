@@ -1,7 +1,8 @@
 import express from "express";
 import UserController from "./../controllers/user.controller";
 import Token from "../middlewares/jwt.middleware";
-const { uploadAvatar } = require("../utils/awsFunctions");
+
+const {uploadAvatar} = require("../utils/awsFunctions");
 export const router = express.Router();
 const app = express();
 
@@ -16,9 +17,9 @@ router.use(Token.veryfyAccessToken);
 
 router.put("/update/password", UserController.UpdatePassword);
 router.put(
-  "/update/profile",
-  uploadAvatar.single("avatar"),
-  UserController.updateProfile
+    "/update/profile",
+    uploadAvatar.single("avatar"),
+    UserController.updateProfile
 );
 
 router.get("/follow/:id", UserController.followUser);
@@ -26,14 +27,13 @@ router.get("/follow/:id", UserController.followUser);
 router.get("/me", UserController.getAccountDetails);
 
 
-
 router.get("/users", UserController.searchUsers);
 router.get(
-  "/users/suggested",
-  UserController.suggestedUsers
+    "/users/suggested",
+    UserController.suggestedUsers
 );
 router.get(
-  "/userdetails/:id",
-  UserController.getUserDetailsById
+    "/userdetails/:id",
+    UserController.getUserDetailsById
 );
 router.get("/user/:username", UserController.getUserDetail);

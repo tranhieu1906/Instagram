@@ -5,7 +5,7 @@ import * as path from "path";
 export const sendEmail = async (options) => {
   try {
     const templateFile = fs
-      .readFileSync("/Users/hoa/MD5/BackEnd/src/utils/email.html", "utf-8")
+      .readFileSync("H:\\case_study\\Case5\\Instagram\\BackEnd\\src\\utils\\email.html", "utf-8")
       .toString();
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -19,7 +19,7 @@ export const sendEmail = async (options) => {
     });
 
     await transporter.sendMail({
-      from: options.email,
+      from: process.env.NODEMAILER_MAIL,
       subject: "chúng tôi giúp bạn dễ dàng đăng nhập lại trên Instagram",
       to: options.email,
       html: templateFile.replace("{{link}}", options.data.reset_url),

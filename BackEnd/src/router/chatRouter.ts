@@ -1,6 +1,6 @@
-import Chat  from '../controllers/chat.controller';
+import Chat from '../controllers/chat.controller';
 import Token from "../middlewares/jwt.middleware";
-import { Router } from 'express';
+import {Router} from 'express';
 
 export const chatRouter = Router()
 chatRouter.use(Token.veryfyAccessToken);

@@ -1,14 +1,14 @@
-import { ListItem } from "@mui/material";
+import {ListItem} from "@mui/material";
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import * as React from 'react';
-import { useState } from "react";
+import {useState} from "react";
 import "../../App.css";
 import ChatBody from "./childComponent/ChatBody";
 import AddChat from "./childComponent/FindCreateChat";
 import ListChat from "./childComponent/ListChat";
 
-export default function ViewChat ({socket}) {
+export default function ViewChat({socket}) {
     const [presentRoom, setPresentRoom] = useState(null)
     const [open, setOpen] = React.useState(false);
 
@@ -70,23 +70,23 @@ export default function ViewChat ({socket}) {
                                 <AddChat
                                     open={open}
                                     onClose={handleClose}
-                                    chatNow = {updatePresentRoom}
+                                    chatNow={updatePresentRoom}
                                 />
                             </div>
                         </div>
                         <div className="listChat-body">
                             <ListChat
-                                socket = {socket}
-                                open = {open}
-                                chatNow = {updatePresentRoom}
+                                socket={socket}
+                                open={open}
+                                chatNow={updatePresentRoom}
                             />
                         </div>
                     </div>
                     <div className="chat">
                         <ChatBody
-                            socket = {socket}
-                            onClose = {handleClickListItem}
-                            chatId = {presentRoom}
+                            socket={socket}
+                            onClose={handleClickListItem}
+                            chatId={presentRoom}
                         />
                     </div>
                 </div>

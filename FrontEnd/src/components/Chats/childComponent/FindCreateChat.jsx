@@ -15,6 +15,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Checkbox from '@mui/material/Checkbox';
 import Avatar from '@mui/material/Avatar';
+
 export default function AddChat(props) {
     const [checked, setChecked] = useState([]);
     const {onClose, open, chatNow} = props;
@@ -23,7 +24,7 @@ export default function AddChat(props) {
     const [searchTerm, setSearchTerm] = useState("");
 
     const fetchUsers = async (term) => {
-        const { data } = await axios.get(`/api/v1/users?keyword=${term}`);
+        const {data} = await axios.get(`/api/v1/users?keyword=${term}`);
         setListUser(data.users);
     };
 
@@ -74,7 +75,7 @@ export default function AddChat(props) {
             setChecked([]);
             setListUser([])
         }
-    }, [ open]);
+    }, [open]);
 
     return (
         <Dialog
@@ -110,18 +111,19 @@ export default function AddChat(props) {
                     </svg>
                 </button>
                 <div className="add-chat-title"><p>tin nhắn mới</p></div>
-                <button onClick={handleOk} style={{float: "right", color: "#27c4f5"} }>tiếp</button>
+                <button onClick={handleOk} style={{float: "right", color: "#27c4f5"}}>tiếp</button>
             </DialogTitle>
             <div style={{height: 50}}>
                 <div style={{float: "left"}}>
-                    <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-                        <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} style={{margin: 5}}/>
-                        <TextField onChange={(e) => setSearchTerm(e.target.value)} id="input-with-sx" label="tìm kiếm" variant="standard" style={{width: 350}}/>
+                    <Box sx={{display: 'flex', alignItems: 'flex-end'}}>
+                        <AccountCircle sx={{color: 'action.active', mr: 1, my: 0.5}} style={{margin: 5}}/>
+                        <TextField onChange={(e) => setSearchTerm(e.target.value)} id="input-with-sx" label="tìm kiếm"
+                                   variant="standard" style={{width: 350}}/>
                     </Box></div>
             </div>
             <DialogContent dividers style={{height: 400}}>
-                <List dense sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                    {listUsers.map((user,index) => {
+                <List dense sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper'}}>
+                    {listUsers.map((user, index) => {
                         const labelId = `checkbox-list-secondary-label-${user.id}`;
                         return (
                             <ListItem
@@ -131,7 +133,7 @@ export default function AddChat(props) {
                                         edge="end"
                                         onChange={handleToggle(user.id)}
                                         checked={checked.indexOf(user.id) !== -1}
-                                        inputProps={{ 'aria-labelledby': labelId }}
+                                        inputProps={{'aria-labelledby': labelId}}
                                     />
                                 }
                                 disablePadding
@@ -143,7 +145,7 @@ export default function AddChat(props) {
                                             src={`${user.profile_picture}`}
                                         />
                                     </ListItemAvatar>
-                                    <ListItemText id={labelId} primary={` ${user.username}`} />
+                                    <ListItemText id={labelId} primary={` ${user.username}`}/>
                                 </ListItemButton>
                             </ListItem>
                         );
