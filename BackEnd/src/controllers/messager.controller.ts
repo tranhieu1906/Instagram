@@ -30,21 +30,28 @@ class MessageController {
   }
 
   async getMessage(req, res) {
-    let chatId = req.query.chatId;
-    let room = await RoomRepository.findOneBy({ id: chatId });
-    let dataMessage = await MessageRepository.find({
-      relations: {
-        author: true,
-      },
-      where: {
-        room: room,
-      },
-    });
+    try {
+      let chatId = req.query.chatId;
+      let room = await RoomRepository.findOneBy({ id: chatId });
+      let dataMessage = await MessageRepository.find({
+        relations: {
+          author: true,
+        },
+        where: {
+          room: room,
+        },
+      });
 
-    if (dataMessage) {
-      res.status(200).json({
-        success: true,
-        dataMessage: dataMessage,
+      if (dataMessage) {
+        res.status(200).json({
+          success: true,
+          dataMessage: dataMessage,
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
       });
     }
   }

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import axios from "../../../api/axios";
 
+import { RESET_FOLLOWING_SUCCESS } from "../../../constants/postConstants";
 import { addComment, deletePost, likePost } from "../../../service/postAction";
 import {
   commentIcon,
@@ -74,6 +75,7 @@ const PostItem = ({
 
   const handleDeletePost = () => {
     if (window.confirm("Bạn có chắc muốn xóa bài viết này ko ?")) {
+      dispatch({ type: RESET_FOLLOWING_SUCCESS });
       dispatch(deletePost(id));
       setDeleteModal(false);
       setOpen(false);

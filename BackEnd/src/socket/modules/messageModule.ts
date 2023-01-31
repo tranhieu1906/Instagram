@@ -4,7 +4,6 @@ const RoomRepository = AppDataSource.getRepository(Rooms);
 module.exports = (io, socket) => {
 
     const joinRoom = (data) => {
-
         socket.join(data);
     }
 
