@@ -9,7 +9,6 @@ function NotificationDetails({ setNotification, socket }) {
 
   useEffect(() => {
     socket.on("getNotification", (data) => {
-      console.log(data);
       dispatch(notificationUser(data));
     });
   }, [dispatch, socket]);

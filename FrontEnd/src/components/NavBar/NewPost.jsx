@@ -1,15 +1,19 @@
-import { Dialog, LinearProgress } from "@mui/material";
-import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
+import CloseIcon from "@mui/icons-material/Close";
+import { Dialog, LinearProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { addNewPost, clearErrors } from "../../service/postAction";
-import { NEW_POST_RESET } from "../../constants/postConstants";
-import { emojiIcon } from "../Home/SvgIcons";
-import CloseIcon from "@mui/icons-material/Close";
 import "react-toastify/dist/ReactToastify.css";
+import { NEW_POST_RESET } from "../../constants/postConstants";
+import {
+  addNewPost,
+  clearErrors,
+  getPostsOfFollowing,
+} from "../../service/postAction";
+import { emojiIcon } from "../Home/SvgIcons";
 
 const NewPost = ({ newPost, setNewPost }) => {
   const dispatch = useDispatch();
@@ -56,7 +60,7 @@ const NewPost = ({ newPost, setNewPost }) => {
     formData.set("content", content);
     formData.set("post", post);
     formData.set("user", user.id);
-    
+
     dispatch(addNewPost(formData));
   };
 
@@ -70,7 +74,7 @@ const NewPost = ({ newPost, setNewPost }) => {
       dispatch({ type: NEW_POST_RESET });
       setNewPost(false);
       navigate("/");
-
+      dispatch(getPostsOfFollowing());
       setPostImage("");
       setPostPreview("");
       setCaption("");

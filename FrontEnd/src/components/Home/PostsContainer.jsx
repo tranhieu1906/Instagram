@@ -13,13 +13,6 @@ import StoriesContainer from "./StoriesContainer";
 import InfiniteScroll from "react-infinite-scroll-component";
 import SkeletonPost from "../Layouts/SkeletonPost";
 import SpinLoader from "../Layouts/SpinLoader";
-import {
-  commentIcon,
-  emojiIcon,
-  likeIconOutline,
-  moreIcons,
-  shareIcon,
-} from "./SvgIcons";
 
 
 const PostsContainer = ({socket}) => {
@@ -40,7 +33,6 @@ const PostsContainer = ({socket}) => {
   const { error: commentError, success: commentSuccess } = useSelector(
     (state) => state.newComment
   );
-  const { user } = useSelector((state) => state.user);
 
   const handleClose = () => setUsersDialog(false);
 
@@ -92,6 +84,7 @@ const PostsContainer = ({socket}) => {
         >
           <div className="w-full h-full mt-1 sm:mt-6 flex flex-col space-y-4">
             {posts?.map((post, index) => (
+              
               <PostItem
                 key={index}
                 {...post}
