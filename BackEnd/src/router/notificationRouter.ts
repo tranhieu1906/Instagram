@@ -7,3 +7,5 @@ notificationRouter.post(
   "/notification",
   notificationController.sendNotification
 );
+notificationRouter.get("/notification/setup/:id", notificationController.setupNotifications)
+notificationRouter.get("/notification/new", notificationController.getNewNotification)

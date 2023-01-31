@@ -21,6 +21,7 @@ export default function ChatBody(props) {
   let [message, setMessage] = useState("");
   const { user } = useSelector((state) => state.user);
 
+
   const sendMessage = async () => {
     if (message !== "") {
       setMessage("");

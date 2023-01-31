@@ -12,12 +12,14 @@ const getUser = (username) => {
 module.exports = (io, socket) => {
   const sendNotification = ({ senderName, receiverName, type }) => {
     const receiver = getUser(receiverName);
-    io.to(receiver?.socketId).emit(
+    socket.in(receiver?.id).emit(
       "getNotification",
       `${senderName} ${type} your post.`
     );
+
   };
   const sendText = ({ senderName, receiverName, text }) => {
+    console.log(senderName)
     const receiver = getUser(receiverName);
     io.to(receiver.socketId).emit("getText", {
       senderName,
