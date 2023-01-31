@@ -13,6 +13,7 @@ import {
   clearErrors,
   getPostsOfFollowing,
 } from "../../service/postAction";
+import { RESET_FOLLOWING_SUCCESS } from "../../constants/postConstants";
 import { emojiIcon } from "../Home/SvgIcons";
 
 const NewPost = ({ newPost, setNewPost }) => {
@@ -74,6 +75,7 @@ const NewPost = ({ newPost, setNewPost }) => {
       dispatch({ type: NEW_POST_RESET });
       setNewPost(false);
       navigate("/");
+      dispatch({ type: RESET_FOLLOWING_SUCCESS });
       dispatch(getPostsOfFollowing());
       setPostImage("");
       setPostPreview("");

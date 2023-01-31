@@ -7,6 +7,7 @@ import {
   POST_FOLLOWING_REQUEST,
   POST_FOLLOWING_SUCCESS,
   POST_FOLLOWING_RESET,
+  RESET_FOLLOWING_SUCCESS,
   POST_FOLLOWING_FAIL,
   LIKE_UNLIKE_POST_REQUEST,
   LIKE_UNLIKE_POST_SUCCESS,
@@ -68,6 +69,10 @@ export const postOfFollowingReduct = (
       return {
         ...state,
         loading: true,
+      };
+    case RESET_FOLLOWING_SUCCESS:
+      return {
+        posts: [],
       };
     case POST_FOLLOWING_SUCCESS:
       return {
