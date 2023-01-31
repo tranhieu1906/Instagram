@@ -53,8 +53,6 @@ export default function ChatBody(props) {
         socket?.on("take-message",(dataMessage) => {
             if (dataMessage.room.id === chatId) {
                 setListMessages([...listMessages,dataMessage])
-            } else {
-
             }
         })
     });
@@ -146,7 +144,8 @@ export default function ChatBody(props) {
             <ScrollToBottom className="show-message">
               {listMessages.map(message =>  (
                 user.id  !== message.author.id? (
-                    <div className="flex items-end gap-2 max-w-xs pb-2.5">
+                    <div className="flex items-end gap-2 max-w-xs pb-2.5"
+                    key={message.id}>
                       <img
                           draggable="false"
                           className="w-7 h-7 rounded-full object-cover"
@@ -158,7 +157,8 @@ export default function ChatBody(props) {
                   </span>
                     </div>
                 ): (
-                    <div className="flex gap-2 pb-2.5 justify-end">
+                    <div className="flex gap-2 pb-2.5 justify-end"
+                         key={message.id}>
                    <span className="px-4 py-3 text-sm bg-gray-200 rounded-3xl max-w-xs overflow-hidden">
                      {message.content}
                    </span>

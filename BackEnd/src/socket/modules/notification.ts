@@ -16,7 +16,7 @@ module.exports = (io, socket) => {
       "getNotification",
       `${senderName} ${type} your post.`
     );
-
+    console.log(1)
   };
   const sendText = ({ senderName, receiverName, text }) => {
     console.log(senderName)
