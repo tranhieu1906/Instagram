@@ -21,6 +21,7 @@ export default function ChatBody(props) {
   let [message, setMessage] = useState("");
   const { user } = useSelector((state) => state.user);
 
+
   const sendMessage = async () => {
     if (message !== "") {
       setMessage("");
@@ -41,7 +42,6 @@ export default function ChatBody(props) {
     if (chatId !== null) {
       axios.get(`/api/v1/chat/${chatId}`).then((res) => {
         setPresentRoom(res.data.dataChat);
-        console.log(presentRoom);
         let listMessage = res.data.dataMessage;
         setListMessages(listMessage);
         socket.emit("join-room", chatId);
@@ -49,14 +49,15 @@ export default function ChatBody(props) {
     }
   }, [chatId]);
 
-  useEffect(() => {
-    socket?.on("take-message", (dataMessage) => {
-      if (dataMessage.room.id === chatId) {
-        setListMessages([...listMessages, dataMessage]);
-      } else {
-      }
+    useEffect(() => {
+        socket?.on("take-message",(dataMessage) => {
+            if (dataMessage.room.id === chatId) {
+                setListMessages([...listMessages,dataMessage])
+            } else {
+
+            }
+        })
     });
-  });
 
   const addChat = () => {
     onClose();
@@ -143,33 +144,33 @@ export default function ChatBody(props) {
           </div>
           <div className=" w-full flex-1 flex flex-col gap-1.5 overflow-y-auto overflow-x-hidden p-4">
             <ScrollToBottom className="show-message">
-              {listMessages.map((message) =>
-                user.id !== message.author.id ? (
-                  <div className="flex items-end gap-2 max-w-xs pb-2.5">
-                    <img
-                      draggable="false"
-                      className="w-7 h-7 rounded-full object-cover"
-                      src={presentRoom.avatar[0]}
-                      alt="avatar"
-                    />
-                    <span className="px-4 py-3 text-sm bg-gray-200 rounded-3xl max-w-xs overflow-hidden">
-                      {message.content}
-                    </span>
-                  </div>
-                ) : (
-                  <div className="flex gap-2 pb-2.5 justify-end items-end">
-                    <span className="px-4 py-3 text-sm bg-gray-200 rounded-3xl max-w-xs overflow-hidden break-words">
-                      {message.content}
-                    </span>
-                    <img
-                      draggable="false"
-                      className="w-7 h-7 rounded-full object-cover"
-                      src={user.profile_picture}
-                      alt="avatar"
-                    />
-                  </div>
+              {listMessages.map(message =>  (
+                user.id  !== message.author.id? (
+                    <div className="flex items-end gap-2 max-w-xs pb-2.5">
+                      <img
+                          draggable="false"
+                          className="w-7 h-7 rounded-full object-cover"
+                          src={presentRoom.avatar[0]}
+                          alt="avatar"
+                      />
+                      <span className="px-4 py-3 text-sm bg-gray-200 rounded-3xl max-w-xs overflow-hidden">
+                   {message.content}
+                  </span>
+                    </div>
+                ): (
+                    <div className="flex gap-2 pb-2.5 justify-end">
+                   <span className="px-4 py-3 text-sm bg-gray-200 rounded-3xl max-w-xs overflow-hidden">
+                     {message.content}
+                   </span>
+                      <img
+                          draggable="false"
+                          className="w-7 h-7 rounded-full object-cover"
+                          src={user.profile_picture}
+                          alt="avatar"
+                      />
+                    </div>
                 )
-              )}
+              ))}
             </ScrollToBottom>
           </div>
           <div className="flex items-center gap-3 justify-between border rounded-full py-2.5 px-4 m-5 relative bottom-9">

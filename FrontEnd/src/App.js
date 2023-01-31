@@ -5,7 +5,7 @@ import { ToastContainer } from "react-toastify";
 import io from "socket.io-client";
 import axios from "./api/axios";
 
-import { loadUser } from "./service/userAction";
+import { loadUser, notificationUser } from "./service/userAction";
 
 import PrivateRoute from "./Router/PrivateRouter";
 import ViewChat from "./components/Chats/ViewChat";
@@ -40,10 +40,12 @@ function App() {
   useEffect(() => {
     dispatch(loadUser());
   }, [dispatch]);
-
   useEffect(() => {
     setSocket(io("http://localhost:8080"));
   }, []);
+  useEffect(() => {
+    dispatch(notificationUser());
+  }, [dispatch, socket]);
   return (
     <>
       <ToastContainer

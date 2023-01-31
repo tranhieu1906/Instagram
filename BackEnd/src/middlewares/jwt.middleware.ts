@@ -12,7 +12,7 @@ class Token {
       };
       const secret = process.env.SECRET_KEY;
       const options = {
-        expiresIn: "24h",
+        expiresIn: "1y",
       };
       JWT.sign(payload, secret, options, (err, token) => {
         if (err) {
