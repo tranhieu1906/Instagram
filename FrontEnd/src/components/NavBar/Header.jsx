@@ -1,29 +1,27 @@
 import Badge from "@mui/material/Badge";
-import React, {useEffect, useState} from "react";
-import {useSelector} from "react-redux";
-import {Link, useLocation} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
+import axios from "../../api/axios";
 import logo from "../../assests/images/5a4e432a2da5ad73df7efe7a.png";
 import NewPost from "./NewPost";
 import NotificationDetails from "./NotificationDetails";
 import ProfileDetails from "./ProfileDetails";
-import axios from "../../api/axios";
 import SearchBox from "./SearchBar/SearchBox";
 import {
-    exploreOutline,
-    homeFill,
-    homeOutline,
-    likeFillBlack,
-    likeOutline,
-    messageFill,
-    messageOutline,
-    postUploadOutline,
+  exploreOutline,
+  homeFill,
+  homeOutline,
+  likeFillBlack,
+  likeOutline,
+  messageFill,
+  messageOutline,
+  postUploadOutline,
 } from "./SvgIcons";
-import {notificationUser} from "../../service/userAction";
 
 
 const Header = ({socket}) => {
     const {user} = useSelector((state) => state.user);
-    const {notification} = useSelector((state) => state.notification);
     const [profileToggle, setProfileToggle] = useState(false);
     const [newPost, setNewPost] = useState(false);
     const [newNotification, setNewNotification] = useState()

@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { UPDATE_PASSWORD_RESET } from "../../../constants/userConstants";
 import {
   clearErrors,
   loadUser,
   updatePassword,
 } from "../../../service/userAction";
-import { UPDATE_PASSWORD_RESET } from "../../../constants/userConstants";
 import MetaData from "../../Layouts/MetaData";
 
 const UpdatePassword = () => {

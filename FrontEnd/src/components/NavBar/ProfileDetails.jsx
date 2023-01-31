@@ -1,15 +1,15 @@
+import { ClickAwayListener } from "@mui/material";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { ClickAwayListener } from "@mui/material";
+import { logoutUser } from "../../service/userAction";
 import {
   profileIcon,
   savedIcon,
   settingsIcon,
   switchAccountIcon,
 } from "./SvgIcons";
-import { logoutUser } from "../../service/userAction";
-import { useDispatch, useSelector } from "react-redux";
 
 function ProfileDetails({ setProfileToggle }) {
   const dispatch = useDispatch();

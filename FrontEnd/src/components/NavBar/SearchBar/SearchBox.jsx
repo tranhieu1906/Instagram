@@ -1,6 +1,6 @@
 import { ClickAwayListener } from "@mui/material";
-import axios from "../../../api/axios";
 import { useEffect, useState } from "react";
+import axios from "../../../api/axios";
 import { searchIcon } from "../SvgIcons";
 import SearchUserItem from "./SearchUserItem";
 
