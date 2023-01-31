@@ -52,6 +52,7 @@ const Header = ({socket}) => {
     useEffect(() => {
         getNewNotification()
         socket.on("getNotification", (data) => {
+            console.log(1)
             getNewNotification()
         });
     }, [socket])

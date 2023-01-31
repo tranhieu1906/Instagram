@@ -21,7 +21,7 @@ function NotificationDetails({ setNotification, socket }) {
 
   useEffect(() => {
     dispatch(notificationUser());
-  }, [dispatch, socket]);
+  }, [dispatch]);
 
   const chooseRead = async (id) => {
     await axios.get(`api/v1/notification/setup/${id}`, ).catch((error) => {
@@ -44,7 +44,8 @@ function NotificationDetails({ setNotification, socket }) {
             {!read?(
                     <ListItemButton alignItems="flex-start"
                                     style={{backgroundColor: "coral"}}
-                                    onClick={() => chooseRead(id)}>
+                                    onClick={() => chooseRead(id)}
+                    key={id}>
                       <ListItemAvatar>
                         <Avatar alt="Remy Sharp" src={userSend.profile_picture} />
                       </ListItemAvatar>
@@ -66,7 +67,8 @@ function NotificationDetails({ setNotification, socket }) {
                     </ListItemButton>
             ):(
                 <ListItemButton alignItems="flex-start"
-                                onClick={() => chooseRead(id)}>
+                                onClick={() => chooseRead(id)}
+                                key={id}>
                   <ListItemAvatar>
                     <Avatar alt="Remy Sharp" src={userSend.profile_picture} />
                   </ListItemAvatar>
