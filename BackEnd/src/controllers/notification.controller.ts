@@ -1,5 +1,5 @@
-import { Notification } from "../model/Notification";
 import { AppDataSource } from "../config/data-source";
+import { Notification } from "../model/Notification";
 const NotificationRepo = AppDataSource.getRepository(Notification);
 
 class notificationController {
@@ -9,11 +9,11 @@ class notificationController {
         where: {
           userGet: {
             id: req.user.data.id,
-          }
+          },
         },
         relations: {
           userGet: true,
-          userSend: true
+          userSend: true,
         },
         // order: {
         //   createdAt: "DESC"
@@ -28,7 +28,7 @@ class notificationController {
     }
   }
 
-  async getNewNotification(req,res,next) {
+  async getNewNotification(req, res, next) {
     try {
       const notification = await NotificationRepo.find({
         where: {
@@ -40,25 +40,24 @@ class notificationController {
       });
       res.status(201).json({
         success: true,
-        numberNewNotifications: notification.length
+        numberNewNotifications: notification.length,
       });
-    }catch (error) {
+    } catch (error) {
       next(error);
     }
   }
 
   async setupNotifications(req, res, next) {
     try {
-
       await NotificationRepo.createQueryBuilder()
-          .update(Notification)
-          .set({ read: true })
-          .where("id = :id", { id: req.params.id })
-          .execute();
+        .update(Notification)
+        .set({ read: true })
+        .where("id = :id", { id: req.params.id })
+        .execute();
       res.status(200).json({
         success: true,
-      })
-    }catch (error) {
+      });
+    } catch (error) {
       next(error);
     }
   }
@@ -76,13 +75,11 @@ class notificationController {
           success: true,
           notification,
         });
-      }
-      else {
+      } else {
         res.status(201).json({
           success: true,
         });
       }
-
     } catch (error) {
       next(error);
     }
