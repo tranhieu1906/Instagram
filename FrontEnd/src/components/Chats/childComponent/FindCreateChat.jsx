@@ -20,15 +20,22 @@ export default function AddChat(props) {
     const {onClose, open, chatNow} = props;
     const [listUsers, setListUser] = useState([]);
     const radioGroupRef = React.useRef(null);
+    const [searchTerm, setSearchTerm] = useState("");
 
-    const searchUsers = (event) => {
-        axios.get("/api/v1/users?keyword="+ event.target.value)
-            .then((response) => {
-                setListUser(response.data.users)
-            }).catch((error) => {
-            console.log(error.message)
-        })
+    const fetchUsers = async (term) => {
+        const { data } = await axios.get(`/api/v1/users?keyword=${term}`);
+        setListUser(data.users);
     };
+
+    useEffect(() => {
+        if (searchTerm.trim().length > 0) {
+            fetchUsers(searchTerm);
+        }
+
+        return () => {
+            setListUser([]);
+        };
+    }, [searchTerm]);
 
     const handleToggle = (user) => () => {
         const currentIndex = checked.indexOf(user);
@@ -109,7 +116,7 @@ export default function AddChat(props) {
                 <div style={{float: "left"}}>
                     <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
                         <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} style={{margin: 5}}/>
-                        <TextField onChange={searchUsers} id="input-with-sx" label="tìm kiếm" variant="standard" style={{width: 350}}/>
+                        <TextField onChange={(e) => setSearchTerm(e.target.value)} id="input-with-sx" label="tìm kiếm" variant="standard" style={{width: 350}}/>
                     </Box></div>
             </div>
             <DialogContent dividers style={{height: 400}}>
