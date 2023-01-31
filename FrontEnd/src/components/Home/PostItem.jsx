@@ -78,7 +78,7 @@ const PostItem = ({
     });
     await axios.post(`/api/v1/notification`, {
       userGet: postedBy.id,
-      message: `${user.username} comment your post.`,
+      message: `${user.username} đã bình luận về một bài viết của bạn.`,
     });
     setAllComments(data.post.comments);
   };

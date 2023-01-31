@@ -9,7 +9,6 @@ const Home = ({socket}) => {
 
     useEffect(() => {
         socket.emit('setup', user)
-        socket?.emit("newUser", user);
     },[user]);
 
   return (

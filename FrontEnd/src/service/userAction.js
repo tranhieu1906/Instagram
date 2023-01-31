@@ -243,7 +243,10 @@ export const notificationUser = (dataSocket) => async (dispatch) => {
   dispatch({ type: GET_NOTIFICATION_REQUEST });
   let { data } = await axios.get("/api/v1/notification");
   if (dataSocket) {
-    console.log(dataSocket)
+    dispatch({
+      type: GET_NOTIFICATION_SUCCESS,
+      payload: data.notification,
+    });
   } else {
     dispatch({
       type: GET_NOTIFICATION_SUCCESS,

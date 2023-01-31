@@ -4,7 +4,7 @@ const RoomRepository = AppDataSource.getRepository(Rooms);
 module.exports = (io, socket) => {
 
     const joinRoom = (data) => {
-        console.log(data)
+
         socket.join(data);
     }
 
@@ -19,7 +19,6 @@ module.exports = (io, socket) => {
 
         dataChat[0].users.forEach(user => {
             if (user.id !== dataMessage.author.id) {
-                console.log(dataMessage)
                 socket.in(user.id).emit("take-message", dataMessage);
             }
         })

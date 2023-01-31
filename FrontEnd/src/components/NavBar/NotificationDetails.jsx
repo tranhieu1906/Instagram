@@ -1,24 +1,36 @@
-import { ClickAwayListener } from "@mui/material";
+import {ClickAwayListener, Divider, ListItem, Typography} from "@mui/material";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { notificationUser } from "../../service/userAction";
-
+import List from "@mui/material/List";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import Avatar from "@mui/material/Avatar";
+import ListItemText from "@mui/material/ListItemText";
+import ScrollToBottom from "react-scroll-to-bottom";
+import ListItemButton from "@mui/material/ListItemButton";
+import axios from "../../api/axios";
 function NotificationDetails({ setNotification, socket }) {
   const { notification } = useSelector((state) => state.notification);
   const dispatch = useDispatch();
 
   useEffect(() => {
     socket.on("getNotification", (data) => {
-      console.log(data);
       dispatch(notificationUser(data));
     });
-  }, [dispatch, socket]);
+  }, [socket]);
 
   useEffect(() => {
     dispatch(notificationUser());
   }, [dispatch, socket]);
 
-  const displayNotification = ({ senderName, type, message }) => {
+  const chooseRead = async (id) => {
+    await axios.get(`api/v1/notification/setup/${id}`, ).catch((error) => {
+      console.log(error);
+    })
+    dispatch(notificationUser(true));
+  }
+
+  const displayNotification = ({ senderName, type, message,userSend, id, read }) => {
     if (senderName && type) {
       return (
         <span
@@ -27,7 +39,57 @@ function NotificationDetails({ setNotification, socket }) {
         >{`${senderName.username} ${type} your post.`}</span>
       );
     } else {
-      return <span className="p-1" key={message.id}>{`${message} `}</span>;
+      return (
+          <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+            {!read?(
+                    <ListItemButton alignItems="flex-start"
+                                    style={{backgroundColor: "coral"}}
+                                    onClick={() => chooseRead(id)}>
+                      <ListItemAvatar>
+                        <Avatar alt="Remy Sharp" src={userSend.profile_picture} />
+                      </ListItemAvatar>
+                      <ListItemText
+                          primary={userSend.username}
+                          secondary={
+                            <React.Fragment>
+                              <Typography
+                                  sx={{ display: 'inline' }}
+                                  component="span"
+                                  variant="body2"
+                                  color="text.primary"
+                              >
+                                {message}
+                              </Typography>
+                            </React.Fragment>
+                          }
+                      />
+                    </ListItemButton>
+            ):(
+                <ListItemButton alignItems="flex-start"
+                                onClick={() => chooseRead(id)}>
+                  <ListItemAvatar>
+                    <Avatar alt="Remy Sharp" src={userSend.profile_picture} />
+                  </ListItemAvatar>
+                  <ListItemText
+                      primary={userSend.username}
+                      secondary={
+                        <React.Fragment>
+                          <Typography
+                              sx={{ display: 'inline' }}
+                              component="span"
+                              variant="body2"
+                              color="text.primary"
+                          >
+                            {message}
+                          </Typography>
+                        </React.Fragment>
+                      }
+                  />
+                </ListItemButton>
+            )}
+            <Divider variant="inset" component="li" />
+          </List>
+      )
     }
   };
   return (
@@ -37,13 +99,15 @@ function NotificationDetails({ setNotification, socket }) {
 
         <div className="flex flex-col w-full overflow-hidden">
           <div className="flex flex-col w-full h-full overflow-hidden" style={{"minHeight":"300px","maxHeight":"350px"}}>
-            {notification.length > 0 ? (
-              notification?.map((n) => displayNotification(n))
-            ) : (
-              <span className="flex justify-center h-full items-center">
+            <ScrollToBottom className="flex flex-col w-full h-full overflow-hidden">
+              {notification.length > 0 ? (
+                  notification?.map((n) => displayNotification(n))
+              ) : (
+                  <span className="flex justify-center h-full items-center">
                 Không có thông báo nào
               </span>
-            )}
+              )}
+            </ScrollToBottom>
           </div>
         </div>
       </div>

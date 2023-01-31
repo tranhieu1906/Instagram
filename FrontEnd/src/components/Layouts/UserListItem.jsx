@@ -10,7 +10,6 @@ const UserListItem = ({
   name,
   follower: followers,
 }) => {
-  console.log(followers);
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.user);

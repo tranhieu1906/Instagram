@@ -40,7 +40,8 @@ const PostsContainer = ({socket}) => {
   const { error: commentError, success: commentSuccess } = useSelector(
     (state) => state.newComment
   );
-  const { user } = useSelector((state) => state.user);
+
+    const { user } = useSelector((state) => state.user);
 
   const handleClose = () => setUsersDialog(false);
 
