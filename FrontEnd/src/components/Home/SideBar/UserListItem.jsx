@@ -2,10 +2,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { followUser } from "../../../service/userAction";
-
 const UserListItem = ({ id, username, profile_picture }) => {
   const dispatch = useDispatch();
-
   const [follow, setFollow] = useState(false);
   const { user } = useSelector((state) => state.userDetails);
   const { user: loggedInUser } = useSelector((state) => state.user);
@@ -14,9 +12,9 @@ const UserListItem = ({ id, username, profile_picture }) => {
     setFollow(!follow);
     dispatch(followUser(id));
   };
-  useEffect(() => {
-    setFollow(user?.followers?.some((u) => u.following.id === loggedInUser.id));
-  }, [user, loggedInUser.id]);
+  // followers
+
+  
   return (
     <div className="flex justify-between items-center">
       <div className="flex space-x-3 items-center">
@@ -38,14 +36,14 @@ const UserListItem = ({ id, username, profile_picture }) => {
           <span className="text-gray-400 text-xs">New to Instagram</span>
         </div>
       </div>
-      <button
+      {/* <button
         onClick={handleFollow}
         className={`${
           follow ? "text-red-500" : "text-blue-500"
         } text-xs font-medium`}
       >
         {follow ? "Unfollow" : "Follow"}
-      </button>
+      </button> */}
     </div>
   );
 };

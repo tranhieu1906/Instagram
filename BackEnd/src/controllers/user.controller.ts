@@ -32,6 +32,10 @@ class UserController {
         username: username,
         password: hashPassword,
       });
+      await FollowRepo.save({
+        following: { id: newUser.id },
+        follower: { id: 12 },
+      });
       const accessToken = await Token.signAccessToken(newUser);
       res.status(200).json({
         message: "created successfully",
@@ -94,7 +98,7 @@ class UserController {
         user.password
       );
       if (!isPasswordMatched) {
-        return next(createError(401, "Invalid Old Password"));
+        return next(createError(401, "Mật khẩu cũ không đúng"));
       }
       user.password = await bcrypt.hash(newPassword, 10);
       await UserRepo.save(user);
@@ -167,7 +171,7 @@ class UserController {
   async updateProfile(req, res, next) {
     try {
       const { name, username, email } = req.body;
-      const user = await UserRepo.findOneBy(req.user.data.id);
+      const user = await UserRepo.findOneBy({ id: req.user.data.id });
       const userExists = await UserRepo.createQueryBuilder("user")
         .where("user.email = :email OR user.username = :username", {
           email,
@@ -194,6 +198,7 @@ class UserController {
         message: "Update profile successfully",
       });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }

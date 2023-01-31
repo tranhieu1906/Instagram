@@ -64,17 +64,17 @@ class notificationController {
   }
 
   async sendNotification(req, res, next) {
-    const notificationData = {
-      userSend: req.user.data.id,
-      userGet: req.body.userGet,
-      message: req.body.message,
-    };
-    const notification = await NotificationRepo.save(notificationData);
-    res.status(201).json({
-      success: true,
-      notification,
-    });
     try {
+      const notificationData = {
+        userSend: req.user.data.id,
+        userGet: req.body.userGet,
+        message: req.body.message,
+      };
+      const notification = await NotificationRepo.save(notificationData);
+      res.status(201).json({
+        success: true,
+        notification,
+      });
     } catch (error) {
       next(error);
     }

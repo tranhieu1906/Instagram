@@ -30,7 +30,6 @@ class Chat {
           }
         });
       }
-
       let dataMessage = await MessageRepository.find({
         relations: {
           author: true,
