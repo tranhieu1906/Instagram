@@ -3,6 +3,7 @@ import * as fs from "fs";
 import * as path from "path";
 
 export const sendEmail = async (options) => {
+  console.log(options);
   try {
     const templateFile = fs
       .readFileSync("/Users/hoa/MD5/BackEnd/src/utils/email.html", "utf-8")
@@ -19,8 +20,8 @@ export const sendEmail = async (options) => {
     });
 
     await transporter.sendMail({
-      from: options.email,
-      subject: "chúng tôi giúp bạn dễ dàng đăng nhập lại trên Instagram",
+      from: process.env.NODEMAILER_MAIL,
+      subject: "Chúng tôi giúp bạn dễ dàng đăng nhập lại trên Instagram",
       to: options.email,
       html: templateFile.replace("{{link}}", options.data.reset_url),
     });
