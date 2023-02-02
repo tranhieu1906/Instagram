@@ -59,6 +59,7 @@ const PostContainer = ({ posts, id }) => {
       dispatch({ type: DELETE_POST_RESET });
       fechData(params.username);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     dispatch,
     success,

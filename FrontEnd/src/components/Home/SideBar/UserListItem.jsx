@@ -1,17 +1,17 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+// import { useState } from "react";
+// import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { followUser } from "../../../service/userAction";
+// import { followUser } from "../../../service/userAction";
 const UserListItem = ({ id, username, profile_picture }) => {
-  const dispatch = useDispatch();
-  const [follow, setFollow] = useState(false);
-  const { user } = useSelector((state) => state.userDetails);
-  const { user: loggedInUser } = useSelector((state) => state.user);
+  // const dispatch = useDispatch();
+  // const [follow, setFollow] = useState(false);
+  // const { user } = useSelector((state) => state.userDetails);
+  // const { user: loggedInUser } = useSelector((state) => state.user);
 
-  const handleFollow = () => {
-    setFollow(!follow);
-    dispatch(followUser(id));
-  };
+  // const handleFollow = () => {
+  //   setFollow(!follow);
+  //   dispatch(followUser(id));
+  // };
   // followers
 
   

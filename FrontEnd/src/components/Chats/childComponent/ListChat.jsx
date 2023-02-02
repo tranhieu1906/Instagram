@@ -7,7 +7,6 @@ import ListItemText from "@mui/material/ListItemText";
 import moment from "moment/moment";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import "../../../App.css";
 import axios from "../../../api/axios";
 import StyledBadgeOffline from "./ activeStatus/statusOffline";
@@ -15,7 +14,6 @@ import StyledBadgeOnline from "./ activeStatus/statusOnline";
 
 export default function ListChat(props) {
   let { open, chatNow, socket } = props;
-  const { user } = useSelector((state) => state.user);
   let [listChat, setListChat] = useState([]);
 
   useEffect(() => {
@@ -42,7 +40,7 @@ export default function ListChat(props) {
           console.log(error.message);
         });
     });
-  }, []);
+  }, [socket]);
 
   return (
     <>

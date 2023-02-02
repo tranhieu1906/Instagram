@@ -67,7 +67,7 @@ const UpdateProfile = () => {
 
       dispatch({ type: UPDATE_PROFILE_RESET });
     }
-  }, [dispatch, user, error, isUpdated]);
+  }, [dispatch, user, error, isUpdated, navigate, username]);
 
   return (
     <>

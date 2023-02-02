@@ -39,7 +39,6 @@ import {
   RESET_PASSWORD_FAIL,
   GET_NOTIFICATION_REQUEST,
   GET_NOTIFICATION_SUCCESS,
-  GET_NOTIFICATION_FAIL,
 } from "../constants/userConstants";
 
 export const userReducer = (state = { user: {} }, { type, payload }) => {

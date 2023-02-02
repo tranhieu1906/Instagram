@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+// import React, { useState } from "react";
+// import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { followUser } from "../../service/userAction";
+// import { followUser } from "../../service/userAction";
 
 const UserListItem = ({
   id,
@@ -10,15 +10,15 @@ const UserListItem = ({
   name,
   follower: followers,
 }) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const { user } = useSelector((state) => state.user);
-  const [follow, setFollow] = useState(followers?.some((id) => id === user.id));
+  // const { user } = useSelector((state) => state.user);
+  // const [follow, setFollow] = useState(followers?.some((id) => id === user.id));
 
-  const handleFollow = () => {
-    setFollow(!follow);
-    dispatch(followUser(id));
-  };
+  // const handleFollow = () => {
+  //   setFollow(!follow);
+  //   dispatch(followUser(id));
+  // };
   return (
     <div className="flex justify-between items-center mb-3">
       <div className="flex space-x-3 items-center">
