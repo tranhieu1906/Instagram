@@ -64,14 +64,3 @@ Full-Stack Instgram Clone sử dụng MERN Stack và Socket.io
     <td><img src="https://user-images.githubusercontent.com/87225248/216341713-49d57a68-e9c6-4147-92f7-ee73ac19a776.png" alt="mockups" /></td>
   </tr>
 </table>
-
-<h2>📬 Contact</h2>
-
-If you want to contact me, you can reach me through below handles.
-
-[![linkedin](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jigar-sable)
-
-© 2022 Jigar Sable
-
-
-[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
