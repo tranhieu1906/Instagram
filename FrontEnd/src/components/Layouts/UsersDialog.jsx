@@ -48,7 +48,7 @@ const UsersDialog = ({ open, onClose, title, usersList }) => {
               return <UserListItem {...u.user} key={u.id} />;
             } else if (u.follower) {
               return <UserListItem {...u.follower} key={u.id} />;
-            }else{
+            } else {
               return <UserListItem {...u.following} key={u.id} />;
             }
           })}

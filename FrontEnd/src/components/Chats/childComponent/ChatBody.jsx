@@ -1,18 +1,17 @@
+import { useEffect, useState } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
-import { useState, useEffect } from "react";
 import "../../../App.css";
 
-import axios from "../../../api/axios";
 import { Button, ListItem } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
+import moment from "moment";
 import * as React from "react";
 import { useSelector } from "react-redux";
-import StyledBadgeOnline from "./ activeStatus/statusOnline";
+import axios from "../../../api/axios";
 import StyledBadgeOffline from "./ activeStatus/statusOffline";
-import moment from "moment";
-const ariaLabel = { "aria-label": "description" };
+import StyledBadgeOnline from "./ activeStatus/statusOnline";
 
 export default function ChatBody(props) {
   let { onClose, chatId, socket } = props;
@@ -47,7 +46,7 @@ export default function ChatBody(props) {
         socket.emit("join-room", chatId);
       });
     }
-  }, [chatId]);
+  }, [chatId, socket]);
 
     useEffect(() => {
         socket?.on("take-message",(dataMessage) => {
